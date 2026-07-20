@@ -2,7 +2,7 @@
 
 Drop the AI-assisted development workflow into any existing repo in one command: a curated set of Claude Code skills (grilling, spec/ticket generation, TDD, code review, bug diagnosis, triage, and more) plus the `CLAUDE.md` instructions that make them fire automatically from plain-language requests — no commands to learn.
 
-Background and reasoning for every decision this kit makes: see [`../development-guide/`](../development-guide/README.md).
+New to this and want the story of how it came to be and where the pieces actually come from? See [`BACKGROUND.md`](BACKGROUND.md) — self-contained, no need to have the rest of the parent project around.
 
 ## Quick start
 
@@ -60,4 +60,4 @@ npx skills list                                        # see what's installed
 
 ## Why project scope, not global
 
-The [team blueprint chapter](../development-guide/11-team-blueprint.md) of the guide this kit implements is explicit: project-scoped skills are the right call once more than one person touches a repo, because everyone gets the same versioned toolset instead of whatever happens to be installed on their own machine. If you're the only person who will ever touch a given repo, installing globally once (`npx skills@latest add mattpocock/skills -g`) and skipping this kit entirely is a reasonable alternative — this kit exists for the "hand this repo to someone else, or work across machines" case.
+Project-scoped skills are the right call once more than one person touches a repo, because everyone gets the same versioned toolset instead of whatever happens to be installed on their own machine — see [`BACKGROUND.md`](BACKGROUND.md) for where that guidance comes from. If you're the only person who will ever touch a given repo, installing globally once (`npx skills@latest add mattpocock/skills -g`) and skipping this kit entirely is a reasonable alternative — this kit exists for the "hand this repo to someone else, or work across machines" case.
