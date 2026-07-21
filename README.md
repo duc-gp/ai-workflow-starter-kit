@@ -9,7 +9,7 @@ New to this and want the story of how it came to be and where the pieces actuall
 Clone this kit somewhere, then point `init.sh` at the repo you want to set up:
 
 ```bash
-git clone <this-repo-url> ai-workflow-starter
+git clone https://github.com/duc-gp/ai-workflow-starter-kit.git ai-workflow-starter
 ai-workflow-starter/init.sh /path/to/your/existing/repo
 ```
 
@@ -17,12 +17,14 @@ Or clone it straight into the target repo and run it from there:
 
 ```bash
 cd /path/to/your/existing/repo
-git clone <this-repo-url> .ai-workflow-starter
+git clone https://github.com/duc-gp/ai-workflow-starter-kit.git .ai-workflow-starter
 ./.ai-workflow-starter/init.sh .
 rm -rf .ai-workflow-starter   # one-time setup tool, safe to remove afterwards
 ```
 
 With no argument, `init.sh` targets the current directory.
+
+This repo is private, so cloning it on another machine needs GitHub auth there first (`gh auth login`, or an SSH key registered with your GitHub account).
 
 ## What it does
 
