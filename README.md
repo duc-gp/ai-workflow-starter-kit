@@ -1,6 +1,6 @@
 # AI Workflow Starter Kit
 
-Drop the AI-assisted development workflow into any existing repo in one command: a curated set of Claude Code skills (grilling, spec/ticket generation, TDD, code review, bug diagnosis, triage, and more) plus the `CLAUDE.md` instructions that make them fire automatically from plain-language requests — no commands to learn.
+Drop the AI-assisted development workflow into any existing repo in one command: a curated set of Claude Code skills (grilling, spec/ticket generation, TDD, code review, bug diagnosis, triage, and more), the 13-chapter guide those skills are distilled from, plus the `CLAUDE.md` instructions that make them fire automatically from plain-language requests — no commands to learn.
 
 New to this and want the story of how it came to be and where the pieces actually come from? See [`BACKGROUND.md`](BACKGROUND.md) — self-contained, no need to have the rest of the parent project around.
 
@@ -28,9 +28,13 @@ This repo is private, so cloning it on another machine needs GitHub auth there f
 
 ## What it does
 
-1. **Installs 21 skills, project-scoped** (not global) via the official [`skills`](https://skills.sh) installer, so they're committed to the repo and every teammate who clones it gets the same toolset:
-   `ask-matt`, `code-review`, `codebase-design`, `diagnosing-bugs`, `domain-modeling`, `grill-with-docs`, `implement`, `improve-codebase-architecture`, `prototype`, `research`, `resolving-merge-conflicts`, `setup-matt-pocock-skills`, `tdd`, `to-spec`, `to-tickets`, `triage`, `wayfinder`, `teach`, `claude-handoff`, `git-guardrails-claude-code`, `setup-pre-commit`.
+1. **Installs 23 skills, project-scoped** (not global) via the official [`skills`](https://skills.sh) installer, so they're committed to the repo and every teammate who clones it gets the same toolset:
+   `ask-matt`, `code-review`, `codebase-design`, `diagnosing-bugs`, `domain-modeling`, `grill-with-docs`, `grilling`, `handoff`, `implement`, `improve-codebase-architecture`, `prototype`, `research`, `resolving-merge-conflicts`, `setup-matt-pocock-skills`, `tdd`, `to-spec`, `to-tickets`, `triage`, `wayfinder`, `teach`, `claude-handoff`, `git-guardrails-claude-code`, `setup-pre-commit`.
+
+   `grilling` and `handoff` are the interview/handoff primitives that `grill-with-docs`, `wayfinder`, `triage`, and `ask-matt` invoke internally by name — they're needed even though nothing routes to them directly.
 2. **Wires up `CLAUDE.md`** with the routing logic that makes those skills trigger from plain language instead of slash commands. Safe to run against a repo that already has its own `CLAUDE.md` — the block is appended, clearly delimited, and re-running the script is a no-op once it's there (delete the delimited block to force a refresh).
+3. **Bundles `development-guide/`** — the 13-chapter guide this whole workflow is distilled from — into the target repo, so the reasoning behind the workflow travels with it instead of staying behind on one machine. Skipped if `development-guide/` already exists there (non-destructive; delete it and re-run to refresh).
+4. **Installs one custom skill, `explain-workflow`** — not from Matt Pocock's repo, built specifically for this kit. It explains *why* the workflow does something, or helps you figure out what to do next when you're not sure, grounded in the bundled guide, instead of silently routing the way the other skills do. Just ask "why" or say you're stuck.
 
 It does not touch git remotes, does not push anything, and does not require the target repo to be a git repo (it'll warn, not fail).
 
@@ -49,6 +53,7 @@ From there, just describe what you want in plain language:
 - *"This form submits twice"* → routed to bug diagnosis.
 - *"40 open issues, no idea where to start"* → routed to triage.
 - *"I want to rework the whole billing system"* → routed to Wayfinder first, since that's big and foggy.
+- *"Why did you just clear the conversation?"* / *"I don't know what to do here"* → routed to `explain-workflow`, which explains the reasoning instead of just proceeding.
 
 Optionally, once set up, ask Claude to also run `setup-pre-commit` (type checks + lint + tests on every commit) and `git-guardrails-claude-code` (blocks `push --force`, `reset --hard`, etc. before they run).
 
@@ -59,6 +64,8 @@ npx skills update              # update installed skills to latest, from inside 
 npx skills@latest add mattpocock/skills -y -s <name>   # add one that was skipped
 npx skills list                                        # see what's installed
 ```
+
+`explain-workflow` isn't managed by `npx skills` (it's custom to this kit, not from Matt Pocock's repo) — re-run `init.sh` to refresh it or `development-guide/` to their latest bundled version.
 
 ## Why project scope, not global
 

@@ -15,6 +15,7 @@ This repo uses a skills-based workflow so that output quality comes from the pro
 - **A design question needs a cheap concrete artifact to react to (UI, state model):** `prototype`.
 - **Something needs looking up against real sources before deciding:** `research`.
 - **You genuinely don't know which skill fits:** use `ask-matt` rather than guessing out loud to the user.
+- **The user asks why the workflow does something, or seems unsure what to do next:** use `explain-workflow` — explain the reasoning in plain language instead of silently routing, so they build understanding, then proceed.
 - **Handing off mid-task to a fresh session:** `claude-handoff`.
 - **Reviewing a diff, branch, or PR against spec + standards:** `code-review`.
 - **Domain vocabulary is fuzzy or contested:** `domain-modeling`. **A module's interface needs shaping:** `codebase-design`.
@@ -25,3 +26,5 @@ Ground rules:
 - If this repo lacks tests, types, or lint for something that matters, say so once and offer to fix it — don't silently work around a missing feedback loop forever.
 
 First time these skills touch this repo: run `setup-matt-pocock-skills` once before anything else (configures the issue tracker, triage labels, and domain-doc layout).
+
+Background reading, only if you (the agent) need the reasoning behind a rule above, or `explain-workflow` needs to ground an answer: `development-guide/` at this repo's root. The user does not need to read it themselves.
