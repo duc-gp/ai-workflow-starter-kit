@@ -67,6 +67,8 @@ npx skills list                                        # see what's installed
 
 `explain-workflow` isn't managed by `npx skills` (it's custom to this kit, not from Matt Pocock's repo) — re-run `init.sh` to refresh it or `development-guide/` to their latest bundled version.
 
+The bundled `development-guide/` is also kept up to date automatically: the parent repo runs a daily pipeline that processes new Matt Pocock videos and pushes updated guide chapters to this kit. Re-run `init.sh` at any time to pull the latest version into your target repo.
+
 ## Why project scope, not global
 
 Project-scoped skills are the right call once more than one person touches a repo, because everyone gets the same versioned toolset instead of whatever happens to be installed on their own machine — see [`BACKGROUND.md`](BACKGROUND.md) for where that guidance comes from. If you're the only person who will ever touch a given repo, installing globally once (`npx skills@latest add mattpocock/skills -g`) and skipping this kit entirely is a reasonable alternative — this kit exists for the "hand this repo to someone else, or work across machines" case.
