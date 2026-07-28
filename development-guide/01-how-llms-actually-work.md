@@ -43,15 +43,21 @@ The cautionary tale: Meta's Llama 4 Scout advertised a 10-million-token context 
 
 The operating principle that falls out of all this: **"Models just do better with less, more focused information, just like humans do."**
 
-## The Smart Zone: ~140k Tokens, and How to Budget It
+## The Smart Zone and the Dumb Zone: Budget the Usable Window
 
-Pocock refines the degradation curve into a working number:
+Pocock refines the degradation curve into a working model:
 
-> "I think of my context window as kind of like ending or getting significantly dumber at around the 140k mark. I think of that as kind of like the smart zone of the LLM."
+> "Practically, you can think of the agent as having a smart zone and a dumb zone."
 
-The **smart zone** is the usable portion of the context window before attention degradation — roughly 140k tokens on the 200k-token Claude models he works in. Past it, the model "ends up getting stupider, does weird hallucinations." So the real budget for a session is not the advertised limit; it is the smart zone, minus whatever is already spent.
+The **smart zone** is the usable portion of the context window before attention degradation — roughly 140k tokens on the 200k-token Claude models he works in ("I think of my context window as kind of like ending or getting significantly dumber at around the 140k mark"). Past it lies the **dumb zone**: not a cliff but a slow decline — "it slowly sinks down" — where the model "ends up getting stupider, does weird hallucinations," retrieves worse, and writes worse code. So the real budget for a session is not the advertised limit; it is the smart zone, minus whatever is already spent.
 
-This one number generates most of the guide's session mechanics:
+The mechanism underneath is quadratic attention: every added token must be tracked in relation to every other token — 5 tokens is ~10 attention relationships; 10,000 tokens is ~1,000,000. That scaling is why "many models now ship with 1 million tokens of context window, but it's pretty shocking how little of that is usable for actual work" — advertised windows and usable windows are different things.
+
+A working rule of thumb for where the dumb zone begins: **~150,000 tokens** — but treat it as per-model, per-task, and moving. Pocock's own recommendation moved from ~100k six months earlier to ~150k now, "and it will continue to creep up" as models improve. Re-derive the threshold periodically rather than treating it as fixed.
+
+The dumb zone has a detector: **faithfulness hallucinations**. "If you're seeing hallucinations, especially faithfulness hallucinations, then you're probably in the dumb zone." Treat that as the signal to clear, compact, hand off — or redesign the task so it doesn't need that much context at all. Some tasks genuinely don't need much of the smart zone and can be run in the dumb zone; but to get the most out of the tokens you spend, spend them in the smart zone.
+
+This one model generates most of the guide's session mechanics:
 
 - **One ticket = one smart zone.** When a spec is sliced into tickets ([Chapter 6](06-tickets-and-planning.md)), each ticket is sized so its implementation fits inside a single context window's smart zone. "Each one of these tickets is supposed to just be the size of a single context window or a single smart zone."
 - **Clear between tickets.** Don't say "do every single ticket." Implement one, check where you are; maybe squeeze in one more if there is room, but usually clear between every ticket ([Chapter 7](07-execution.md)). Stacking tickets pushes the session past the smart zone and quality drops.
@@ -118,7 +124,7 @@ What a model sees at runtime decomposes into seven pieces. Know them so you can 
 1. **Instructions** — system prompt and guardrails; "clear and plain language wins here."
 2. **User input** — the current ask.
 3. **Retrieved facts** — "the few snippets that matter the most," not everything.
-4. **Tools** — the functions the model can call; their descriptions are context too (which is exactly why MCP servers bloat sessions).
+4. **Tools** — the functions the model can call; their descriptions are context too (which is exactly why MCP servers bloat sessions). Harness-shipped tools count as well: Pocock cut his Claude Code starting system prompt from ~25k tokens to ~8k by disabling unused built-in tools and features in `settings.json` (see [Chapter 3](03-preparing-your-codebase.md)).
 5. **Short-term notes** — summaries of recent steps, so the model remembers what just changed.
 6. **Long-term memory** — stable facts about the user or project, "selected on demand."
 7. **Output format** — schemas or examples that "lock the shape of the answer."
@@ -195,7 +201,8 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 ## Checklist
 
 - [ ] You can explain what a token is and why the same prompt costs 11 tokens on one provider and 4 on another.
-- [ ] You know your model's context limit *and* its smart zone (~140k on 200k-token Claude models) — and you budget against the smart zone, not the limit.
+- [ ] You know your model's context limit *and* its smart zone (~140–150k on 200k-token Claude models) — and you budget against the smart zone, not the limit.
+- [ ] You treat faithfulness hallucinations as the dumb-zone detector: when they appear, you clear, compact, hand off, or redesign the task instead of pushing on.
 - [ ] You run `/context` habitually and know what fraction of your window is system prompt, tools, and messages.
 - [ ] You clear by default and compact only when you need to preserve the session's intent; you have a personal "get scared" threshold (Pocock's: ~50k tokens remaining).
 - [ ] You audit MCP servers and rules files for context tax before adding them.
@@ -209,6 +216,7 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 
 - Most devs don't understand how LLM tokens work
 - Most devs don't understand how context windows work
+- What is the dumb zone?
 - Most devs don't understand what agents are
 - Context Engineering Explained: Stop Padding Prompts, Curate What the Model Sees
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
