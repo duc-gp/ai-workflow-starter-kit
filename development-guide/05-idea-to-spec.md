@@ -107,6 +107,71 @@ The tooling evolved through three stages, and the sources are explicit about why
 
 You work the tickets one at a time, one session each, "until the route is clear," then run /to-spec on the completed map. Because the map lives in the issue tracker, it is collaborative and shareable across the team — shared maps beat private session state. Pocock uses it "for literally everything, even non-coding stuff," and recommends it for anything touching front-end code because those efforts always contain prototype-type questions. The map's closed tickets remain as "primary sources for what was captured."
 
+### The map model, frontier, and fog of war — what Wayfinder actually manages
+
+The dedicated Wayfinder explainer makes the mental model explicit, and the model matters because it shapes how you drive a run. As he lands it: "Conceptually, what we're looking at here is a map. We are creating a map of how we're getting to our destination. This is why it's called wayfinder."
+
+A map has three parts:
+
+- A **start point** (where the repo and your understanding are today),
+- A **vague destination** (where you want to end up — often "a buildable spec", not the implementation itself, so the planning work has a single concrete end product), and
+- A **fog of war** between them — the open decisions you cannot yet make because you lack the research, the prototype, or the grilling to settle them.
+
+Wayfinder tracks two sets of decisions from that fog: the **frontier** — decisions you can take *right now* — and the **fog** — decisions you cannot yet take because something else must land first. Blocking relationships model the dependency (some decisions only become makable once others are made), and as you resolve frontier tickets, new tickets unblock. You then "re-read the map to see where the frontier moved." This is why Wayfinder is distinct from a list of pre-broken tasks: it expects, and manages, that "you can't make your way cleanly to the destination. You have to clear the fog of war."
+
+### The two reuse prompts: chart the map, then walk it
+
+No literal prompts are taught verbatim, but the talk demonstrates a two-prompt structural pattern worth naming:
+
+- **Chart the map** — the kickoff: invoke Wayfinder with a free-text description of the destination. State the single destination up front ("I would like the ability in the CVM to add an icon picker… search other diagrams… copy things…") and let Wayfinder's grilling sub-step clarify whether that destination should be a spec-to-implement or something to build directly. His run created 7 decision tickets immediately, only 3 of which were on the *current* frontier — the rest were blocked/fogged.
+- **Walk the map** — the per-ticket loop: for each takable ticket, call Wayfinder *again* in a fresh session, pointing it at both the map and the specific ticket by its full name (example: "transfer lucid SVG geometry to path builder"). The ticket resolves in its own session, and the outcome is written back up into the parent map — so all decisions accumulate in one place rather than scattering across chat histories.
+
+> **Rule:** Use Wayfinder for *both* charting the map initially and walking each ticket — "you use Wayfinder for both, both for charting the map initially and then walking through each ticket." Don't hand-drive the per-ticket sessions with ad-hoc prompts.
+
+### How Wayfinder avoids being waterfall
+
+The obvious objection to the map model is that it looks like Big-Design-Up-Front. Pocock names the objection directly: "Some folks look at Wayfinder and they think, 'God, that's a lot of planning. Doesn't that look like waterfall?'" His answer is that the **prototype tickets** are precisely what prevents it:
+
+> "Huge amounts of low-fidelity upfront planning. A prototype is a high-fidelity way to get feedback on what you're actually building."
+
+So the recipe is **low-fi planning + high-fi feedback**: the map captures a dense set of decisions cheaply (text, in the tracker), and prototype tickets force concrete, human-in-the-loop answers to the taste questions inside that fog. He credits the density of prototyping for the output quality — "the fact that Wayfinder encourages you to build so many prototypes means that the output is unbelievably good" — and flags cutting prototypes as the way to turn Wayfinder into waterfall by accident.
+
+### Turning a finished map into a spec, then into implementation tickets
+
+Once the map is complete, call `/to-spec` on the wayfinder map, then `/to-tickets` to split the spec into implementation tickets, then implement each and run `/code-review` at the end. Two properties of the produced spec matter, and both are improvements on grill-with-docs:
+
+- **The spec links back to the original decision tickets.** "So you can actually go and the agent can go and view the primary source if it's confused about anything." This fixes a real weakness of grill-with-docs, where "you were really relying on the spec to be the source of truth, but the spec is always just a summary of what was actually said in the meeting" — the primary-source linkage gives a later confused agent somewhere to go.
+- **Specs can get very dense — don't be surprised.** In his demo the first spec draft exceeded GitHub's character limit for an issue — an honest signal of how much decision content the map carries, and a reason to let the spec hold the detail rather than duplicating it into tickets ([Chapter 6](06-tickets-and-planning.md)).
+
+### The decision-ticket ≠ implementation-ticket distinction
+
+A common confusion, "when people first use Wayfinder," is to mistake the decision tickets on the map for implementation tickets. They are not. Wayfinder's **decision tickets** resolve *what to build* (research, grilling, prototype, task). Once the map is complete, `/to-spec` and then `/to-tickets` produce a *separate* set of **implementation tickets** whose job is to *implement* the now-set destination. The map's tickets get worked in their own sessions; the to-tickets output gets implemented separately afterward. Keeping those two sets straight is what makes the whole loop chain correctly rather than implementing half-resolved decisions.
+
+### Wayfinder for non-coding work
+
+Because the map model is just "map → destination → fog," it generalizes past code. Pocock's personal examples: planning a garden office (commissioning a site survey, researching firms that could build it, figuring out contacts) and planning courses, not just engineering. Any domain with a start, a vague destination, and a fog of unresolved decisions in between is fair game — the prototype/grilling/research ticket types adapt to the domain.
+
+### Worked run: a command-K palette in the CVM
+
+The explainer runs Wayfinder end to end on his course video manager, building a spec for a command-K palette (icon picker, search across other diagrams, copy things). The shape of the run is the reference pattern:
+
+1. Chart the map: Wayfinder explored the repo, invoked its grilling sub-skill, interviewed him (asked what "done" looks like, recommended a buildable spec as the destination), then created the first map as a parent issue with 7 sub-issue decision tickets immediately — only 3 immediately takable (icon-names source, component storage schema, palette information architecture + keyboard nav). The other 4 were blocked/fogged.
+2. Walk the map: resolve takable frontier tickets one at a time, each in a fresh session calling Wayfinder on the ticket. Each resolution is written back up into the map. As decisions land, new tickets unblock; re-read the map to see where the frontier moved.
+3. Final map in his run: 17 tickets, 14 done; the remaining work was to "actually build the skill this whole map is built around" and revisit some other items once the skill shape was clear.
+4. Map complete → call `/to-spec` on it (the draft exceeded GitHub's character limit on the first try) → `/to-tickets` → implement each ticket → `/code-review` at the end.
+
+A fancier per-ticket setup available once you have the hang of it: use the **/handoff** skill to auto-write the walk-the-map prompt and spawn a Claude sub-agent per ticket, so you don't babysit each session by hand. This is optional — the plain loop also works — but it removes the manual step of re-invoking Wayfinder per ticket.
+
+### Anti-patterns specific to Wayfinder
+
+- **Constraining what you *build* to fit the agent's single-session context window.** What he was doing before; "doesn't feel right" and limited his ambition. Wayfinder's point is to remove that cap by splitting the work across sessions so you build what's worth building.
+- **Trying to single-session-path work that's genuinely too big for it.** You spend the whole session managing the smart zone and grilling, only to get lost in fog mid-grilling and waste tokens.
+- **Pre-breaking work into tiny chunks up front by hand** — "I'll just bite off this little bit" repeatedly. The naive attempt at what Wayfinder automates — done manually, and worse.
+- **Treating Wayfinder decision tickets as implementation tickets.** They decide; the `/to-tickets` output implements. See the distinction above.
+- **Thinking Wayfinder is waterfall.** The prototype tickets prevent that; cutting prototypes turns it into waterfall.
+- **Using Wayfinder when one session would suffice.** His own guardrail: "if you think the work that you're doing can be completable and plannable in a single session, then plan it in a single session." Don't reach for it when you already know the path.
+- **Spawning a Wayfinder prototype too sparse.** Because "Wayfinder encourages you to build so many prototypes," cutting them cuts output quality.
+
 > **Rule:** Codebase work that fits one session → `/grill-with-docs`. Too big or foggy for one session, or front-end-heavy → `/wayfinder`. `/grill-me` only when there is no codebase.
 
 ## Ubiquitous Language: Document the Words as You Go
@@ -191,6 +256,12 @@ What you *do* review, the spec skill surfaces deliberately before writing anythi
 
 One guardrail on the artifact itself: specs are not implementation targets. "Don't implement PRDs, only implement actual issues" — the spec deliberately does not get the ready-for-agent triage label, because an agent that picks up a whole spec will try to do the whole journey in one context window.
 
+A second guardrail, sharpened in the dedicated Wayfinder explainer: **specs are non-persistent — delete them once the code embodies them.** This is a deliberate divergence from much of the "spec-driven development" world, which treats the spec as a living source of truth you keep and edit. Pocock's position:
+
+> "What I'm essentially trying to say is that these specs are non-persistent... once the spec is present in the code, then you can just delete the spec."
+
+On the Wayfinder path in particular, the produced spec is a *summary* of the decision tickets, linked back to them as primary source — so the durable record lives in the closed decision tickets on the tracker, not in a kept-and-edited spec document. He "rarely if ever refer[s] to it again" once the implementation has landed. The practical consequence: don't invest in spec maintenance tooling, don't treat spec drift from code as a defect to chase, and let closed decision tickets be your audit trail rather than a long-lived spec document (see **wayfinder map** in [Chapter 13](13-glossary.md)).
+
 Finally, remember the boundary of what any spec can achieve: "the specs-to-code approach is just never going to work" as a *complete* methodology, because QA always surfaces edge cases "that are really hard to plan for before" (in one build, a showstopper rollback bug in non-git directories that grilling never touched). The spec is the destination, not a prophecy — plan well, then iterate through the QA loop ([Chapter 8](08-review-and-qa.md)).
 
 ## The Artifacts This Phase Produces
@@ -220,6 +291,9 @@ The one resource with no place in this table is an unbanked grilling context —
 - [ ] Hand off ungrillable questions to a fresh prototyping session; hand learnings back
 - [ ] Use UI prototypes (radically different variants on the real route) for look/feel; logic prototypes (terminal state-machine app) for stateful behavior; commit the winning variant
 - [ ] Never let AFK agents do front-end without a human taste loop via prototypes first
+- [ ] When using Wayfinder: chart the map once, then walk each takable ticket by calling Wayfinder again per session — don't hand-drive the per-ticket loop
+- [ ] When using Wayfinder: don't confuse its decision tickets (research/grilling/prototype/task) with the `to-tickets` implementation tickets produced at the end — decision tickets resolve *what to build*, implementation tickets *build* it
+- [ ] Treat specs as non-persistent: once the spec is present in the code, delete it — don't maintain a living spec document; the closed decision tickets on the tracker are your audit trail
 - [ ] Cache expensive external research as `research.md` in the repo — and delete it when the sprint ends
 - [ ] Update `context.md` with new terms during grilling; write ADRs only for hard-to-reverse, surprising, trade-off decisions
 - [ ] Cut off language bike-shedding: ship the vocabulary, refactor it later
@@ -237,5 +311,6 @@ The one resource with no place in this table is an unbanked grilling context —
 - Building a REAL feature with Claude Code: every step explained
 - The 7 phases of AI-driven development
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
+- /wayfinder: Nothing is too big to plan anymore
 
 See also: [Chapter 1](01-how-llms-actually-work.md) for the smart zone and parametric vs contextual knowledge; [Chapter 3](03-preparing-your-codebase.md) for context.md, ADRs, and CLAUDE.md wiring; [Chapter 4](04-the-workflow.md) for where these phases sit in the end-to-end flow; [Chapter 6](06-tickets-and-planning.md) for turning the spec into tickets; [Chapter 7](07-execution.md) for handoff mechanics and implementation sessions; [Chapter 8](08-review-and-qa.md) for the QA loop that catches what no spec can; [Chapter 10](10-building-skills.md) for the skill-authoring lessons behind the grilling fixes.

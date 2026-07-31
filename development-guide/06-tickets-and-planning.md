@@ -172,14 +172,16 @@ Wayfinder "charts the way as a shared map on the repo's issue tracker": a parent
 
 | Type | What it is |
 |---|---|
-| **research** | An AFK task — the agent goes off, investigates against primary sources, comes back (uses the `/research` skill) |
+| **research** | An AFK task — the agent goes off, investigates against primary sources, comes back (uses the `/research` skill) — usually kicked off in a sub-agent and "you don't actually need to watch it" |
 | **grilling** | A decision that needs an interview session with you |
-| **prototype** | "Raise the fidelity of the discussion by making a cheap rough concrete artifact to react to" — via the `/prototype` skill; use when "how should it look" or "how should it behave" is a key question |
+| **prototype** | "Raise the fidelity of the discussion by making a cheap rough concrete artifact to react to" — via the `/prototype` skill; use when "how should it look" or "how should it behave" is a key question. Prototypes are "the mechanism that keeps Wayfinder from being waterfall" — cut them and the map degrades into Big-Design-Up-Front |
 | **task** | Config, provisioning, moving data into shape — "the boring stuff that doesn't need a grilling decision and can't really be automated by AI" |
 
 (The research, grilling, and prototype techniques themselves are [Chapter 5](05-idea-to-spec.md); here they appear as *typed nodes in a plan*.)
 
-You work the tickets one at a time, each in its own session, "until the route is clear" — close a session, open the next Wayfinder ticket. When all tickets are closed, the captured information is saved onto the map, with the closed tickets remaining as "primary sources for what was captured." Then the completed map feeds the normal pipeline: "once the map is done... you just go to to-spec and you're good to go" — and from spec to `/to-tickets` as usual.
+You work the tickets one at a time, one in its own session, "until the route is clear" — close a session, open the next Wayfinder ticket. When all tickets are closed, the captured information is saved onto the map, with the closed tickets remaining as "primary sources for what was captured." Then the completed map feeds the normal pipeline: "once the map is done... you just go to to-spec and you're good to go" — and from spec to `/to-tickets` as usual.
+
+A terminology guard that catches nearly every first-time user: the "tickets" on a Wayfinder map are **decision tickets**, not implementation tickets. Each one is a research, grilling, prototype, or task node that *resolves what to build*. After the map is complete, `/to-spec` and then `/to-tickets` produce a *separate* set of implementation tickets whose job is to *build* the now-set destination. Don't implement the decision tickets directly, and don't expect the map to read like a `to-tickets` implementation plan — it's denser and full of unresolved dependencies by design (the dedicated explainer calls this confusion common "when people first use Wayfinder"; the full map model, fog-of-war/frontier vocabulary, and chart-then-walk loop live in [Chapter 5](05-idea-to-spec.md)).
 
 Why this beats grinding through one giant planning session: "Instead of having the anxiety of managing my session with Grill with Docs, having to hand off, worry about the smart zone, with Wayfinder it's kind of all managed for me." The map absorbs the session-management problem — every unit of thinking is pre-sliced to session size, and the state lives in the tracker, not in a chat history. Pocock recommends Wayfinder for almost anything touching front-end code, because those efforts nearly always contain "how should it look" or "how should it behave" questions that need prototype tickets.
 
@@ -202,7 +204,8 @@ One caution to close on, because it frames how much to invest in the ticket pile
 - [ ] Make AFK agents pick up only `ready for agent` work — never let them stumble onto unready tasks.
 - [ ] When the triage agent trusts a reporter too readily, force reproduction: "diagnose this yourself."
 - [ ] Record rejected features in `.out-of-scope/` files so future triage auto-closes them.
-- [ ] For ideas too big and foggy to spec, run `/wayfinder` first: a map issue with typed, session-sized, blocking-linked sub-issues (research / grilling / prototype / task), then `/to-spec` off the finished map.
+- [ ] For ideas too big and foggy to spec, run `/wayfinder` first: a map issue with typed, session-sized, blocking-linked sub-issues (research / grilling / prototype / task); let prototype tickets keep the map from becoming waterfall; when done, run `/to-spec` off the finished map → `/to-tickets`.
+- [ ] Treat the map's sub-issues as *decision* tickets — the implementation tickets come later from `/to-tickets`; don't implement decision tickets directly.
 - [ ] Expect QA to add tickets to the board — plan for the loop, not for a one-shot plan.
 
 ## Sources
@@ -213,5 +216,6 @@ One caution to close on, because it frames how much to invest in the ticket pile
 - The 7 phases of AI-driven development
 - Building a REAL feature with Claude Code: every step explained
 - I Open-Sourced My Own AFK Software Factory
+- /wayfinder: Nothing is too big to plan anymore
 
 See also: [Chapter 4](04-the-workflow.md) for where planning sits in the end-to-end flow, [Chapter 5](05-idea-to-spec.md) for producing the spec that tickets slice, [Chapter 7](07-execution.md) for implementing the tickets session by session, [Chapter 8](08-review-and-qa.md) for the QA loop that feeds new tickets back onto the board, and [Chapter 9](09-afk-and-parallel-agents.md) for the AFK machinery that consumes `ready for agent` work.

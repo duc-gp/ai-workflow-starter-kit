@@ -62,6 +62,7 @@ This one model generates most of the guide's session mechanics:
 - **One ticket = one smart zone.** When a spec is sliced into tickets ([Chapter 6](06-tickets-and-planning.md)), each ticket is sized so its implementation fits inside a single context window's smart zone. "Each one of these tickets is supposed to just be the size of a single context window or a single smart zone."
 - **Clear between tickets.** Don't say "do every single ticket." Implement one, check where you are; maybe squeeze in one more if there is room, but usually clear between every ticket ([Chapter 7](07-execution.md)). Stacking tickets pushes the session past the smart zone and quality drops.
 - **The implement-now vs. spec fork.** After a planning conversation, estimate the remaining budget. Pocock's example: "we've got 100k of budget here to remove 10 commands — super easy" → implement in the same session. If the work needs multiple sessions, externalize state into a spec and tickets first, because the smart zone is finite and the next session starts from zero.
+- **Plan across sessions when the planning itself blows the zone — Wayfinder.** The smart zone caps *planning*, not just implementation. As Pocock frames the dedicated Wayfinder explainer: "Some work is bigger than what you can fit into the context window — and especially the smart zone of the context window of the agent. And you know that going in." Attempting to single-session-path genuinely foggy big work means spending the whole session managing the smart zone and grilling, only to "get lost in fog mid-grilling." When planning an idea would itself overrun the zone, split the planning across sessions and externalize the open decisions into a shared map ([Chapter 5](05-idea-to-spec.md)); each deciding ticket is sized to one session and its resolution accrues back into the map, so nothing is lost.
 
 Budgeting requires visibility. In Claude Code:
 
@@ -196,6 +197,7 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 | Keep CLAUDE.md short, be stingy with MCP ([Ch. 3](03-preparing-your-codebase.md)) | Tool definitions and rules files are always-loaded context tax |
 | Tests + types on every commit in AFK loops ([Ch. 9](09-afk-and-parallel-agents.md)) | RL boundary: agents excel where verification is cheap and objective |
 | Grill before building ([Ch. 5](05-idea-to-spec.md)) | Q&A colocation creates attention hotspots; new information drives the loop |
+| Split planning across sessions (/wayfinder, [Ch. 5](05-idea-to-spec.md), [Ch. 6](06-tickets-and-planning.md)) | The smart zone caps the *planning* phase too, not only execution — "you can't make your way cleanly to the destination" when fog sits between you and it |
 | Max iterations on every loop ([Ch. 9](09-afk-and-parallel-agents.md)) | A pure agent "will eventually run forever" |
 
 ## Checklist
@@ -222,5 +224,6 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
 - Building a REAL feature with Claude Code: every step explained
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
+- /wayfinder: Nothing is too big to plan anymore
 
 See also: [Chapter 2 — Operating Principles](02-principles.md) · [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md) · [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md) · [Chapter 7 — Execution](07-execution.md) · [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md) · [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md)

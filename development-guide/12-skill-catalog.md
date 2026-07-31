@@ -70,7 +70,15 @@ These run once per machine or once per repo. The full rationale for a minimal, h
 - **Status & evolution:** Current. Answers the recurring question "how do I make the skills work with Jira/Linear/beads?" — you just tell it during setup.
 - **Source:** mattpocock/skills: A complete AI Coding workflow, end-to-end
 
-### Hooks
+### `/setup-map-skills` (Wayfinder tracker adapter)
+
+- **Type:** skill
+- **What it does:** Configures Wayfinder to use an issue tracker other than GitHub (its default substrate for storing parent maps + sub-issue decision tickets). Maps Wayfinder's per-ticket workflow — blocking relationships, ticket types (research / prototype / grilling / task), and per-ticket resolutions written back into the parent — onto your tracker's primitives.
+- **When to use:** If you track work in Linear, Jira, or "literally whatever you like" and want Wayfinder maps to live there rather than on GitHub. Matt Pocock's skills are issue-tracker-agnostic; `setup-map-skills` is the adapter that makes the non-GitHub path explicit.
+- **Invocation:** Run the skill in the agent, pointing it at your target tracker.
+- **Construction notes:** Wayfinder stores its map as a parent issue with typed, blocked sub-issues; on a non-GitHub tracker, `setup-map-skills` translates those constructs (sub-issues, blocked-by links, ticket-type labels) into the tracker's native equivalents. The per-ticket resolutions still accrue back into the parent map whatever the substrate.
+- **Status & evolution:** Current; documented in the dedicated Wayfinder explainer.
+- **Source:** /wayfinder: Nothing is too big to plan anymore
 
 - **Type:** harness feature (Claude Code)
 - **What it does:** Deterministic code that runs at fixed points in the harness's execution cycle. The key event is **PreToolUse**, which fires before a tool call and can block it: a script matches the command, echoes a corrective message, and exits with code 2 — the command is prevented AND the agent is steered to the right alternative (e.g. blocked `npm install foo` retried automatically as `pnpm install foo`).
@@ -135,8 +143,12 @@ Interview me relentlessly about every aspect of this plan until we reach a share
 - **What it does:** Pre-spec mapping for big, foggy ideas. Skill description: "A loose idea has arrived, too big for one agent session and wrapped in fog. The way from here to the destination isn't visible yet. This skill charts the way as a shared map on the repo's issue tracker, then works its tickets one at a time until the route is clear." A parent GitHub issue is the map; every decision becomes a sub-issue with blocking relationships, each scoped to one agent session and typed **research**, **grilling**, **prototype**, or **task**.
 - **When to use:** Work that would blow out of the smart zone of one session; recommended for anything touching the front end (prototype tickets are essential there). Matt Pocock uses it "for literally everything, even non-coding stuff."
 - **Invocation:** `/wayfinder` with the loose idea. Work the tickets one per session; when all are closed, the captured information is saved onto the map (closed tickets remain as primary sources), then run `/to-spec` on the completed map.
-- **Construction notes:** Ticket types are defined at the bottom of the map ticket. Research tickets are AFK tasks (via `/research`); grilling tickets need a session with you; prototype tickets "raise the fidelity of the discussion by making a cheap rough concrete artifact to react to"; task tickets are "the boring stuff that doesn't need a grilling decision and can't really be automated by AI." Can invoke `/prototype` itself (model-invoked).
-- **Status & evolution:** New in skills v1.1; may replace `/grill-with-docs` in some situations — "default to Wayfinder instead." Replaces "the anxiety of managing my session with Grill with Docs, having to hand off, worry about the smart zone" — and the GitHub map is collaborative across the team.
+- **Construction notes:** Ticket types are defined at the bottom of the map ticket. Research tickets are AFK tasks (via `/research`) — "you don't actually need to watch it," so run them in a sub-agent. Grilling tickets need a session with you. Prototype tickets "raise the fidelity of the discussion by making a cheap rough concrete artifact to react to" and are "the mechanism that keeps Wayfinder from being waterfall" — cut them and the map degrades into Big-Design-Up-Front. Task tickets are "the boring stuff that doesn't need a grilling decision and can't really be automated by AI." Can invoke `/prototype` itself (model-invoked).
+
+  The mental model the dedicated explainer adds: a *map* has a start point, a vague destination (often "a buildable spec", not the implementation), and a *fog of war* of unresolved decisions between them. Wayfinder tracks two sets — the **frontier** (decisions takable right now) and the **fog** (decisions blocked behind others); blocking relationships model dependency, and as frontier tickets close the fog recedes. It is run with a two-prompt structural pattern: **chart the map** once (free-text description of the destination), then **walk the map** per ticket — call Wayfinder *again* in a fresh session pointing at both the map and the specific takable ticket by its full name. Don't hand-drive the per-ticket loop; use Wayfinder for both. A fancier setup uses `/handoff` to auto-write the walk-the-map prompt and spawn a Claude sub-agent per ticket so you don't babysit each session.
+
+  Two important distinctions: Wayfinder's **decision tickets are not implementation tickets** — they resolve *what to build* (research/grilling/prototype/task); the implementation tickets come later from `/to-tickets`. And the produced spec is **non-persistent** — "once the spec is present in the code, then you can just delete the spec" (deliberate divergence from spec-driven-development living specs); the durability lives in the closed decision tickets, which the spec links back to as primary source so a confused later agent can view the original instead of only the summary. That primary-source linkage is the fix for a real weakness of grill-with-docs, where the spec was the only source of truth despite being just a summary of the meeting.
+- **Status & evolution:** New in skills v1.1; may replace `/grill-with-docs` in some situations — "default to Wayfinder instead." Replaces "the anxiety of managing my session with Grill with Docs, having to hand off, worry about the smart zone" — and the GitHub map is collaborative across the team. Based on pre-AI software planning fundamentals; works with any coding agent; usable for non-coding work (planning a course, a garden-office build — anything with a start, a vague destination, and a fog of open decisions). Don't reach for it when one session would suffice: "if you think the work that you're doing can be completable and plannable in a single session, then plan it in a single session."
 - **Source:** New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets
 
 ### `/research`
@@ -468,7 +480,8 @@ Skills about using the system itself. Authoring guidance lives in [Chapter 10](1
 - [ ] Run improve-codebase-architecture every few days to a week, one candidate at a time, auto mode off.
 - [ ] After every AFK run: generate a QA plan issue (human-labeled), walk it, file findings via a feedback-button-style path, re-run the loop.
 - [ ] Sandbox all AFK execution (Sandcastle/Docker) — never YOLO mode; use worktrees per agent and push to explicitly named branches behind a push-blocking hook.
-- [ ] When adopting or renaming skills, delete-and-re-add rather than trusting the installer, then audit the skills folder for stale entries.
+- [ ] For foggy big work or front-end-heavy work, default to `/wayfinder`: chart the map once, then walk each takable ticket in its own Wayfinder session; let prototype tickets keep it from becoming waterfall.
+- [ ] After adopting new or renamed skills, use delete-and-re-add rather than trusting the installer, then audit the skills folder for stale entries.
 
 ## Sources
 
