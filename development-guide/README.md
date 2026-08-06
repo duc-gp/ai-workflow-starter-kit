@@ -15,7 +15,7 @@ This guide's thesis, developed across every chapter and made explicit in [Chapte
 - **Rolling this out to a team?** Read [Chapter 11](11-team-blueprint.md) first for the destination, then backfill the chapters it points you to.
 - **Building your own skills?** [Chapter 10](10-building-skills.md) teaches the craft; [Chapter 12](12-skill-catalog.md) is the reference catalog of every skill and harness feature named in the source material, with construction notes for building your own version of each.
 - **Forgot what a term means?** [Chapter 13](13-glossary.md) is the guide's own ubiquitous language — one precise definition per term, linked back to where it's developed.
-- **Just want the workflow running, without reading any of this?** [`../starter-kit/`](../starter-kit/README.md) is a standalone, cloneable script that installs the skills and wires up `CLAUDE.md` in any repo for you — this guide becomes background reading you never have to open.
+- **Just want the workflow running, without reading any of this?** See the [`starter-kit`](../README.md) — a standalone, cloneable repo that installs the skills and wires up `CLAUDE.md` in any repo for you; this guide becomes background reading you never have to open.
 
 Every chapter ends with a **Checklist** (the chapter compressed into actions) and a **Sources** list (which videos it draws on). Grounding is strict throughout: every technique, number, and quote traces back to the source material — nothing here is invented, and where a chapter had to trim a claim the sources didn't support, it says so rather than filling the gap with plausible-sounding filler.
 

@@ -24,7 +24,7 @@ rm -rf .ai-workflow-starter   # one-time setup tool, safe to remove afterwards
 
 With no argument, `init.sh` targets the current directory.
 
-This repo is private, so cloning it on another machine needs GitHub auth there first (`gh auth login`, or an SSH key registered with your GitHub account).
+The kit is public — just clone it.
 
 ## What it does
 
@@ -67,8 +67,12 @@ npx skills list                                        # see what's installed
 
 `explain-workflow` isn't managed by `npx skills` (it's custom to this kit, not from Matt Pocock's repo) — re-run `init.sh` to refresh it or `development-guide/` to their latest bundled version.
 
-The bundled `development-guide/` is also kept up to date automatically: the parent repo runs a daily pipeline that processes new Matt Pocock videos and pushes updated guide chapters to this kit. Re-run `init.sh` at any time to pull the latest version into your target repo.
+The bundled `development-guide/` is maintained and updated over time — the maintainer processes new source material and publishes updated guide chapters to this repo. Re-run `init.sh` at any time, or just `git pull` this kit, to pull the latest version into your target repo.
 
 ## Why project scope, not global
 
 Project-scoped skills are the right call once more than one person touches a repo, because everyone gets the same versioned toolset instead of whatever happens to be installed on their own machine — see [`BACKGROUND.md`](BACKGROUND.md) for where that guidance comes from. If you're the only person who will ever touch a given repo, installing globally once (`npx skills@latest add mattpocock/skills -g`) and skipping this kit entirely is a reasonable alternative — this kit exists for the "hand this repo to someone else, or work across machines" case.
+
+## License
+
+This kit (guide, scripts, explain-workflow skill, CLAUDE.md.template) is MIT licensed. The skills installed by `init.sh` come from github.com/mattpocock/skills and are governed by their own license.
