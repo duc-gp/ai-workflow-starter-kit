@@ -40,6 +40,14 @@ The original **/grill-me** skill is famously about four sentences long — "the 
 
 The central grilling reference skill (shared by /grill-me and /grill-with-docs) directs the agent to ask one question at a time. The direction alone was not enough — models occasionally batched questions anyway. What fixed it was adding the reason: "asking multiple questions at once is bewildering." This is a general skill-authoring lesson (see [Chapter 10](10-building-skills.md)): rules with stated reasons are followed more consistently across models.
 
+### From one-question-per-turn to multi-question rounds (v1.2)
+
+The one-question-at-a-time rule had a failure mode of its own, which surfaced in v1.2 of the skills repo. At the end of a grilling session, when the hard questions are already settled and only easy ones remain, one-question-per-turn devolves into saying "yeah, that sounds good" over and over, one at a time — "incredibly frustrating" and "dead slow." The v1.2 update to `/grill-me` changed the shape: **multiple questions per turn, organized in rounds**.
+
+The design that makes batching safe is a **dependency graph**. Questions are not a flat list — one critical early question may open a raft of follow-on questions, which themselves lead to others. The skill asks only the questions available *right now* (the frontier), then the next round of questions those answers unlock — "always pushing you as fast as possible down the frontier of questions." Naive multi-question batching would ask dependent questions before their prerequisites are answered; modeling questions as a graph and asking in rounds resolves this. The tradeoff — batching trades one problem (slowness) for another (asking dependents too early) — is solved by the graph, not by going back to one-at-a-time.
+
+The UX makes the rounds scannable: rounds are labeled ("Round 1", "Round 2"), questions are labeled Q1/Q2/etc. with a recommended answer each, and emojis add "a little pop of color" for eye navigation. The intended interaction pattern is dictation: blast answers by label — "Q1, I agree. Q2, I agree. Q3, we need something to change there. Q4, we need something to change" — and the skill moves to the next round. This is the most popular skill in the repo; the update was driven by the end-of-session friction real users hit.
+
 ### Explore the code first, ask second
 
 The skill instructs the agent: if a question can be answered by looking at the code, it must look at the code first instead of asking you. In practice a grilling session opens with an explore phase — a subagent reads "tons and tons of files" in its own context window and hands back only a summary, keeping the parent context small (one full session sat at only ~40k tokens after 22 minutes of grilling). The effect is that every question you actually receive is one the code could not answer, and the agent's challenges are grounded in what the repo really does rather than what it guesses (see the worked example below). One friction note from heavy use: "I do wish that explore was faster. You need it in every single session, sometimes multiple times a session."
@@ -308,6 +316,7 @@ The one resource with no place in this table is an unbanked grilling context —
 - I was an AI skeptic. Then I tried plan mode
 - New Skills! /handoff, /prototype, /review and /writing-* | Skills Changelog
 - New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets
+- New Skills! v1.2 brings /wait-what, /writing-for-agents, and fixes /grill-me
 - Building a REAL feature with Claude Code: every step explained
 - The 7 phases of AI-driven development
 - mattpocock/skills: A complete AI Coding workflow, end-to-end

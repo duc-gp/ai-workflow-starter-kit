@@ -14,7 +14,7 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **auto mode** — The harness mode in which the agent's edits are accepted automatically (Claude Code's default), as opposed to plan mode or manual approval. The main flow runs in auto mode — but turn it off for human-in-the-loop skills such as the de-slopping flow, where it "does funny things." See [Chapter 4](04-the-workflow.md) and [Chapter 8](08-review-and-qa.md).
 
-**blocking relationship** — A dependency between tickets: a blocked ticket may not start until the tickets blocking it are closed. Blocking relationships turn a flat backlog into a **kanban board** and define the parallelization frontier — any unblocked ticket can be handed to an agent right now. See [Chapter 6](06-tickets-and-planning.md).
+**blocking relationship** — A dependency between tickets: a blocked ticket may not start until the tickets blocking it are closed. Blocking relationships turn a flat backlog into a **kanban board** and define the parallelization frontier — any unblocked ticket can be handed to an agent right now. Wayfinder establishes blocking relationships between decision tickets so the frontier moves as the fog clears. See [Chapter 6](06-tickets-and-planning.md).
 
 **CLAUDE.md / AGENTS.md** — The repo-level context file a harness injects into every session's system prompt. Keep it near-empty: only minimal, non-discoverable, non-rotting environment facts (the canonical example is a single line, "you are on WSL on Windows") plus pointers to domain docs. See [Chapter 3](03-preparing-your-codebase.md).
 
@@ -36,6 +36,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **day shift / night shift** — The division of labor at the heart of the workflow: the human does the thinking work — ideation, grilling, specs, ticket slicing — in the day shift; agents execute AFK in the night shift. See [Chapter 4](04-the-workflow.md).
 
+**decision ticket** — A Wayfinder sub-issue that resolves *what to build* (typed research, grilling, prototype, or task) — not an **implementation ticket**. Decision tickets live on the **wayfinder map**; each is scoped to one agent session and its resolution is written back into the parent map. Implementation tickets are produced later by `/to-tickets`. Confusing the two is a common beginner mistake: "when people first use Wayfinder." See [Chapter 5](05-idea-to-spec.md) and [Chapter 6](06-tickets-and-planning.md).
+
 **deep module** — A module that hides a lot of implementation behind a simple interface; **depth** is "the amount of behavior a caller can exercise per unit of interface they have to learn" (from Ousterhout's *A Philosophy of Software Design*). Deep modules give callers leverage and maintainers locality; their opposite, **shallow modules** (complex interface, little behind it), are the signature of an AI-hostile codebase. See [Chapter 3](03-preparing-your-codebase.md).
 
 **de-slopping** — The systematic cleanup of accumulated slop: architecture-deepening refactors driven by the improve-codebase-architecture skill, run human-in-the-loop every few days. Not an AFK skill — the candidates require a judgment call from the strategic programmer sitting above the agent. See [Chapter 8](08-review-and-qa.md).
@@ -45,6 +47,10 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 **facts vs decisions** — The grilling distinction that stops an agent interviewing itself: **facts** are things the agent can discover by exploring the codebase; **decisions** can only be made by the human. A grilling agent must fetch facts and ask only about decisions. See [Chapter 5](05-idea-to-spec.md).
 
 **feedback loop** — A deterministic signal that tells an agent whether its change actually worked: types, tests, lint rules, green CI, a browser it can screenshot. Feedback loops impose "back pressure" on an eager model, make autonomy safe, and improving them is "the entire point now of having a good codebase." See [Chapter 3](03-preparing-your-codebase.md).
+
+**fog of war** — See **frontier vs. fog**.
+
+**frontier vs. fog** — The two sets a **wayfinder map** tracks: the **frontier** = decisions takable right now (because nothing unresolved blocks them); the **fog** = decisions blocked behind others that must be resolved first. Fog "does not resolve cleanly" — you clear it by working the frontier ticket by ticket, each in its own session, until the route to the destination is visible. As frontier tickets close, fog recedes and new tickets unblock. See [Chapter 5](05-idea-to-spec.md) and [Chapter 6](06-tickets-and-planning.md).
 
 **ghost entity** — The guide's worked example of domain language, from Matt Pocock's course video manager: a ghost lesson or ghost course is one that "exists in the database but not yet on the file system." Defined precisely in the repo's glossary so human and agent mean the same thing by "ghost." See **materialize** and **ubiquitous language**. See [Chapter 3](03-preparing-your-codebase.md).
 
@@ -69,6 +75,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 **jaggedness** — The uncoupled ability profile of models: talking to "an extremely brilliant PhD student who's been a systems programmer for their entire life — and a 10-year-old," simultaneously. Caused by the RL training boundary — models improve only in verifiable domains, and code-smartness has not generalized to everything else. See [Chapter 1](01-how-llms-actually-work.md).
 
 **kanban board** — A list of tickets plus the blocking relationships between them. The unblocked tickets are the parallelization frontier: one agent per unblocked ticket. See [Chapter 6](06-tickets-and-planning.md).
+
+**low-fi planning + high-fi feedback** — The Wayfinder principle "Huge amounts of low-fidelity upfront planning. A prototype is a high-fidelity way to get feedback on what you're actually building." The combination is what keeps Wayfinder's dense planning from being waterfall — the cheap maps handle the route-finding, the prototypes handle the taste. See [Chapter 5](05-idea-to-spec.md).
 
 ## M–P
 
@@ -181,6 +189,7 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - I Open-Sourced My Own AFK Software Factory
 - I'm using claude --worktree for everything now
 - Learn anything with the /teach skill
+- /wayfinder: Nothing is too big to plan anymore
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
 
 See also: [Chapter 1](01-how-llms-actually-work.md) · [Chapter 2](02-principles.md) · [Chapter 3](03-preparing-your-codebase.md) · [Chapter 4](04-the-workflow.md) · [Chapter 5](05-idea-to-spec.md) · [Chapter 6](06-tickets-and-planning.md) · [Chapter 7](07-execution.md) · [Chapter 8](08-review-and-qa.md) · [Chapter 9](09-afk-and-parallel-agents.md) · [Chapter 10](10-building-skills.md) · [Chapter 11](11-team-blueprint.md) · [Chapter 12](12-skill-catalog.md)

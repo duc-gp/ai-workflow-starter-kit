@@ -124,8 +124,8 @@ Interview me relentlessly about every aspect of this plan until we reach a share
 - **When to use:** Non-codebase use cases — spec-ing ideas, even non-engineering work (one user wrote a eulogy with it). Rule of thumb: "When you have a codebase, use grill-with-docs. When you don't have a codebase, use grill-me."
 - **Invocation:** `/grill-me` seeded with a rough (dictated) idea, including the WHY: "Grill me. I'd like to think about adding this to the [X] page." Sessions run ~6 to ~50 questions; complex features take 30–45 minutes.
 - **Construction notes:** Deliberately does NOT use the built-in ask-user-question tool — he dislikes that tool's UI, and not calling a tool is always more token-efficient. (Matt Pocock's UI complaint elsewhere is sharper: reviewing the new `/init`'s use of that same tool, he called it "pants" because you can't see the full proposal while answering.) Flexible driver role — you can flip and ask IT for trade-offs. Effectiveness depends on the human: classify questions by fidelity (grillable Q&A vs ungrillable feel-questions needing a prototype), pre-break oversized scope, lead the conversation, use a frontier model (grilling relies on parametric knowledge).
-- **Status & evolution:** "The most influential four sentences I've ever written" — still alive, recategorized into the productivity section for non-codebase work. Superseded inside codebases by `/grill-with-docs`. Replaces plan mode as the planning method.
-- **Source:** 5 Claude Code skills I use every single day; 9 Things People Get Wrong With My /grill-* skills; Building a REAL feature with Claude Code: every step explained
+- **Status & evolution:** "The most influential four sentences I've ever written" — still alive, recategorized into the productivity section for non-codebase work. Superseded inside codebases by `/grill-with-docs`. Replaces plan mode as the planning method. Updated in v1.2 from one-question-per-turn to **multi-question rounds over a dependency graph**: questions are asked in rounds (labeled "Round 1", "Round 2"), each question labeled Q1/Q2 with a recommended answer, and only currently-answerable (frontier) questions are asked — dependent questions wait for their prerequisite. Fixes the end-of-session "dead slow" failure mode where only easy questions remain. Emojis add visual navigation; intended for dictation batch answers ("Q1, I agree. Q2, I agree. Q3, we need a change").
+- **Source:** 5 Claude Code skills I use every single day; 9 Things People Get Wrong With My /grill-* skills; Building a REAL feature with Claude Code: every step explained; New Skills! v1.2 brings /wait-what, /writing-for-agents, and fixes /grill-me
 
 ### `/grill-with-docs`
 
@@ -510,5 +510,6 @@ Skills about using the system itself. Authoring guidance lives in [Chapter 10](1
 - I'm using claude --worktree for everything now
 - Most devs don't understand how context windows work
 - Frontend is HARDER for AI than backend (here's how to fix it)
+- /wayfinder: Nothing is too big to plan anymore
 
 See also: [Chapter 4 — The End-to-End Workflow](04-the-workflow.md), [Chapter 5 — From Idea to Spec](05-idea-to-spec.md), [Chapter 7 — Execution](07-execution.md), [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md), [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md), [Chapter 10 — Building Skills](10-building-skills.md), [Chapter 13 — Glossary](13-glossary.md).

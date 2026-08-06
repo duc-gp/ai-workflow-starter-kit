@@ -172,6 +172,16 @@ The flow will fail. The blueprint's job is to make each failure mode route to a 
 
 **The agent is confidently wrong → push back.** Never argue from your own memory; make it verify. When an agent falsely claimed no test harness existed, the two-word correction "look harder" found the whole suite. The general rule from [Chapter 2](02-principles.md) applies with force in a team, where a wrong claim can propagate into tickets: never trust, always verify against the code.
 
+## Collaborating With Stakeholders Outside the Agent Session
+
+Not everyone you need input from lives in the agent session — or is AI-native. A stakeholder, a spouse, a teammate without Slack/Teams access may hold decisions only they can make, but they are not sitting next to your harness. The **to-questionnaire** skill (v1.2) bridges that gap: during a grilling or Wayfinder session, it pulls the decisions and questions out into a shareable markdown document. You put that document into a Google Doc (or equivalent), send it to the stakeholder, walk through it together while they comment and answer in the doc, then pull the answers back into the agent.
+
+Pocock's worked example: he used Wayfinder (with to-questionnaire) to plan a garden office, and the real stakeholder was his wife — not in the agent session, not AI-native. The questionnaire exported the open decisions into a document she could annotate on her own terms, and the answers flowed back into the planning. The same pattern applies to any teammate or decision-maker who cannot be tagged into the agent's channel.
+
+> **Why it works:** The person you really need to speak to often isn't in the agent session; to-questionnaire bridges the agent-human collaboration gap for people without Slack/Teams or who aren't AI-native. It is a patch for a current limitation, not a permanent fixture — the aspirational end state is the agent living in Slack/Teams where stakeholders can tag it in, collaborate and answer questions together in-channel, then the agent implements directly. Pocock explicitly hopes to delete the skill once that gap closes. Treat it as a workaround with a retirement condition, not as permanent process.
+
+For a team, the implication is twofold: install the questionnaire path now for stakeholders who cannot join the agent's channel, and pursue the better future state — getting the agent into the team's collaboration tool so stakeholders can tag it in directly. The questionnaire is the bridge; in-channel collaboration is the destination.
+
 ## Economics and Model Strategy
 
 A team workflow is also a token-spend workflow, and the ground shifted under it: Anthropic's "dedicated monthly credit" (effective June 15) capped programmatic usage — the Claude Agent SDK, `claude -p`, Claude Code GitHub Actions, and third-party Agent-SDK apps — at a credit matching your plan price (Pro $20, Max 5x $100, Max 20x $200/month; Team plans likewise), with no rollover, while human-in-the-loop usage (Claude Code in the terminal/IDE, the web/desktop apps) stays on normal subscription limits. Framed as a bonus, it is the opposite for AFK-heavy teams: because a 20x Max subscription had been estimated at up to ~$5,000/month of API-credit-equivalent value, capping programmatic use at $200 "feels more like a 5x or a 10x cut." Anthropic is explicitly prioritizing human-in-the-loop usage "way above" AFK.
@@ -239,6 +249,7 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - [ ] Every deterministic rule enforced by hooks/lint (PreToolUse blockers, git-push safety hook, pre-commit tests/lint/typecheck), with `settings.json` in the repo
 - [ ] New developers onboarded via `/ask-matt`, a teach workspace pointed at the codebase, and the six human-side grilling skills
 - [ ] Escalation paths named and known: de-slop cadence scheduled, `/triage` for the backlog, `/handoff` for session splits
+- [ ] For stakeholders outside the agent session (non-AI-native, no Slack/Teams), use to-questionnaire to export decisions to a shareable doc, collect answers, and pull them back in; pursue in-channel agent collaboration as the destination.
 - [ ] Workloads split by economics: subscription for human-in-the-loop, API/alternate provider for AFK; effort levels and model tiers set per phase
 - [ ] AFK execution sandboxed, label-gated, never YOLO; internal tooling (if any) gates powerful tools behind approval
 - [ ] Success measured in landed impact and gate health, with Goodhart's law in mind
@@ -259,6 +270,7 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - I stopped using /grill-me for coding. Here's what I use instead:
 - New Skills! /handoff, /prototype, /review and /writing-* | Skills Changelog
 - /handoff is my new favourite skill
+- New Skills! v1.2 brings /wait-what, /writing-for-agents, and fixes /grill-me
 - The 7 phases of AI-driven development
 - Building a REAL feature with Claude Code: every step explained
 - How to actually force Claude Code to use the right CLI (don't use CLAUDE.md)

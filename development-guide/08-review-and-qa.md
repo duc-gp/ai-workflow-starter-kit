@@ -43,6 +43,21 @@ Tickets are lossy — they are the journey, and the spec is the destination. The
 
 > **Rule:** No multi-session piece of work is done until a fresh context has compared the final implementation against the spec, criterion by criterion.
 
+## /wait-what: Curing Verbose Gibberish With Your Language
+
+Two-axis review catches code that is wrong or non-conforming. A different problem is agent *prose* you cannot even parse — incredibly verbose output full of weird LLM phrases that "goes right over your head." Pocock singles out Opus (especially Opus 5) as "talking garbage at the moment": verbose, hard to read, "and a lot of people feel the same." He tried fixing it with output styles and by adding instructions to agents.md before concluding a dedicated skill was the right tool.
+
+The skill is **/wait-what**, invoked by saying literally "Wait, what?" whenever "the agent just creates some random garbage and you've no idea what they just said." Two mechanics do the work:
+
+1. **ASD STE100 simplified technical English** — the skill instructs the agent to "speak in clear, declarative sentences." STE100 (Simplified Technical English, from the ASD standard) is essentially a leading directive to use very simple language.
+2. **Ground in the ubiquitous language** — the skill points the agent at `context.md`, the glossary produced by `/grill-with-docs` ([Chapter 5](05-idea-to-spec.md)), and tells it to use that vocabulary.
+
+The second mechanic is the load-bearing one. As Pocock frames it:
+
+> "The real cure for verbosity is not to tell it to use simple language, although we are doing a bit of that. It is to tell it to use *your* language — the stuff that you have come up with in Grill with Docs."
+
+Telling an agent to "be simple" helps; grounding it in the project's ubiquitous language is the real fix, because it forces the agent to use the vocabulary you and your team actually use rather than generating generic, verbose circumlocutions. This connects `/wait-what` directly to the ubiquitous-language practice from [Chapter 3](03-preparing-your-codebase.md) and the glossary work in [Chapter 5](05-idea-to-spec.md): the glossary is not just for code generation — it is the cure for incomprehensible explanations too. The skill replies with "a much better, simpler alternative" to whatever it just said.
+
 ## Coding Standards and the Fowler Smell Vocabulary
 
 The standards axis has a bootstrapping problem: it can only check standards that exist. Two decisions make it work.
@@ -209,6 +224,7 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - [ ] Review always runs in fresh-context subagents — never in the context that wrote the code.
 - [ ] `/implement` (or your equivalent) invokes code review automatically before committing; review is a phase, not a favor.
 - [ ] Review runs on two parallel axes: spec fidelity (every acceptance criterion) and repo coding standards.
+- [ ] When agent prose is incomprehensible (Opus verbosity), say "Wait, what?" — /wait-what re-states it in ASD STE100 simplified technical English grounded in your context.md ubiquitous language, not just "simpler" language.
 - [ ] Coding standards live in a dedicated `coding-standards.md`, not in CLAUDE.md/agents.md; review is where they are consumed.
 - [ ] The review skill carries a ~10-line Fowler smell list (mysterious name, duplicated code, feature envy, data clumps, primitive obsession, repeated switches, divergent change, speculative generality, message chains, middleman) as fallback vocabulary.
 - [ ] Refactoring happens at review time, not inside the TDD loop — red-green only during implementation.
@@ -228,6 +244,7 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
 - New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets
+- New Skills! v1.2 brings /wait-what, /writing-for-agents, and fixes /grill-me
 - New Skills! /handoff, /prototype, /review and /writing-* | Skills Changelog
 - Can Cursor's HARDCORE Review Skill Stop The Slop?
 - How To De-Slop A Codebase Ruined By AI (with one skill)

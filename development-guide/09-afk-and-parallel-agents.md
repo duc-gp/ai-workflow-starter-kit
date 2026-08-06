@@ -187,6 +187,23 @@ Pulling the sources together, AFK execution is safe under specific preconditions
 - **Under-specified tickets.** If nobody has written the brief that earns a `ready for agent` label, the ticket is human work (triage) first.
 - **Taste and unverifiable judgment.** Prototyping, UI decisions you "couldn't get a sense for which way to go ... until I saw it in reality", and anything outside an objective metric.
 
+## Provisioning and Secrets: The Wizard Skill
+
+Not every step in the workflow can or should go to an agent. Provisioning infrastructure — logging into AWS, pasting API keys, saving values into GitHub secrets — involves secrets and human-only console actions. Letting an agent do it via computer use "just felt pretty icky"; Pocock wanted control. The **wizard** skill (v1.2) is the alternative: it generates an **interactive bash wizard — a deterministic script, not an agent call** — that walks the human through the steps only they can perform.
+
+How a run works:
+
+1. Kick off the wizard (e.g. for migrating to a remote box or AWS provisioning).
+2. It produces a deterministic bash script with a "nice little UI" that opens the exact page or script you need, directs you to log in, change the exact thing, and paste in API keys.
+3. It saves values into the files needed — and even into GitHub secrets where required — walking through separate stages until done.
+4. Advance each stage with a natural phrase: "Ready to start? Yes, please."
+
+The load-bearing property is determinism: **nothing is sent to an LLM**. Because the wizard is a script, not an agent call, API keys and secrets stay local — no Anthropic round-trip, no third party. The human keeps control over the whole flow while the wizard makes it "as easy as possible." Pocock's verdict on the impact: "this takes provisioning services from incredibly painful to weirdly joyful."
+
+> **Why it works:** Deterministic scripts are the right tool for sensitive human steps the way hooks are the right tool for deterministic CLI rules ([Chapter 3](03-preparing-your-codebase.md)). When a step needs secrets or human judgment at a console, a bash wizard gives you control + ease without putting secrets in an agent's context window — the same logic that rejects YOLO mode for AFK execution applies one level down, to the provisioning step inside the flow.
+
+This is the human-in-the-loop counterpart to the AFK machinery: the wizard handles the steps a loop cannot, deterministically, so the boundary between "agent does this" and "human does this" is explicit and safe rather than blurred by computer use.
+
 ## The Guardrails That Make AFK Safe
 
 Every successful AFK setup in the sources rests on the same short list. Skip any one of them and the failure mode is predictable.
@@ -215,11 +232,13 @@ Every successful AFK setup in the sources rests on the same short list. Skip any
 - [ ] Run the day shift / night shift split: grill and QA while the loop implements your previous session; file QA findings as issues and re-run the loop in parallel.
 - [ ] When waiting on one agent, delegate more non-interfering macro tasks to others (high effort setting, ~20-minute granularity); treat idle token capacity as the bottleneck being you.
 - [ ] Only fully automate what you can evaluate: objective + metric + boundaries (+ a program.md for research-style loops); watch for Goodharting; keep humans on QA, review, and taste.
+- [ ] For provisioning and secret-handling steps, use a deterministic wizard script (not computer use) so secrets stay local and the human keeps control.
 
 ## Sources
 
 - Ship working code while you sleep with the Ralph Wiggum technique
 - I Open-Sourced My Own AFK Software Factory
+- New Skills! v1.2 brings /wait-what, /writing-for-agents, and fixes /grill-me
 - Building a REAL feature with Claude Code: every step explained
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
 - I'm using claude --worktree for everything now
