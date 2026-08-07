@@ -201,7 +201,7 @@ Done. Next steps:
   3. Then describe what you want in plain language. Some skills the agent
      starts on its own (bug diagnosis, TDD, code review, prototypes,
      research). The bigger ones it will suggest and you type — see the two
-     lists printed above, or the cheat sheet in your CLAUDE.md.
+     lists printed above, or re-print them any time with --verify.
 
   4. Not sure why the agent is doing something, or not sure what to do next?
      Just ask "why" or say you're stuck. That reaches explain-workflow, which

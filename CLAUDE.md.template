@@ -33,22 +33,10 @@ Name the command and the reason in one line — e.g. *"This one's non-trivial, s
 
 `/to-spec`, `/to-tickets`, `/triage`, and `/wayfinder` all read `docs/agents/issue-tracker.md` to learn where work is stored. **If that file does not exist, this repo has not been set up yet.** Stop and tell the user to run `/setup-matt-pocock-skills` first — a one-time, per-repo setup covering the issue tracker, triage labels, and domain-doc layout. Do not guess a tracker, and do not follow the setup skill's instructions by hand.
 
-Local markdown under `.scratch/` is the recommended default: no tokens, no CLI, works with any git host or none, and the tickets stay versioned next to the code that satisfies them. A shared tracker (GitHub, GitLab, Jira, Linear) is worth it only when unattended agents or teammates need to pull work from a shared queue.
-
 ### Ground rules
 
 - Never treat generated specs/tickets/reviews as requiring line-by-line sign-off by default — that defeats the point. Surface only real decisions and genuine surprises.
 - Prefer a deterministic check (lint/type/test/hook) over a written instruction whenever one is possible instead of just saying "remember to X."
 - If this repo lacks tests, types, or lint for something that matters, say so once and offer to fix it — don't silently work around a missing feedback loop forever.
-
-### Cheat sheet
-
-Automatic — just describe the situation:
-`diagnosing-bugs` · `resolving-merge-conflicts` · `tdd` · `prototype` · `research` · `code-review` · `domain-modeling` · `codebase-design` · `explain-workflow`
-
-Type these yourself:
-`/setup-matt-pocock-skills` · `/grill-with-docs` · `/wayfinder` · `/to-spec` · `/to-tickets` · `/implement` · `/triage` · `/claude-handoff` · `/ask-matt`
-
-Run `init.sh --verify` from the kit to re-print this list for the skills actually installed here.
 
 Background reading, only if you (the agent) need the reasoning behind a rule above, or `explain-workflow` needs to ground an answer: `development-guide/` at this repo's root. The user does not need to read it themselves.
