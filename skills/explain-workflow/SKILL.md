@@ -1,7 +1,6 @@
 ---
 name: explain-workflow
 description: Explain, in plain language, why this AI-development workflow does what it does — or help a user who isn't sure what to do next understand their situation and options. Grounded in development-guide/, not silent routing.
-disable-model-invocation: true
 ---
 
 # Explain Workflow
@@ -11,7 +10,9 @@ Two distinct triggers land here, both handled the same way:
 1. The user asks **why** — why grill before writing code, why clear context between tickets, why two-axis review, why any rule the workflow follows.
 2. The user seems **unsure what to do next** — doesn't know which skill applies, doesn't understand what just happened, or asks something like "what do I do now?" / "I don't get it."
 
-This is different from silent routing (the default behavior described in this repo's `CLAUDE.md` and from `ask-matt`): those pick the right skill and just proceed. This skill is for when the user wants — or needs — the reasoning made visible instead of hidden. Once they understand, proceed with whichever skill actually fits; don't stop at the explanation if there's still work to do.
+This is different from ordinary routing (the behavior described in this repo's `CLAUDE.md`) and from `ask-matt`: those pick the right skill and either proceed or tell the user which command to run. This skill is for when the user wants — or needs — the reasoning made visible instead of hidden. Once they understand, continue with whatever actually fits; don't stop at the explanation if there's still work to do.
+
+This skill is deliberately model-invocable, unlike most of the workflow skills — a user who is confused should not have to know a command name to get unstuck.
 
 ## Where the knowledge lives
 

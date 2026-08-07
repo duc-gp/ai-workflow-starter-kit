@@ -1,30 +1,54 @@
 ## AI development workflow
 
-This repo uses a skills-based workflow so that output quality comes from the process, not from how well any one person prompts. Route the user's plain-language requests to the right skill yourself — don't wait to be asked by name, and don't make the user learn these names.
+This repo uses a skills-based workflow so that output quality comes from the process, not from how well any one person prompts.
 
-- **New feature or change request, non-trivial:** run `grill-with-docs` first to interview the user into a sharp shared understanding, before writing code. Skip this only for genuinely tiny, unambiguous asks (typo, one-line fix, "add this exact field").
-- **The idea is big and foggy** ("I want to overhaul X" with no clear shape yet): use `wayfinder` instead of jumping straight into grilling.
-- **After grilling, decide the fork yourself:**
-  - Fits in the current session comfortably → just implement it directly.
-  - Won't fit in one session, or needs to survive a context clear → `to-spec`, then `to-tickets`, then `implement` one ticket at a time (clear context between tickets).
-- **Implementing:** use the `implement` skill. It runs type checks and tests as it goes and calls code review itself — don't skip that step or call work "done" without it.
+**Two kinds of skills, and the difference matters.** Some the agent invokes on its own. Others are marked `disable-model-invocation` upstream — the agent *cannot* start them, because they publish to a tracker, restructure work, or consume a whole session. For those, the agent's job is to recognise the situation and tell the user which command to type, and why. Never claim to have run one of these, and never quietly do its work by hand instead.
+
+### Routed automatically — the user just describes the situation
+
 - **Something is broken or slow:** `diagnosing-bugs`.
 - **Mid-merge conflict:** `resolving-merge-conflicts`.
 - **Test-first is requested or fits naturally:** `tdd`.
-- **A backlog of issues/PRs needs sorting:** `triage`.
 - **A design question needs a cheap concrete artifact to react to (UI, state model):** `prototype`.
 - **Something needs looking up against real sources before deciding:** `research`.
-- **You genuinely don't know which skill fits:** use `ask-matt` rather than guessing out loud to the user.
-- **The user asks why the workflow does something, or seems unsure what to do next:** use `explain-workflow` — explain the reasoning in plain language instead of silently routing, so they build understanding, then proceed.
-- **Handing off mid-task to a fresh session:** `claude-handoff`.
 - **Reviewing a diff, branch, or PR against spec + standards:** `code-review`.
 - **Domain vocabulary is fuzzy or contested:** `domain-modeling`. **A module's interface needs shaping:** `codebase-design`.
+- **The user asks why the workflow does something, or seems unsure what to do next:** `explain-workflow` — explain the reasoning in plain language instead of silently routing, so they build understanding, then proceed.
 
-Ground rules:
+### Suggested by the agent, typed by the user
+
+Name the command and the reason in one line — e.g. *"This one's non-trivial, so it's worth sharpening first: run `/grill-with-docs`."* Then wait.
+
+- **New feature or change request, non-trivial:** `/grill-with-docs` first, to interview the user into a sharp shared understanding before any code. Skip only for genuinely tiny, unambiguous asks (typo, one-line fix, "add this exact field").
+- **The idea is big and foggy** ("I want to overhaul X" with no clear shape yet): `/wayfinder` instead of jumping straight into grilling.
+- **After grilling, judge the fork and say which applies:**
+  - Fits in the current session comfortably → implement it directly, no command needed.
+  - Won't fit in one session, or needs to survive a context clear → `/to-spec`, then `/to-tickets`, then `/implement` one ticket at a time (clear context between tickets).
+- **Implementing from a spec or tickets:** `/implement`. It runs type checks and tests as it goes and calls code review itself — don't skip that step or call work "done" without it.
+- **A backlog of issues/PRs needs sorting:** `/triage`.
+- **Handing off mid-task to a fresh session:** `/claude-handoff`.
+- **You genuinely don't know which skill fits:** `/ask-matt` rather than guessing out loud to the user.
+
+### Before any tracker-touching skill
+
+`/to-spec`, `/to-tickets`, `/triage`, and `/wayfinder` all read `docs/agents/issue-tracker.md` to learn where work is stored. **If that file does not exist, this repo has not been set up yet.** Stop and tell the user to run `/setup-matt-pocock-skills` first — a one-time, per-repo setup covering the issue tracker, triage labels, and domain-doc layout. Do not guess a tracker, and do not follow the setup skill's instructions by hand.
+
+Local markdown under `.scratch/` is the recommended default: no tokens, no CLI, works with any git host or none, and the tickets stay versioned next to the code that satisfies them. A shared tracker (GitHub, GitLab, Jira, Linear) is worth it only when unattended agents or teammates need to pull work from a shared queue.
+
+### Ground rules
+
 - Never treat generated specs/tickets/reviews as requiring line-by-line sign-off by default — that defeats the point. Surface only real decisions and genuine surprises.
 - Prefer a deterministic check (lint/type/test/hook) over a written instruction whenever one is possible instead of just saying "remember to X."
 - If this repo lacks tests, types, or lint for something that matters, say so once and offer to fix it — don't silently work around a missing feedback loop forever.
 
-First time these skills touch this repo: run `setup-matt-pocock-skills` once before anything else (configures the issue tracker, triage labels, and domain-doc layout).
+### Cheat sheet
+
+Automatic — just describe the situation:
+`diagnosing-bugs` · `resolving-merge-conflicts` · `tdd` · `prototype` · `research` · `code-review` · `domain-modeling` · `codebase-design` · `explain-workflow`
+
+Type these yourself:
+`/setup-matt-pocock-skills` · `/grill-with-docs` · `/wayfinder` · `/to-spec` · `/to-tickets` · `/implement` · `/triage` · `/claude-handoff` · `/ask-matt`
+
+Run `init.sh --verify` from the kit to re-print this list for the skills actually installed here.
 
 Background reading, only if you (the agent) need the reasoning behind a rule above, or `explain-workflow` needs to ground an answer: `development-guide/` at this repo's root. The user does not need to read it themselves.
