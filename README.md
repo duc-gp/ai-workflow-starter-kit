@@ -8,25 +8,27 @@ New to this and want the story of how it came to be and where the pieces actuall
 
 ## Quick start
 
-Clone this kit somewhere, then point `init.sh` at the repo you want to set up:
+Open Claude Code in the repo you want to set up and say:
+
+> Clone https://github.com/duc-gp/ai-workflow-starter-kit.git into this repo and follow its INSTALL.md
+
+That's the whole thing. [`INSTALL.md`](INSTALL.md) is written for the agent: it runs the installer, deletes the clone, commits, and tells you the two steps only you can do. Nothing to memorise, and you can read `INSTALL.md` yourself first to see exactly what it will do.
+
+<details>
+<summary>Prefer to run it yourself?</summary>
+
+Clone the kit somewhere and point `init.sh` at the repo you want to set up:
 
 ```bash
-git clone https://github.com/duc-gp/ai-workflow-starter-kit.git ai-workflow-starter
-ai-workflow-starter/init.sh /path/to/your/existing/repo
+git clone https://github.com/duc-gp/ai-workflow-starter-kit.git ~/ai-workflow-starter
+~/ai-workflow-starter/init.sh /path/to/your/existing/repo
 ```
 
-Or clone it straight into the target repo and run it from there:
+With no argument, `init.sh` targets the current directory. Add `--verify` to check an already-set-up repo without installing anything. If you clone the kit *into* the target repo, delete the clone before committing — it carries its own `.git`.
 
-```bash
-cd /path/to/your/existing/repo
-git clone https://github.com/duc-gp/ai-workflow-starter-kit.git .ai-workflow-starter
-./.ai-workflow-starter/init.sh .
-rm -rf .ai-workflow-starter   # one-time setup tool, safe to remove afterwards
-```
+</details>
 
-With no argument, `init.sh` targets the current directory. Add `--verify` to check an already-set-up repo without installing anything.
-
-The kit is public — just clone it.
+The kit is public — no auth needed. It does need Node installed, for `npx`.
 
 ## What it does
 
