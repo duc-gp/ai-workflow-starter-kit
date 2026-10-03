@@ -189,6 +189,23 @@ QA discoveries are not review comments; they are **new tickets** that flow back 
 
 QA is also where human taste re-enters. UI decisions that could not be settled by talking ("I couldn't get a sense for which way to go until I saw it in reality") get settled here — and QA caught internal jargon ("ghost course") leaking into end-user UI, something no automated axis would flag.
 
+## Scaling Review: Sampling, Post-Land Review, and Course-Correcting the Kitchen
+
+Once agents ship thousands of PRs a month, exhaustive human review is arithmetically impossible — and Poteto's setup, which does exactly that, shows what replaces it. Three techniques:
+
+**1. Sample like a quality supervisor.** "You can't taste every dish" — you don't read all 2,500 PRs. You sample, scrutinizing the sampled agent-written code rigorously, like a factory quality supervisor. Sampling works because the alternative is not "read everything" — it is skimming everything and catching nothing.
+
+**2. Course-correct the environment, not the individual.** The sampling verdict routes to a system-level decision: a one-off incident is fine ("maybe there's nothing to fix there"); multiple agents taking the same shortcut or propagating the same workaround means the kitchen needs amending — skills, constraints, lint rules, type systems ([Chapter 2](02-principles.md) states the principle; [Chapter 3](03-preparing-your-codebase.md) builds the constraints). Never chase the individual agent's mistake; fix what made it possible.
+
+**3. Review after the land, via commit history.** At the top of the trust ladder, agents merge their own PRs while you sleep; you review afterwards via the commit history, then revert, modify, or add a lint rule when problems show. This only works because verification has made "one-way doors become two-way doors in a sense" — a verified, cheaply revertible merge is not a one-way door. The gate is the verifiability of the domain: software engineering is largely verifiable, so post-land review is safe; for hard-to-verify domains (medical, law, finance) he has no full answer — the industry has to figure it out.
+
+Two supporting practices from the same setup:
+
+- **The gardening buffer.** An agent constantly scans the codebase for banned patterns (e.g. React footguns) — but is told NOT to fix immediately; it appends findings to a document. Every couple of days, review the document: the entries usually turn out to be "all the same thing," revealing the pattern you'd miss in pure execution mode. The buffer forces pattern-discovery: a chief-of-staff agent "can see the forest" that per-bug fixing can't. Much of the PR volume is this kind of "gardening," not features.
+- **Eliminate tautological tests.** A named test smell from the same source: agent-written tests that assert the implementation against itself — "tautology" is the word worth using, because a good word is one the agent hooks onto and reuses in its thinking traces.
+
+**Mining your own transcripts (recall).** Past chats are "a treasure trove of context" — the real process, materialized, not the abstract idea in your head. The workflow: have an agent look through past transcripts for places where you had to intervene, then turn those higher-level learnings into reusable skills or lint rules so the mistake stops repeating. Poteto's `recall` skill compresses exactly this — mining a previous chat's context to carry into a new chat (it was born from virtualization bug-fixing, where each new chat lost the good context of the last one). This is the same "bank the session" discipline as [Chapter 5](05-idea-to-spec.md)'s artifacts table, run against history instead of the current session.
+
 ## De-Slopping: Rescuing a Codebase Ruined by AI
 
 Everything above assumes the quality gate was in place while the code was written. Many codebases were not so lucky. Pocock's diagnosis of what actually happened during the "code is cheap" era:
@@ -239,6 +256,9 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - [ ] QA discoveries flow back as tickets through a near-zero-friction channel (feedback button: cheap-model title, route, verbatim feedback), and the fix loop runs in parallel with continued QA.
 - [ ] Multi-session work ends with a final implementation-vs-spec comparison in a fresh context.
 - [ ] The improve-codebase-architecture skill runs every couple of days (auto mode off, human judgment on), and first of all in any legacy codebase.
+- [ ] At scale you sample instead of reading everything — sampled agent code scrutinized rigorously; repeated shortcuts across agents trigger an environment fix (skills, lints, types), not per-agent correction.
+- [ ] Gardening findings buffered into a document for pattern discovery — not fixed one by one as they appear; tautological tests flagged and eliminated.
+- [ ] Post-land review via commit history (revert / modify / add lint rule) where verification has made merges cheaply revertible; past transcripts mined for interventions and turned into skills or lint rules (recall).
 
 ## Sources
 
@@ -250,5 +270,6 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - How To De-Slop A Codebase Ruined By AI (with one skill)
 - Building a REAL feature with Claude Code: every step explained
 - Never Trust An LLM
+- LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 
 See also: [Chapter 2](02-principles.md) for the never-trust principle behind fresh-context review, [Chapter 3](03-preparing-your-codebase.md) for the codebase properties review enforces, [Chapter 6](06-tickets-and-planning.md) for how specs become tickets, [Chapter 7](07-execution.md) for the implementation sessions review gates, [Chapter 9](09-afk-and-parallel-agents.md) for the AFK loops QA feeds, and [Chapter 10](10-building-skills.md) for authoring review skills of your own.

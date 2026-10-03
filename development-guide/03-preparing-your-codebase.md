@@ -35,6 +35,16 @@ There is a deeper principle here: **feedback loops beat instructions**. Matt hat
 
 > **Rule:** Any quality rule that CAN be expressed as a deterministic check (lint rule, type constraint, test, hook) should be — never as prose instructions to the agent.
 
+### Verification as the #1 skill: give the agent hands and eyes
+
+Poteto (creator of the pstack skill library, whose agents ship thousands of PRs a month) calls this the top of the whole hierarchy: "the single most important skill that should be in your toolkit is verification" — even if you don't use his skill library. Verification means giving the agent the ability to run the code and interact with it like a human user — debug it, take traces and snapshots ("hands and eyes"). Without it you remain the proxy between the agent and its output, and the agent can't iterate — there is no loop:
+
+> "The most important part of a loop that allows it to be a loop is the verification part, because the agent is able to verify its own work." — Poteto
+
+It was the first skill he built at Cursor, the thing that first let him climb the trust ladder, and every app his team runs carries an auto-maintained verification skill — "critical infrastructure." The verification CLI itself is "just a bunch of glue" over Playwright and the Chrome DevTools Protocol plus APIs. Once the agent can verify against a rubric or score, it can also **hill-climb**: continually try to improve the result in a loop (cf. Karpathy's auto-research, [Chapter 9](09-afk-and-parallel-agents.md)).
+
+In this guide's terms, that is exactly what the frontend browser loop below does — and the reason "the environment determines quality" is not just about lint rules but about giving the agent **eyes on its own output**.
+
 ## Modular Architecture: Deep, Gray-box Modules
 
 The architectural pattern for an AI-ready codebase comes from *A Philosophy of Software Design*: **deep modules** — "lots of implementation controlled by a simple interface" — instead of many small interconnected ones.
@@ -71,6 +81,8 @@ Three benefits are claimed:
 > **Warning:** Gray-box delegation is "a million miles away from vibe coding." You must still apply taste at module boundaries — deciding what belongs in which module and how interfaces fit together is exactly the work you cannot delegate. See [Chapter 2](02-principles.md).
 
 The failure mode this replaces is "a web of interconnected kind of shallow modules... really hard to navigate and really hard to test and really hard to keep in your head" — the summary diagnosis of an AI-unready codebase.
+
+**Turning agent mistakes into environment constraints** is the same idea run continuously, from Poteto's setup. Every observed agent failure prompts two questions: "how do I turn this into a lint rule? How do I make it so that the codebase makes this impossible?" The goal is an environment where "it's actually very hard to write bad code" — where there's "really only one way to do something." His before-and-after: early versions of his product were ~eight god files of 10,000+ lines each; breaking features into their own directories plus restrictive lint rules fixed it. His internal framework ("our internal Next.js for our Electron apps") bakes this in: very restrictive lint rules, registry-based feature directories, conventional patterns. The same move at the language level is **type narrowing** — narrow the space of possible types until "there's only one type," exactly analogous to constraining the codebase so there's only one way to do something. Constraints live in the environment, not in the agent's memory: the agent isn't overloaded with rules, it just "bounces off them." And for migrations, encode the transformation itself: use scripts and code mods that crawl the AST and transform code literally, instead of asking the agent to invent the transformation each time. His working definition of the goal: "a good codebase is a codebase that's easy to make changes in."
 
 Finally, module thinking starts before code: "right from the early planning stage when you're writing your PRDs or when you're turning your PRDs into implementation issues," identify which modules you're affecting, design the interfaces, and decide how you'll test them. During review, this is what you scrutinize — Matt describes reviewing a proposed `materializeCourseAndLesson` method versus adding a parameter to `materializeGhost` (the extra param would be "dodgy API-wise", so a new method won): "Notice how I'm thinking about the interface more than the implementation... I want to make sure this is testable and that the rest of the repo and any future AI agents can understand what it's doing."
 
@@ -244,6 +256,8 @@ Run this repo readiness checklist against any repository before pointing agents 
 - [ ] Each module's interface obvious at the type level, readable before the implementation
 - [ ] Module boundaries enforced, not implied (in TS/JS, consider Effect)
 - [ ] PRDs and tickets already name the modules, interfaces, and tests they affect
+- [ ] No god files: features broken into their own directories, with restrictive lint rules making bad code hard to write
+- [ ] Observed agent failures converted into constraints (lint rules, directory structure, type narrowing) instead of instructions
 
 **Domain documentation**
 - [ ] Glossary / ubiquitous language file exists: terms, verbs, composite concepts, aliases to avoid — updated after every grilling session
@@ -262,7 +276,7 @@ Run this repo readiness checklist against any repository before pointing agents 
 - [ ] Corresponding instructions removed from CLAUDE.md after each hook lands
 
 **Frontend readiness**
-- [ ] Browser feedback loop configured: `.mcp.json` for a browser MCP plus a launch-instructions skill
+- [ ] Browser feedback loop configured: `.mcp.json` for a browser MCP plus a launch-instructions skill — the agent has hands and eyes on its own output
 - [ ] Textual loops (tests, lint, types) attached to frontend code too — necessary but not sufficient
 - [ ] Any AFK loop touching frontend code has the browser plugged in
 - [ ] Frontend look/behavior questions routed through prototypes, not settled by conversation
@@ -277,5 +291,6 @@ Run this repo readiness checklist against any repository before pointing agents 
 - Building a REAL feature with Claude Code: every step explained
 - New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
+- LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 
 See also: [Chapter 1](01-how-llms-actually-work.md) for context windows and the smart zone; [Chapter 2](02-principles.md) for the trust and taste principles gray-box delegation depends on; [Chapter 5](05-idea-to-spec.md) for grilling and prototyping; [Chapter 8](08-review-and-qa.md) for how coding-standards.md is consumed at review; [Chapter 9](09-afk-and-parallel-agents.md) for the loops these feedback mechanisms make safe; [Chapter 10](10-building-skills.md) for authoring the skills that absorb steering guidance.

@@ -161,6 +161,8 @@ to the current branch.
 
 Matt almost didn't ship it — but it "earns its place" as the named step in the flow. Leverage-the-prior cuts both ways: name cited concepts instead of explaining them, and omit anything the model reliably does anyway.
 
+**Word choice is intent compression.** Poteto's version of the same principle: pick words dense with meaning — "tautology" for useless agent-written tests, "TDD" as a thinking primer that gets the agent re-prioritizing tests. The test of a good word: the agent hooks onto it and reuses it in its own thinking traces. Choose vocabulary the way you choose a named concept: for what it unlocks, not for what it states.
+
 ### Leave escape hatches, keep content durable
 
 Two smaller patterns with documented payoffs:
@@ -179,6 +181,15 @@ The redesign made it **reference material only**: no prescribed steps, just the 
 > **Rule:** If a skill will ever run without a human present, it cannot depend on mid-flight confirmation. Write interactive skills as step-by-step processes with gates; write AFK-compatible skills as reference material — constraints and definitions the agent applies on its own.
 
 This is the newest position and the recommended one: default to reference material for anything execution-shaped, and reserve step lists for skills whose entire point is a human conversation (grilling, setup, review approval).
+
+## Skills as Wrappers: Deterministic Tools Plus Light Instructions
+
+Poteto's design stance, proven at thousands of PRs a month: **a skill is a wrapper with some light instructions around custom deterministic tools.** Split any skill along the judgment-vs-determinism gradient — the purely mechanical parts (a pattern→pattern refactor) become a script/CLI bundled with the skill; only the judgment remains for the agent ([Chapter 7](07-execution.md) covers the execution side). His verification CLI is "just a bunch of glue" over Playwright, the Chrome DevTools Protocol, and APIs — the value is not novel software but consistent execution, smaller context, and speed: without it, "the agent would try to verify his work but it would basically rebuild the world each time and then every agent did it differently."
+
+Two further properties of skills from the same source:
+
+- **Skills are workflow encoding, not implementation details.** "A skill is really much just process... at the end of the day a skill is just English or language. It's just markdown." Skills from a year ago were full of exact script commands; with current models you can delete those parts and encode just the workflow — "a series of steps, a series of real process" — and skills will keep getting smaller and more compact as models improve. "If there is any magic in them, it's just the words chosen and the phrases used and the thinking that's been done to turn those, like, take abstract process and turn them into language." Once that thinking is on the surface, "you just nick it."
+- **Combine skill libraries; everyone carries their own knives.** Skills from different libraries are complementary — "just markdown," just language — so weave them into your own set (e.g. combine Matt's grilling or wayfinder with PAC's execution skills). "Everyone should have their own set of knives" — chefs carry their knives to every new restaurant, and trust comes from knowing your own tools really well. A dev who never learned VS Code/Vim/Git and only knows Notepad has dull knives; sharp ones exist for a reason.
 
 ## Skills, CLAUDE.md, or Hooks: Put Each Rule in Its Strongest Home
 

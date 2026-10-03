@@ -171,6 +171,34 @@ Three caveats, all his:
 - **Goodharting**: an autonomous loop over metrics will overfit them; his mitigation is using the system itself to devise more metrics for better coverage.
 - **Don't outrun capability**: "the whole thing is still bursting at the seams… if you try to go too far ahead, the whole thing is actually net not useful." Calibrate autonomy to what actually works today.
 
+Poteto's hill-climbing observation is the same loop from the engineering side: once the agent can verify its own work against a rubric or score (the verification skill), it can continually try to improve the result in a loop — the practical form of Karpathy's rubric-based auto-research ([Chapter 3](03-preparing-your-codebase.md) covers building the verification skill itself).
+
+## Connecting the Inner Loop and the Outer Loop
+
+The AFK machinery so far automates the **inner loop**: agents building code toward a snapshot of your intent. Poteto's framing names the other half: the **outer loop** is everything that makes that snapshot stale — Slack, X, email, Linear, bug reports — and traditionally *you* are the proxy shoveling that context to agents. Scaling past one agent means automating the outer loop too:
+
+1. Wire an outer-loop watcher: Poteto's **Grokbot** (his product — a desktop app with connectors to email, calendar, Slack, Linear, X) watches channels and forwards triggers into the inner loop; a Slack MCP or a harness with a Slack subscription does the same job simply.
+2. Give the inner-loop agents a standing instruction — the **subscribe-and-triage pattern**: "subscribe to the Slack channel; every time a bug report arrives, triage it — reproduce the issue on main (using your verification skills), check it's not the user's setup, data, or a missing dependency, then fix."
+3. The payoff: "when you connect those two loops, it's very very powerful because now all of a sudden your agents have the ability to get context for themselves" — and you are removed from the equation. This is the same "where am I the bottleneck?" question from [Chapter 2](02-principles.md), answered with infrastructure.
+
+Two cautions from the same source. First, **group related issues**: when a burst lands (e.g. 30 performance issues, possibly with a similar fix), have the coordinator group them into one project instead of one agent per task — spawning one agent per bug report loses the thread, duplicates work, and misses the higher-level problem (several slightly different bug reports often reveal the real location of the bug). This is the same lesson as Pocock's "16 parallel agents… absolutely hellish": ungrouped parallelism collides. Second, skepticism about "company brain" / "context graph" abstractions: those terms are "unnecessarily complex or even abstract" — the whole thing is simply teaching the agent to fetch information you'd otherwise have to pass yourself.
+
+## Coordinator Agents: Chiefs of Staff in the Cloud
+
+Above the outer loop sits a delegation layer. Cursor's **projects** feature gives you a coordinator agent in the cloud with its own computer — it does not do the work itself; it delegates, orchestrates, and manages sub-agents (Poteto's metaphor: "executive chef / chief of staff"). Grokbot can message projects directly — you don't even have to open Cursor — and can create a project for a related series of tasks. Coordinator agents can spawn different agent topologies and figure out how to efficiently distribute tasks.
+
+The scale this reaches: Poteto runs "the equivalent of like more than 10 chiefs of staff, each working on a different area" — one on performance of the desktop app, one on user-reported bugs, one even exploring a rewrite in a different language as a toy. The multi-agent lesson for the fleet patterns above: parallelism needs a *manager* — the Sandcastle planner ([Chapter 9](#the-open-source-afk-software-factory)'s factory) is the same role, dispatching only unblocked work and grouping related issues. And a chief-of-staff agent "can see the forest" — pattern-level visibility across sub-agents that any single worker agent lacks (the gardening buffer in [Chapter 8](08-review-and-qa.md) exploits exactly this).
+
+**Full autopilot with fuzzing verifiers.** The most intense form: a per-PR verification loop (a PAC capability) that spawns a bunch of verifier agents per PR — they fuzz the running application, click around, use it like a real human, look for regressions and bugs, fix what they find, and repeat until the PR is in a state where it can land. It is quite token-intensive (verifier count is tunable, ~10 down to 1). Verification plus a constrained environment is exactly the combination that lets agents merge their own PRs unattended — the top rung of the trust ladder.
+
+## The Trust Ladder and the Dark Factory
+
+Poteto's scaling story is a **trust ladder**: as trust in agents grows you delegate more and scale to more agents; low trust forces "lock in and micromanage," which eats all your capacity for higher-level work. Each rung is earned by the machinery in this chapter and [Chapter 3](03-preparing-your-codebase.md) — the verification skill first ("the thing that first let me ascend the trust ladder"), then deterministic CLIs, then constrained environments, then connected loops — until agents self-merge their own PRs while you sleep. His honest caveat: "It's very hard to get to this point. I don't want to sell this as something that you can just do easily by using PAC" — it takes time and effort observing failures and setting guard rails thoughtfully. The first night of agents self-merging was scary ("what if I break something overnight?"); now "I'm sleeping so much better."
+
+He calls the end state a **dark factory** — dark only in the sense that *he* goes to sleep while agents work 24/7: "It's not dark in the sense that — so it's dark in the sense that I go to sleep." This is deliberately NOT Karpathy's vibe-coding dark, where the code barely exists: "If the code in the environment are bad, then you will get bad outputs. Garbage in, garbage out." The code and the environment remain essential; maybe a dimmer switch — some parts dark, some lit. (Contrast the never-trust principle in [Chapter 2](02-principles.md): this is not trust in the agent, it is trust in the environment's verification.)
+
+The domain gate for self-merging is **verifiability** — the same two-way/one-way-door framing: verification makes "one-way doors become two-way doors in a sense," because a verified merge is cheap to check and revert. Software engineering is largely verifiable; mathematics partially, via proofs; for hard-to-verify domains (medical, law, finance) he has no answer and predicts the industry will need agent-oriented programming languages that marry programming with proofs (he points to Bend, which compiles to a proof of correctness, as the hopeful direction; Lean/TLA+ are the old way — construct the proof in a separate language, then use a solver). "If it compiles, right, if the proofs show you that it's correct, then why wouldn't you just merge it?"
+
 ## When AFK Works — and When a Human Must Stay in the Loop
 
 Pulling the sources together, AFK execution is safe under specific preconditions, and the human re-enters at specific points:
@@ -232,6 +260,10 @@ Every successful AFK setup in the sources rests on the same short list. Skip any
 - [ ] Run the day shift / night shift split: grill and QA while the loop implements your previous session; file QA findings as issues and re-run the loop in parallel.
 - [ ] When waiting on one agent, delegate more non-interfering macro tasks to others (high effort setting, ~20-minute granularity); treat idle token capacity as the bottleneck being you.
 - [ ] Only fully automate what you can evaluate: objective + metric + boundaries (+ a program.md for research-style loops); watch for Goodharting; keep humans on QA, review, and taste.
+- [ ] Connect the loops: wire an outer-loop watcher (Slack MCP, Grokbot-style) and give agents a subscribe-and-triage instruction so they gather their own context — you stop being the proxy.
+- [ ] Group bursts of related issues into one project — never one agent per bug report; parallelism needs a coordinator that sees the forest.
+- [ ] Climb the trust ladder deliberately: verification skill → deterministic CLIs → constrained environment → connected loops → self-merging PRs with post-land review; expect it to take time, not a tool install.
+- [ ] "Dark" means you sleep while agents work — the code and the environment stay essential (garbage in, garbage out); never Karpathy-dark where the code barely exists.
 - [ ] For provisioning and secret-handling steps, use a deterministic wizard script (not computer use) so secrets stay local and the human keeps control.
 
 ## Sources
@@ -244,5 +276,6 @@ Every successful AFK setup in the sources rests on the same short list. Skip any
 - I'm using claude --worktree for everything now
 - The 7 phases of AI-driven development
 - Burn through the backlog from hell with /triage
+- LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 
 See also: [Chapter 3](03-preparing-your-codebase.md) for building the feedback loops AFK depends on, [Chapter 4](04-the-workflow.md) for where AFK execution sits in the 7 phases, [Chapter 6](06-tickets-and-planning.md) for ticket slicing and the triage state machine that feeds these loops, [Chapter 7](07-execution.md) for interactive execution sessions, and [Chapter 8](08-review-and-qa.md) for the review and QA gates that close the loop.

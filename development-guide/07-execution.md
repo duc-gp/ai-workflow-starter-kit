@@ -21,6 +21,8 @@ That is the whole skill. Pocock almost didn't ship it, because it mostly restate
 
 Note the phrase "pre-agreed seams": the seams were agreed during grilling and spec-writing ([Chapter 5](05-idea-to-spec.md)), where interface changes and testing decisions are confirmed with the human. Execution is not where interfaces get designed — it is where they get built.
 
+A related prompt trick from Poteto: **"TDD" as a thinking primer**. The point of putting the word TDD in front of the agent is not whether you doctrinally "use TDD" — it's that the word alone gets the agent thinking about tests and re-prioritizing them in its plan. Word choice is intent compression: pick words dense with meaning, ones the agent hooks onto and reuses in its own thinking traces (his example: "tautology" for useless agent-written tests). See [Chapter 10](10-building-skills.md) for the skill-authoring side of the same principle.
+
 What /implement actually does in a run, observed end to end:
 
 1. Implements the ticket or plan.
@@ -166,6 +168,18 @@ Commits during execution are frequent, verified, descriptive, and agent-authored
 
 Frequent verified commits are also what makes the rest of the workflow cheap: the QA-plan generation in [Chapter 8](08-review-and-qa.md) is literally "take the last five commits and create a QA plan" — it only works when the commit history is a clean, descriptive record of what changed.
 
+## Deterministic CLIs: Extract the Mechanical, Leave the Judgment
+
+The judgment-vs-determinism gradient, from Poteto: work spans entirely-judgment tasks (multi-context thinking) to purely mechanical ones (a pattern→pattern refactor). Let agents shine at the non-deterministic parts — "that's what they're trained to do" — and encode the mechanical parts as code. Applied to execution, this means **putting deterministic CLIs inside skills**:
+
+1. Look at a skill and ask which parts are purely mechanical (a refactoring from one pattern to another) versus which require judgment.
+2. Extract the deterministic parts into a script/CLI that ships with the skill; leave only the judgment to the agent.
+3. The skill becomes "a wrapper with some light instructions around how to use these custom tools."
+
+Why it works: consistent execution, smaller context, and speed. Without the CLI, "the agent would try to verify his work but it would basically rebuild the world each time and then every agent did it differently" — each verifying agent wrote its own scripts from scratch and discarded the last one's working code. His verification CLI is "just a bunch of glue" over Playwright, the Chrome DevTools Protocol, and APIs — not novel software. The origin of the pattern is telling: the community meme that one compaction made the agent "stupid" for the rest of the session pushed him to encode deterministic parts as code; harnesses are much better at summarization now, but a clean context still helps.
+
+The same split governs migrations: use scripts and **code mods that crawl the AST and transform code literally**, instead of asking the agent to invent the transformation each time — deterministic tooling for a deterministic job. ([Chapter 10](10-building-skills.md) covers the skill-authoring side: a skill as a wrapper around custom tools, and skills as process encoding rather than implementation details.)
+
 ## Checklist
 
 - [ ] Kick off each ticket in a fresh session: `/clear`, then `@tickets /implement this` — spec and tickets carry the state, not conversation history.
@@ -183,6 +197,7 @@ Frequent verified commits are also what makes the rest of the workflow cheap: th
 - [ ] Run parallel sessions in worktrees (`claude --worktree`); push to a named branch (`git push origin <worktree-branch>`) before removing the worktree.
 - [ ] Protect main and keep a push-blocking hook so agent pushes get human confirmation.
 - [ ] Require frequent, descriptive, agent-authored commits that reference their tickets.
+- [ ] Split judgment from determinism: mechanical parts of a skill extracted into a bundled script/CLI; AST code mods for mechanical migrations — the agent keeps only the judgment.
 
 ## Sources
 
@@ -193,5 +208,6 @@ Frequent verified commits are also what makes the rest of the workflow cheap: th
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
 - 5 Claude Code skills I use every single day
 - Building a REAL feature with Claude Code: every step explained
+- LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 
 See also: [Chapter 1](01-how-llms-actually-work.md) (smart zone and context windows), [Chapter 3](03-preparing-your-codebase.md) (feedback loops and hooks), [Chapter 4](04-the-workflow.md) (where execution sits in the flow), [Chapter 6](06-tickets-and-planning.md) (sizing tickets to one context window), [Chapter 8](08-review-and-qa.md) (the review that receives the refactoring), [Chapter 9](09-afk-and-parallel-agents.md) (Ralph loops and agent fleets).

@@ -81,6 +81,16 @@ Bassam Daidi describes the same division of labor from inside GitHub: let the ag
 
 > **Warning:** Delegation is earned, not assumed. Pocock is only "pretty aggressive with accept edits on" *after* thorough planning — "now that we've done the planning… we understand the implementation a bit." Upfront thinking is what buys the right to stop watching keystrokes. Delegating without the upfront investment is just vibe coding with extra steps.
 
+### Course-correct the environment, not the agent
+
+Poteto (ex-Meta React team, creator of the pstack skill library, whose agents ship thousands of PRs a month) adds the review-side rule that makes delegation scale. When sampled agent output shows a bad pattern, the question is not "which agent went wrong" but "what made this possible":
+
+> "If it was a one-off incident, it's fine. You know, maybe there's nothing to fix there. But if you actually notice that multiple agents are having the same issue... that's a sign that you should go off and think about how to amend your kitchen or your factory." — Poteto
+
+Every agent mistake is information. The standing loop: observe how agents fail, then ask "how do I turn this into a lint rule? How do I make it so that the codebase makes this impossible?" Constraints live in the environment — lint rules, directory structure, type narrowing — not in the agent's memory, so the agent isn't overloaded with rules; it just "bounces off them" ([Chapter 3](03-preparing-your-codebase.md) builds them; [Chapter 8](08-review-and-qa.md) pairs them with sampling review).
+
+Two companion questions from the same source. First, the **bottleneck question**: constantly ask "where am I the bottleneck? Why do my agents need me to answer this question?" — then teach the agent to answer it with real data, not hallucination. That removes you from the equation. Second, Netflix's **context not control**: you can drive outcomes by control (micromanaging) or by providing context — teach agents to be self-sufficient so you don't have to. Low trust forces "lock in and micromanage," which eats all your capacity for higher-level work; every gate that passes buys more delegation (the full trust ladder is [Chapter 9](09-afk-and-parallel-agents.md)'s territory).
+
 ## You Own the Why and the Taste; the Agent Owns the How
 
 The clean split in responsibilities: the human owns *why* the work exists, *what* good looks like, and the judgment calls no metric captures. The agent owns the mechanical *how*.
@@ -134,6 +144,8 @@ Around December 2025, something flipped. Karpathy describes going from writing ~
 
 This is not one outlier's experience. Bassam Daidi states that ~90% of *his* code at GitHub is written by agents (a figure from his GitHub Universe presentation), shipping features to production with VS Code agent mode "all the time." His benchmark-delegation example makes the leverage concrete: for a Redis cache-key design question, he prompted the agent — "this pattern, this pattern and this pattern: go write three distinct benchmarks, run them, give me the results, analyze them and give me the output" — and got 2–3 days of work in 20 minutes.
 
+Poteto's version of the same shift, from the delegation side: as models get really good, "the bottleneck is no longer the agent. It becomes your ability to express your intent and your goals in a clear way that the agent can understand and actually carry out." Domain expertise matters *more* than ever, not less — techno-curious domain experts (doctors, lawyers) who can articulate a clear vision can now build great products with agents. The medium is language either way — agents are the meeting of natural language with programming language, so it is all communication.
+
 So if agents write the code, what exactly is the job? The sources converge on four things that stay human:
 
 1. **Verification.** Every autonomous result gets checked against tests, metrics, diffs, or human QA. Pocock's seven-phase pipeline ends with "a human, yes, a human" walking through the QA plan. Karpathy's auto-research runs only count when candidate improvements are verified against the objective metric.
@@ -180,6 +192,8 @@ And when verification is expensive but still objective, the economics favor auto
 - [ ] Design for the next order of magnitude only; write it in the dumbest, simplest way possible; let agents lower the cost of *building*, not the bar for *deciding what to build*.
 - [ ] Accept the post-December reality — expressing will to agents is the job — while keeping verification, operations, taste, and responsibility firmly human.
 - [ ] Gate every increase in agent autonomy on verifiability: objective metric → autonomous loop; tests on every commit → AFK backlog; reviewable artifact → boundary approval; pure taste → human in the loop.
+- [ ] When sampled agent output repeats a bad pattern, amend the environment (skills, lints, types) — one-off incidents are fine, repeated shortcuts are a signal about the kitchen, not the agent.
+- [ ] Ask "where am I the bottleneck?" and teach the agent to answer with real data — prefer context over control when delegating.
 - [ ] Watch for Goodharting in any metric-driven loop; expand metric coverage instead of trusting one number.
 
 ## Sources
@@ -190,6 +204,7 @@ And when verification is expensive but still objective, the economics favor auto
 - System Design at GitHub Scale: Build Simple, Solve Today's Problems — with Bassam Daidi (Senior SWE, GitHub)
 - Building a REAL feature with Claude Code: every step explained
 - The 7 phases of AI-driven development
+- LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
 
 See also: [Chapter 1 — How LLMs Actually Work](01-how-llms-actually-work.md) · [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md) · [Chapter 4 — The End-to-End Workflow](04-the-workflow.md) · [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md) · [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md)
