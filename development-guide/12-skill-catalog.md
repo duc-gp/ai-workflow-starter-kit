@@ -43,6 +43,7 @@ Where the sources evolved, the newer position wins. This table is the authoritat
 | `needs-triage` label on `/to-spec` / `/to-tickets` output | `ready for agent` label | issues produced by those skills are agent-ready by design |
 | Playwright MCP (browser feedback) | Chrome DevTools MCP | community verdict: Playwright MCP "not very good" and context-hoggy |
 | Manual "write me a handoff.md" prompt | `/handoff` | used so often it earned packaging as a skill |
+| `context.md` (domain-modeling output) | `glossary.md` | "Context.md just felt way too vague. It didn't sort of trigger the agent to pull it in at the right moment" — file names are triggers; content reduced to literally just a glossary |
 
 > **Warning:** skill renames are not auto-migrated by the installer. `npx skills add` will not turn `to-prd` into `to-spec` — delete the old skills, re-add, then audit your skills folder for stale entries.
 
@@ -227,6 +228,16 @@ Implement the work described by the user in the spec or tickets. Use TDD where p
 - **Status & evolution:** New in skills v1.1; the flow's endpoint that Matt Pocock almost didn't write.
 - **Source:** New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets; mattpocock/skills: A complete AI Coding workflow, end-to-end
 
+### `/implement-spec`
+
+- **Type:** skill
+- **What it does:** Orchestrates implementation of a whole spec via sub-agents: reads the spec and tickets, explores in its own sub-agent, creates an integration branch, spawns implement sub-agents per ticket (TDD, work trees), merges work to the integration branch via a sub-agent, pings off more implement sub-agents until all the work is done, then runs code review on the integration branch, cleans up, and makes a single PR ready for review. Nine steps plus reference material; "goes for parallelization where it can."
+- **When to use:** When spec + tickets exist but no deterministic ticket-running loop is set up — "where you don't have your like software factory dialed in." A beginner-accessible on-ramp to AFK workflows. Not as reliable as a deterministic loop (which runs the same way every time); stacked PRs are an alternative once you outgrow it.
+- **Invocation:** `/implement-spec` with the spec and tickets in place.
+- **Construction notes:** Viable because sub-agents can now spawn sub-agents — they "used to be nerfed" but are now "as powerful as orchestrator agents," so an agent does the babysitting instead of a human. Read the entire skill file before using any skill — this one has nine steps plus reference material at the top.
+- **Status & evolution:** New in skills v1.3.
+- **Source:** New Skills! v1.3 brings /pr, /implement-spec, and /retro
+
 ### TDD skill (`/tdd`)
 
 - **Type:** skill
@@ -358,6 +369,26 @@ The quality gate. Full treatment in [Chapter 8](08-review-and-qa.md).
 - **Construction notes:** v1.1 added a ~10-line list of Fowler's smells from *Refactoring* — mysterious name, duplicated code, feature envy, data clumps, primitive obsession, repeated switches, divergent change, speculative generality, message chains, middleman — one sentence each. It works because the book is "deep in the agent's prior": naming the concept unlocks the knowledge. Result: "outrageously useful... really cheap to add." Coding standards belong in their own file outside agents.md; a separate standards-extraction skill is planned to feed the standards axis. Lessons from evaluating Cursor's "thermonuclear" review skill: license ambition beyond the diff (agents otherwise "treat that diff as its bounds"), tolerate false positives ("it's the ones that you miss... those are the dangerous ones"), keep prompts DRY with concrete criteria, and don't ignore tests/seams/feedback loops.
 - **Status & evolution:** `/review` (in progress, two-axis design) → `/code-review` (graduated in v1.0, Fowler smells in v1.1). Absorbed the refactoring step removed from the TDD loop.
 - **Source:** New Skills! /handoff, /prototype, /review and /writing-* | Skills Changelog; New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets; Can Cursor's HARDCORE Review Skill Stop The Slop?
+
+### `/pr`
+
+- **Type:** skill
+- **What it does:** Generates the PR body from a fixed template that makes human review easy: **summary** (Show Me-style concise diagrams and pseudo-code), **evidence** (before-and-after proof on a real entity — often makes the agent run an extra test or take an extra screenshot), **merge danger** (one-way vs two-way door, near the top: "the first or second thing the person is going to see"), and **blast radius** (the potential ramifications).
+- **When to use:** Every PR. "PRs are still the main bottleneck for work getting to main" — the goal is making human review as easy as possible: small blast radius + two-way door = no need to review hard.
+- **Invocation:** `/pr`, or automatically — it is one of the most consistently model-invoked skills in the repo ("It seems to just invoke it every single time, at least on Opus 5.5").
+- **Construction notes:** Inspired by Dex Hies's Show Me skill (helping the user understand the current topic visually with concise diagrams and pseudo-code) — its template is the source of the summary section. Evidence is the essential section: without asking for hard evidence "it's very easy for agents to say yeah that probably works cuz I've read the code."
+- **Status & evolution:** New in skills v1.3.
+- **Source:** New Skills! v1.3 brings /pr, /implement-spec, and /retro
+
+### `/retro`
+
+- **Type:** skill
+- **What it does:** A retrospective on real coding-agent sessions — the current one or recent past ones: reads what actually happened and suggests improvements across categories (codebase navigation, automated checks to add, coding standards for the automated reviewer, global AGENTS.md health, tool economy, no-ops in steering files, information access).
+- **When to use:** On a sampling of sessions whenever you realize you haven't run it in a while — especially sessions that went wrong or where the agent did something weird. "Retro will usually find a fix." "Retro is merciless... it will pretty much always find ways to improve."
+- **Invocation:** `/retro` on the current or recent sessions.
+- **Construction notes:** Human-in-the-loop by design — apply its fixes with human judgment, never auto-applied: automation "gets itself into a loop where it continually finds false positives." It works because "the agent doesn't complain, I think, as much as it should, and doesn't try to fix its own mistakes" — a second agent must look back at the sessions. Real findings from Pocock's runs: a `pnpm check` script nothing ran (→ add CI), an agent cutting a missing 1.3.0 release without asking, repeated instructions lost between compactions (→ move into a skill), token-wasting custom CLIs, tools not on PATH.
+- **Status & evolution:** New in skills v1.3 — "the one that I've just seen absolutely go nuts on socials."
+- **Source:** New Skills! v1.3 brings /pr, /implement-spec, and /retro
 
 ### Improve-codebase-architecture (the de-slop skill)
 

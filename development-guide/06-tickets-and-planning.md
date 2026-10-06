@@ -74,7 +74,7 @@ So the human review budget for this phase is spent on exactly two things: **is t
 
 ## Blocking Relationships and the Kanban Board
 
-A **kanban board**, in this workflow, is nothing more than a list of tickets with blocking relationships between them ("blocked by #1"). Those relationships do two jobs:
+A **kanban board**, in this workflow, is nothing more than a list of tickets with blocking relationships between them ("blocked by #1"). The v1.3 skills release sharpens what that makes the board: "The tickets are not a list of steps. They're a task graph with blocking relationships between them. That means there's always a frontier of tickets that are ready to be grabbed." Those relationships do two jobs:
 
 1. **They serialize what must be sequential.** Schema changes before the API that uses them; the key architectural decision before everything that depends on it.
 2. **They expose what can be parallel.** At any moment, the set of *unblocked* tickets is the parallelization frontier: you can spin up one agent per unblocked ticket.

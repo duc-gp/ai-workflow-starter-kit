@@ -51,6 +51,8 @@ look harder.
 
 In his recorded session, the agent then found the entire test suite it had just denied existed.
 
+One more demand belongs in every review conversation, sharpened in the v1.3 skills release: **hard evidence, not code-read assurances**. "Without asking for hard evidence it's very easy for agents to say yeah that probably works cuz I've read the code." Ask for before-and-after proof on a real entity — an extra test run, a screenshot — which often makes the agent actually exercise the change at runtime instead of reasoning about it. Prompting for evidence is how you learn to trust agent outputs at all; Pocock describes himself as "beginning to be really obsessed with" verification ([Chapter 8](08-review-and-qa.md) makes evidence a standing section of every PR body).
+
 Verification is not a one-time review step; it is the *shape* of the whole workflow. Feedback loops — tests and typechecks on every commit, diffs reviewed at phase boundaries, human QA plans — are how paranoia becomes process instead of anxiety. [Chapter 3](03-preparing-your-codebase.md) covers building those loops into the repo; [Chapter 8](08-review-and-qa.md) covers the review gate itself.
 
 ## The Delegation Mindset: Review Inputs and Outputs

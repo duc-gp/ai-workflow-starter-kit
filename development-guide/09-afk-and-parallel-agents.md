@@ -68,6 +68,16 @@ There is also a human-in-the-loop variant, **`ralph-once.sh`**: the same prompt,
 
 After any loop finishes, the human steps back in: "you go through, read the code, test everything works, and then change the PRD if you need to."
 
+### Three ways to run the tickets — and where implement-spec sits
+
+The v1.3 skills release names three tiers of ticket orchestration, ranked:
+
+1. **Manual loop (worst).** You say "implement ticket one," wait, clear, repeat — "you're kind of acting like a for loop there. It's not really workable."
+2. **Sub-agent orchestration (the beginner on-ramp).** The **/implement-spec** skill reads the spec and tickets, explores in its own sub-agent, creates an integration branch, spawns implement sub-agents per ticket (TDD, work trees), merges to the integration branch via a sub-agent, pings off more implement sub-agents until all the work is done, then runs code review on the integration branch, cleans up, and opens a single PR. Use it "where you don't have your like software factory dialed in" — a good on-ramp to AFK workflows before a deterministic loop exists. It is worse than a deterministic loop (deterministic runs the same way every time); stacked PRs are a further alternative.
+3. **Deterministic loop (most reliable).** A script that reads each ticket and runs implement on it — the Ralph loop and Sandcastle below. Reliable and cheap (no agent or human burning tokens running the loop), but complicated and patience-consuming to set up; out of range for beginners.
+
+What recently made the middle tier viable: **sub-agents can now spawn sub-agents.** They "used to be nerfed" but are now "as powerful as orchestrator agents" — so "an agent does the babysitting instead of a human."
+
 ## Feeding the Loop: Backlogs and Labels
 
 The prd.json version is the minimal Ralph. Pocock's setup evolved: his current loops pull **GitHub issues** as the backlog instead of a local JSON file — issues created by the PRD-to-issues flow ([Chapter 6](06-tickets-and-planning.md)), by his in-app feedback button, and by teammates. A shared issue tracker is what lets AFK agents coexist with humans, and that requires explicit signals about which tickets are agent-safe:

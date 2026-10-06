@@ -30,7 +30,7 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **context window** — Everything the LLM sees at one time — system prompt, messages, tool results, and its own output — up to a hard provider limit. All of it counts against the limit, and performance degrades well before you reach it (see **smart zone**, **attention degradation**). See [Chapter 1](01-how-llms-actually-work.md).
 
-**context.md** — The repo-root glossary file recording the ubiquitous language of one bounded context: a short description of the repo, then a precise definition of every entity and term ("standalone video: a video with lessonId = null"). Pointed to from the local CLAUDE.md; large monorepos use a context map of several contexts. See [Chapter 3](03-preparing-your-codebase.md).
+**context.md** — The repo-root glossary file recording the ubiquitous language of one bounded context: a short description of the repo, then a precise definition of every entity and term ("standalone video: a video with lessonId = null"). Pointed to from the local CLAUDE.md; large monorepos use a context map of several contexts. Renamed to **glossary.md** in skills v1.3 — "Context.md just felt way too vague. It didn't sort of trigger the agent to pull it in at the right moment" — because file names are triggers. See [Chapter 3](03-preparing-your-codebase.md) and [Chapter 5](05-idea-to-spec.md).
 
 ## D–G
 
@@ -83,6 +83,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 **main flow** — The canonical skills pipeline all work runs through: grill-with-docs → (prototype via handoff when a question needs a runnable answer) → then either implement in the same session, or to-spec → to-tickets → implement one ticket per session, with code review built into implement. See [Chapter 4](04-the-workflow.md).
 
 **materialize** — The domain verb paired with **ghost entity**: "the act of transitioning a ghost entity to a real entity by creating its on-disk representation" — with "aliases to avoid" (create on disk, realize) recorded in the glossary. The payoff of this precision: "there's a bug inside the materialization cascade" is instantly unambiguous to both human and agent. See [Chapter 3](03-preparing-your-codebase.md).
+
+**merge danger / blast radius** — The two review-calculus fields every PR body carries: merge danger states whether the change is a **one-way door** (hard to roll back — deletes data, expensive to revert) or a **two-way door** ("a door that you can walk back through" — easily reverted); blast radius states the potential ramifications of the changes. Small blast radius + two-way door → light review; dangerous changes demand hard review. Verification can turn one-way doors into two-way doors — a verified, cheaply revertible merge is no longer one-way. See [Chapter 8](08-review-and-qa.md).
 
 **model prior** — What the model already knows from training (also called **parametric knowledge**, as opposed to the contextual knowledge you supply in the window). Skills lean on it: name a well-cited concept ("message chains," "red before green") and you unlock knowledge "deep in the agent's prior" instead of re-teaching it. Grilling leans on it too — which is why planning wants a frontier model while implementation tolerates a dumber one. See [Chapter 7](07-execution.md) and [Chapter 5](05-idea-to-spec.md).
 

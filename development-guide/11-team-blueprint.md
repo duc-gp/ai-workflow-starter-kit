@@ -172,6 +172,8 @@ The flow will fail. The blueprint's job is to make each failure mode route to a 
 
 **The agent is confidently wrong → push back.** Never argue from your own memory; make it verify. When an agent falsely claimed no test harness existed, the two-word correction "look harder" found the whole suite. The general rule from [Chapter 2](02-principles.md) applies with force in a team, where a wrong claim can propagate into tickets: never trust, always verify against the code.
 
+**The process itself is drifting → retro.** Skills, steering files, and tooling decay silently: check scripts nothing runs, instructions that are no-ops, token-wasting CLIs, repeated instructions lost to compaction. Run the `/retro` skill ([Chapter 8](08-review-and-qa.md)) on a sampling of the team's recent agent sessions — especially ones that went wrong — and apply its suggested fixes with human judgment. It is deliberately not automated: an auto-applied retro loop "continually finds false positives" and takes the repo somewhere it shouldn't go.
+
 ## Collaborating With Stakeholders Outside the Agent Session
 
 Not everyone you need input from lives in the agent session — or is AI-native. A stakeholder, a spouse, a teammate without Slack/Teams access may hold decisions only they can make, but they are not sitting next to your harness. The **to-questionnaire** skill (v1.2) bridges that gap: during a grilling or Wayfinder session, it pulls the decisions and questions out into a shareable markdown document. You put that document into a Google Doc (or equivalent), send it to the stakeholder, walk through it together while they comment and answer in the doc, then pull the answers back into the agent.

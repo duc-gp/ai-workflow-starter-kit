@@ -35,6 +35,8 @@ There is a deeper principle here: **feedback loops beat instructions**. Matt hat
 
 > **Rule:** Any quality rule that CAN be expressed as a deterministic check (lint rule, type constraint, test, hook) should be — never as prose instructions to the agent.
 
+And a check that exists but nothing runs is not a feedback loop. A real retrospective finding (see `/retro` in [Chapter 8](08-review-and-qa.md)): a repo shipping a `pnpm check` script with no CI pipeline to run it — no guard rail, so nothing stopped a broken release. Wire the checks into CI so they fire without anyone deciding to run them.
+
 ### Verification as the #1 skill: give the agent hands and eyes
 
 Poteto (creator of the pstack skill library, whose agents ship thousands of PRs a month) calls this the top of the whole hierarchy: "the single most important skill that should be in your toolkit is verification" — even if you don't use his skill library. Verification means giving the agent the ability to run the code and interact with it like a human user — debug it, take traces and snapshots ("hands and eyes"). Without it you remain the proxy between the agent and its output, and the agent can't iterate — there is no loop:

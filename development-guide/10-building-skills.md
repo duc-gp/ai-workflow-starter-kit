@@ -56,6 +56,8 @@ Skills come in two invocation modes, and the choice is a context-budget decision
 
 > **Rule:** Default to user-invoked with a one-sentence description. Make a skill model-invoked only when another skill or a specific recurring situation must trigger it without a human present — and then hide it from the user menu with `user-invocable: false`.
 
+The payoff of a clean description is observable: the v1.3 **/pr** skill is "one of the most consistently auto-invoked skills" Pocock has seen — "It seems to just invoke it every single time, at least on Opus 5.5." When a model-invoked skill fires reliably off its description alone, that is the description doing its job.
+
 ### Cross-harness portability: the OpenAI.yaml sidecar (v1.2)
 
 The user-invoked vs model-invoked distinction is a context-hygiene benefit: user-invoked skills are hidden from the agent's context window until invoked. That works in Claude Code and a couple of other harnesses — but **not in Codex** (the OpenAI-flavored harness, including codeex UI and codeex 2). Pocock "didn't quite realize that": the semantics that one harness infers from `SKILL.md` frontmatter do not travel to every harness.

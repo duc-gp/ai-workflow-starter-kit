@@ -90,6 +90,17 @@ You are not teaching the model what feature envy is — it read about it thousan
 
 The general lesson for your own review skills: prefer famous, named, heavily-cited concepts over homegrown descriptions. The model's prior does most of the work.
 
+## PR Bodies That Make Review Easy: The /pr Skill
+
+Two-axis review checks the code. But after review passes, work still has to cross the last gate: a human reading the PR. "PRs are still the main bottleneck for work getting to main" — so the v1.3 **/pr** skill (inspired by Dex Hies's Show Me skill) makes the PR body itself a review instrument, generated from a fixed template with four sections:
+
+1. **Summary** — Show Me-style: concise diagrams and pseudo-code that make the PR easier to read and review; the reviewer sees the shape of the change before the diff.
+2. **Evidence** — before-and-after proof on a real entity. Asking the agent for evidence often makes it run an extra test or take an extra screenshot — runtime information that the change does what it thinks it's doing, not just that the code reads plausibly.
+3. **Merge danger** — is this a one-way door (hard to roll back — deletes data, expensive to revert) or a two-way door ("a door that you can walk back through. In other words, we can easily revert this PR")? Placed near the top: "the first or second thing the person is going to see."
+4. **Blast radius** — the potential ramifications of the changes.
+
+The review calculus this hands the human: small blast radius + two-way door → no need to review hard; dangerous changes demand hard review, whatever the diff size (see [Chapter 2](02-principles.md)). And the skill is one of the most reliably model-invoked in the repo — "It seems to just invoke it every single time, at least on Opus 5.5" — evidence that a clean description gets a skill consistently auto-triggered ([Chapter 10](10-building-skills.md)).
+
 ## Demanding Ambition: What a Serious Review Skill Looks Like
 
 Two-axis review answers "is this correct and conformant?" A harder question is "is this *good* — and did it make the codebase better or worse?" For that, Pocock test-drove a skill attributed to the Cursor team, "thermonuclear code quality review" — a single `skill.md` billed as "an unusually strict review focused on implementation quality, maintainability, abstraction quality, and codebase health" — on the last five PRs that had landed on his own Sand Castle project, work he had done the previous day and knew well. That test method matters in itself: reading a skill tells you what it *tries* to do; running it on recent code you personally supervised tells you its real hit rate, because you can judge every finding.
@@ -206,6 +217,19 @@ Two supporting practices from the same setup:
 
 **Mining your own transcripts (recall).** Past chats are "a treasure trove of context" — the real process, materialized, not the abstract idea in your head. The workflow: have an agent look through past transcripts for places where you had to intervene, then turn those higher-level learnings into reusable skills or lint rules so the mistake stops repeating. Poteto's `recall` skill compresses exactly this — mining a previous chat's context to carry into a new chat (it was born from virtualization bug-fixing, where each new chat lost the good context of the last one). This is the same "bank the session" discipline as [Chapter 5](05-idea-to-spec.md)'s artifacts table, run against history instead of the current session.
 
+## Retro: An Agent Grading Your Own Sessions
+
+Review skills grade the code; nothing in the loop grades *the process itself*. The v1.3 **/retro** skill closes that gap: run it on a coding-agent session — the current one or recent past ones — and it reads what actually happened and suggests improvements for next time, across categories: codebase navigation, automated checks to add (a `pnpm check` script nothing ran → add CI), coding standards for the automated reviewer, health of the global AGENTS.md, tool economy (token-wasting custom CLIs, tools not on PATH), no-op instructions in steering files, and whether the agent had access to all the information it needed.
+
+Why a second agent must do this: the working agent hides its own failures. "The agent doesn't complain, I think, as much as it should, and doesn't try to fix its own mistakes. You kind of need to get another agent to look back on those sessions and see where it went wrong and see how to help." Agents persist and get features built "one way or another" even while bumping into undetected problems — retro is what surfaces them. Its verdicts are blunt by design: "Retro is merciless. It will look at your actual sessions and see what is going on and it will pretty much always find ways to improve."
+
+Two rules govern its use:
+
+- **Run it on a sampling of sessions** whenever you realize you haven't in a while — especially on sessions that went wrong or where the agent did something weird. "Retro will usually find a fix."
+- **Never automate it.** Retro is human-in-the-loop by design: apply its fixes with human judgment, because "automating this means that the agent will get itself into a loop where it continually finds false positives" and takes the repo somewhere it shouldn't go. Its most serious-sounding finding may not actually be that bad — weigh it yourself.
+
+Real findings from Pocock's own runs illustrate the range: an agent that discovered a missing 1.3.0 release and cut one without asking (an irreversible public action — why his repo has 1.3.1 but no 1.3.0); repeated per-session instructions lost between compactions in long sessions, moved into an animatics skill; a custom CLI that wasted tokens; a tool with gaps not on PATH. Retro is the same instinct as Poteto's transcript mining (above) and the gardening buffer — pattern-level visibility on your own process — packaged as a named, invocable step.
+
 ## De-Slopping: Rescuing a Codebase Ruined by AI
 
 Everything above assumes the quality gate was in place while the code was written. Many codebases were not so lucky. Pocock's diagnosis of what actually happened during the "code is cheap" era:
@@ -259,6 +283,8 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - [ ] At scale you sample instead of reading everything — sampled agent code scrutinized rigorously; repeated shortcuts across agents trigger an environment fix (skills, lints, types), not per-agent correction.
 - [ ] Gardening findings buffered into a document for pattern discovery — not fixed one by one as they appear; tautological tests flagged and eliminated.
 - [ ] Post-land review via commit history (revert / modify / add lint rule) where verification has made merges cheaply revertible; past transcripts mined for interventions and turned into skills or lint rules (recall).
+- [ ] Every PR body carries summary (diagrams/pseudo-code), evidence (before/after), merge danger (one-way vs two-way door), and blast radius — near the top, where the reviewer sees them first.
+- [ ] Run /retro on a sampling of recent sessions — especially the ones that went wrong; apply its fixes with human judgment, never automated.
 
 ## Sources
 
