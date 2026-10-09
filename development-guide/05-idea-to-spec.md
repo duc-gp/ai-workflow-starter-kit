@@ -72,6 +72,8 @@ Seed the session with your reasoning, not just your request. From a real grillin
 
 The initial idea itself can — and should — stay rough. "It really can be as vague as this." The skill does the heavy lifting; over-polishing the opening prompt is wasted effort. (Pocock dictates his prompts rather than typing them.)
 
+Why the interview format in the first place: it is the mechanism for crossing the **communication barrier**. People "massively underestimate the communication gap between them and the agent" — but the gap is not a model limitation that better models will close ("the model is never going to know exactly what you're thinking"). It is a human one: "we often don't know what we want," and we hold "complicated internal value systems for the things that we want to prioritize in the output" — "we care about complicated things in complicated orders," and "communicating that to an agent is really hard because we often don't know it ourselves." Meanwhile "the agent doesn't know what we care about" until you say it. Grilling operationalizes the barrier-crossing: before and while you delegate, keep asking what the agent does not know about you or about what you want right now — then answer those questions, one round at a time, until the shared understanding on the far side of the gap is real. Treat every grilling session as practice at this permanently necessary skill, not a chore to minimize.
+
 ### What a real session looks like
 
 From a full feature build on Pocock's production course-video-manager repo (~1,200 commits), a grilling session on "ghost courses" showed the characteristic question shapes you should expect from a well-built grill skill:
@@ -292,6 +294,7 @@ The one resource with no place in this table is an unbanked grilling context —
 ## Checklist
 
 - [ ] Seed the grilling session with a rough, dictated idea — include the WHY, not just the WHAT
+- [ ] Remember the communication barrier is permanent and mostly yours: ask "what does the agent not know about me, or about what I want right now?" — the grilling rounds are how you answer it
 - [ ] Pick the right skill: no codebase → `/grill-me`; codebase, one-session scope → `/grill-with-docs`; too big/foggy or front-end-heavy → `/wayfinder`
 - [ ] Pre-break oversized scope: have the agent decompose it before grilling each piece
 - [ ] Use a frontier model for grilling (parametric knowledge); save cheaper models for implementation
@@ -314,6 +317,7 @@ The one resource with no place in this table is an unbanked grilling context —
 ## Sources
 
 - 9 Things People Get Wrong With My /grill-* skills
+- Don't underestimate the communication barrier
 - I stopped using /grill-me for coding. Here's what I use instead
 - I was an AI skeptic. Then I tried plan mode
 - New Skills! /handoff, /prototype, /review and /writing-* | Skills Changelog

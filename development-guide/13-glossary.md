@@ -18,6 +18,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **CLAUDE.md / AGENTS.md** — The repo-level context file a harness injects into every session's system prompt. Keep it near-empty: only minimal, non-discoverable, non-rotting environment facts (the canonical example is a single line, "you are on WSL on Windows") plus pointers to domain docs. See [Chapter 3](03-preparing-your-codebase.md).
 
+**communication barrier** — The permanent gap between you and the agent: delegating is "like a colleague or someone that you're employing to do something for you," and "the model is never going to know exactly what you're thinking." It is a human problem ("we often don't know what we want" and hold "complicated internal value systems" we can't always articulate), not a model problem — better models will not close it. Cross it by asking, before and while delegating: what does the agent not know about me, or about what I want right now? Grilling is the structured crossing. See [Chapter 2](02-principles.md) and [Chapter 5](05-idea-to-spec.md).
+
 **claw** — A persistence layer above an agent harness: it keeps looping, has its own sandbox and a memory system more sophisticated than compact-on-overflow, and acts on your behalf when you're not looking, typically behind a messaging portal such as WhatsApp. Peter Steinberger's OpenClaw — with its SOUL.md personality document — is the reference implementation. See [Chapter 9](09-afk-and-parallel-agents.md).
 
 **compaction (`/compact` vs `/clear`)** — `/compact` summarizes the current conversation so the *same* session can continue with a fresh window; `/clear` wipes it. Clear is the default; compact only when you must barrel on at the same problem (debugging) and need to preserve the session's intent; use a **handoff** when the work should move to a *different* session. See [Chapter 7](07-execution.md).
@@ -165,6 +167,7 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - Most devs don't understand how context windows work
 - Most devs don't understand how LLM tokens work
 - Most devs don't understand what agents are
+- Don't underestimate the communication barrier
 - Context Engineering Explained: Stop Padding Prompts, Curate What the Model Sees
 - Never Trust An LLM
 - Never Run claude /init

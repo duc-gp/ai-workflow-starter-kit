@@ -63,6 +63,8 @@ If you can never trust the output, the naive conclusion is to watch every keystr
 
 A useful mental model from his plan-mode video: an AI agent is like "a colleague who every time they made a commit forgot everything they'd ever learned about the repo." You wouldn't fire that colleague; you'd change how you brief them — make them explore the repo first, give them the context they lack, and review their work at sensible boundaries. Delegation to an agent is delegation to a capable amnesiac, and the whole discipline of context engineering exists to compensate.
 
+And the barrier never fully closes, because most of it is on your side. Pocock's complaint about how people work with agents: they "massively underestimate the communication gap between them and the agent." Delegating is "like a colleague or someone that you're employing to do something for you, to build some code for you" — and the communication barrier that exists with every human employee exists here too, permanently, because "the model is never going to know exactly what you're thinking." Two facts keep it open. It is "not a model problem. It is a human problem": "we often don't know what we want." And you hold "complicated internal value systems for the things that we want to prioritize in the output" — "we care about complicated things in complicated orders," and "communicating that to an agent is really hard because we often don't know it ourselves." Crucially, "the agent doesn't know what we care about" until you say it. So keep the standing question alive before and while you delegate: what does the agent not know about me, or about what I want right now? Better models will not close this gap — improving what you communicate across it is the durable lever, and it is exactly what the grilling phases of [Chapter 5](05-idea-to-spec.md) exist to do.
+
 What delegation looks like in practice:
 
 - **Review at boundaries, not as edits stream.** Pocock explicitly does not review edits as they appear during execution; he reviews the diff at the end of each phase, using git staging and commits as the boundary markers that make per-phase diffs legible.
@@ -185,6 +187,7 @@ And when verification is expensive but still objective, the economics favor auto
 - [ ] Verify even intrinsic answers: check citations; for health/legal/critical domains, read the source documents yourself.
 - [ ] When the agent confidently denies something exists in your codebase, say "look harder" before believing it.
 - [ ] Treat the agent as a capable amnesiac delegate: brief it with context, give it the *why* as well as the *what*, and let it propose alternatives.
+- [ ] Keep the communication barrier in mind before and while delegating — ask "what does the agent not know about me, or about what I want right now?" — and don't expect better models to close it for you.
 - [ ] Review inputs and outputs at boundaries (interfaces, module contracts, phase diffs) — not every streamed edit; spot-check the code occasionally.
 - [ ] Skip re-reading artifacts that summarize a conversation you were part of (PRDs, generated issues) — you reviewed them by having the conversation.
 - [ ] Earn aggressive autonomy with upfront planning; never run accept-everything mode on unplanned work.
@@ -201,6 +204,7 @@ And when verification is expensive but still objective, the economics favor auto
 ## Sources
 
 - Never Trust An LLM
+- Don't underestimate the communication barrier
 - How I use Claude Code for real engineering
 - I was an AI skeptic. Then I tried plan mode
 - System Design at GitHub Scale: Build Simple, Solve Today's Problems — with Bassam Daidi (Senior SWE, GitHub)
