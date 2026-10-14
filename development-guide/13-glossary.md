@@ -44,6 +44,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **de-slopping** — The systematic cleanup of accumulated slop: architecture-deepening refactors driven by the improve-codebase-architecture skill, run human-in-the-loop every few days. Not an AFK skill — the candidates require a judgment call from the strategic programmer sitting above the agent. See [Chapter 8](08-review-and-qa.md).
 
+**effort level** — The reasoning/effort dial on a coding agent. A per-task setting, not a status symbol: high effort pays off only on detail-heavy work; for small changes and repo exploration it burns tokens and makes the model overthink. Medium is the sensible default ("even high is way too much effort for most coding tasks"); every token not spent over-deliberating is context budget kept for useful work. See [Chapter 7](07-execution.md).
+
 **explore subagent** — A subagent (often on a cheap, fast model such as Haiku) that reads many files in its own context window and hands only a summary back to the parent agent. It is how harnesses build just-in-time context — and the reason pre-baked codebase documentation is mostly redundant. See [Chapter 1](01-how-llms-actually-work.md) and [Chapter 5](05-idea-to-spec.md).
 
 **facts vs decisions** — The grilling distinction that stops an agent interviewing itself: **facts** are things the agent can discover by exploring the codebase; **decisions** can only be made by the human. A grilling agent must fetch facts and ask only about decisions. See [Chapter 5](05-idea-to-spec.md).
@@ -124,9 +126,13 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **spec** — The destination document: "the description of everything of how it's going to look at the end," compressed out of a grilling session (problem statement, solution, user stories, implementation and testing decisions) and published to the issue tracker. The spec is the destination; the **tickets** are the journey. See [Chapter 5](05-idea-to-spec.md).
 
+**steering file** — A repo file that pushes standing standards into agent-visible instructions — e.g. `coding-standards.md`, consumed by code review agents at review time rather than loaded into every session. The soft, LLM-enforced counterpart to a deterministic automated check; `/retro` writes its findings into one or the other. See [Chapter 3](03-preparing-your-codebase.md) and [Chapter 8](08-review-and-qa.md).
+
 **subagent** — An agent spawned by a parent agent, with its own clean context window, that returns only a digest to the parent. Used to isolate token-heavy work (exploration) and to get fresh eyes (review) — "agents are often really bad at editing code or improving code they've just written because they wrote it." See [Chapter 1](01-how-llms-actually-work.md) and [Chapter 8](08-review-and-qa.md).
 
 ## T–Z
+
+**tactical vs strategic programming** — Tactical = solving the problem in front of you; strategic = the long view, "where you are the general winning the war." Agents are tactically excellent and strategically indifferent — not from a capability gap but from RL training on tactical benchmarks ("the agents learn that tactical programming is the only thing that matters"). The strategic intent must come from you: tell agents you care about the codebase improving over time and they optimize for it, and are good at it. See [Chapter 1](01-how-llms-actually-work.md) and [Chapter 2](02-principles.md).
 
 **ticket** — One unit of the journey from spec to shipped: a thin vertical slice sized to a single context window / smart zone, with acceptance criteria and a reference to its parent spec. Implement one per session, clearing between tickets. (Renamed from "issues" because tickets is tracker-neutral.) See [Chapter 6](06-tickets-and-planning.md).
 
@@ -193,6 +199,9 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - Ship working code while you sleep with the Ralph Wiggum technique
 - I Open-Sourced My Own AFK Software Factory
 - I'm using claude --worktree for everything now
+- Your effort level is STILL TOO HIGH
+- Tell your agents to CARE about the codebase
+- /retro is a banger of a skill
 - Learn anything with the /teach skill
 - /wayfinder: Nothing is too big to plan anymore
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift

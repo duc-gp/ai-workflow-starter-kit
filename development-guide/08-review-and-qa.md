@@ -230,6 +230,8 @@ Two rules govern its use:
 
 Real findings from Pocock's own runs illustrate the range: an agent that discovered a missing 1.3.0 release and cut one without asking (an irreversible public action — why his repo has 1.3.1 but no 1.3.0); repeated per-session instructions lost between compactions in long sessions, moved into an animatics skill; a custom CLI that wasted tokens; a tool with gaps not on PATH. Retro is the same instinct as Poteto's transcript mining (above) and the gardening buffer — pattern-level visibility on your own process — packaged as a named, invocable step.
 
+Two framings from its dedicated short are worth keeping. First, the response rule: when your agent makes a mistake, don't get angry or frustrated — ask "how do I make that mistake harder for the agent to make next time?" Retro is that question mechanized: each finding is converted into one of two guardrail classes — a deterministic **automated check** that verifies the agent is doing the right thing, or an entry in a **steering file** like `coding-standards.md` so that code review agents catch the mistake before it reaches production. Hard verification for what can be checked mechanically; LLM-enforced review standards for the rest. Second, the diagnostic payoff: running retro "forced me to consider that maybe my code base is not as good as I thought it was," because "it's surprising what your agents will put up with without moaning." Agents tolerate friction silently — their mistakes are one of the few visible signals of codebase problems you'd otherwise never hear about.
+
 ## De-Slopping: Rescuing a Codebase Ruined by AI
 
 Everything above assumes the quality gate was in place while the code was written. Many codebases were not so lucky. Pocock's diagnosis of what actually happened during the "code is cheap" era:
@@ -252,6 +254,8 @@ The critical constraint: **this is not an AFK skill.**
 > "This is not an AFK skill that you can just sort of run and rely on to continually improve your codebase. This requires a judgment call from you, the programmer, sitting above the LLM."
 
 Pocock's model is tactical versus strategic: agents are "really, really good tactical programmers," but they need a strategic programmer above them. The skill lets the agent *scout* deepening opportunities; the human decides which serve the codebase's long-term health. A design detail worth stealing for your own skills: the skill embeds a **glossary** of its architecture terminology (module, interface, deep/shallow, seam, adapter, locality, leverage), because "having a shared vocabulary with the AI is super important... you can be a lot more precise with what you're asking for."
+
+And the scout half works better agent-driven than most people expect — provided you supply the strategic intent. "Skills like my improved codebase architecture skill are really great when they're driven by agents because they can just plow through and find candidates for module deepening and for improving test coverage and all the cool stuff that you need when you've got a good codebase." Tell the agent you care about the codebase improving over time ([Chapter 2](02-principles.md)); the scouting, candidate-listing, and even the refactor design run fine delegated. What stays yours is the judgment call at the top of this section — which candidate, and whether it serves the long view.
 
 When to run it:
 
@@ -285,6 +289,7 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - [ ] Post-land review via commit history (revert / modify / add lint rule) where verification has made merges cheaply revertible; past transcripts mined for interventions and turned into skills or lint rules (recall).
 - [ ] Every PR body carries summary (diagrams/pseudo-code), evidence (before/after), merge danger (one-way vs two-way door), and blast radius — near the top, where the reviewer sees them first.
 - [ ] Run /retro on a sampling of recent sessions — especially the ones that went wrong; apply its fixes with human judgment, never automated.
+- [ ] Every retro finding becomes a mechanism, not a note: a deterministic automated check or a steering-file entry for the review agents — and agent mistakes are read as codebase signals, since agents put up with problems silently.
 
 ## Sources
 
@@ -296,6 +301,8 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - How To De-Slop A Codebase Ruined By AI (with one skill)
 - Building a REAL feature with Claude Code: every step explained
 - Never Trust An LLM
+- /retro is a banger of a skill
+- Tell your agents to CARE about the codebase
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 
 See also: [Chapter 2](02-principles.md) for the never-trust principle behind fresh-context review, [Chapter 3](03-preparing-your-codebase.md) for the codebase properties review enforces, [Chapter 6](06-tickets-and-planning.md) for how specs become tickets, [Chapter 7](07-execution.md) for the implementation sessions review gates, [Chapter 9](09-afk-and-parallel-agents.md) for the AFK loops QA feeds, and [Chapter 10](10-building-skills.md) for authoring review skills of your own.

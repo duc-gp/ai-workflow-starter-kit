@@ -2,6 +2,8 @@
 
 Every chapter before this one used skills; this one teaches you to write them. A **skill** is a reusable, versioned instruction set invoked inside an agent harness — the mechanism that turns "quality depends on who is prompting" into "quality is enforced by the process." This chapter covers the full authoring lifecycle: anatomy and invocation modes, the stateless/stateful design decision, the wording techniques that make instructions actually stick across models, when to reach for hooks instead, and how to install, distribute, test, and version a skill set. By the end you should be able to author a skill your whole team can run and improve.
 
+One misconception to kill before anything else: a skill is not "an execution program for the agent or something." It is "just an instruction of the ways that you want the agent to behave and the things that you care about from the agent's output" — behavioral instructions plus valued output attributes, nothing more. Internalize that definition and the size target for skills stops being mysterious: they should be as short as that job allows.
+
 ## Skills Are Your Process, Written Down
 
 Matt Pocock's framing: agents are "a fleet of middling to good engineers... but they have no memory." A memoryless workforce makes process more important than it has ever been — you need "a really strict path it can walk down every single time." Skills are that path, encoded. He reports that encoding his process this way made the code quality the AI produces "shoot up."
@@ -27,6 +29,8 @@ codebase instead.
 ```
 
 > **Why it works:** "Skills don't have to be long to be impactful. You've just got to choose the right words for the LLM at the right time." Those three sentences replaced plan mode for users worldwide (see [Chapter 5](05-idea-to-spec.md)).
+
+The inverse failure is more common: "people massively get wrong with working with agents is they produce enormous, absolutely outrageously huge skills." Size hurts twice — the obvious way (bigger skills are more painful to include in the context window) and the more important way: "they become really hard to audit, really hard to maintain, and they'll often contain a bunch of sediment and a bunch of duplication." The root cause is asymmetric fear. You edit code freely ("I just edit that code because it's not working the way I want it to"), but people "are often scared to touch someone else's language" — reluctant to delete skill text in case it's loadbearing, the author was proud of it, or the word combination is somehow magical. So skills only ever grow, by appending. The counter-claim: **"English is just as malleable as code. Maybe even more so."** Treat skill text exactly like code you're free to refactor — delete what isn't needed, condense what remains, keep iterating until the skill is as concise as you can make it. That compression work is not cosmetic: "it's a real test of your thinking to try to get your skills as concise as they can be" — forcing out the sediment is how you find out which instructions actually matter. And the payoff compounds: "once they're smaller, they are more easily composable," easier to audit, easier to maintain, and clearer about what you want the model to do. "Ruthlessly edit them, keep them short, and I promise you'll get better results."
 
 But note what a short skill demands of its user: the grill skills "are designed to aid you as an engineer, not replace you as an engineer." A skill encodes the agent's side of the process; the human still has to be skilled at their side. Keep that boundary in mind when deciding what to put in the file.
 
@@ -317,6 +321,7 @@ The skill authoring checklist — run a new or changed skill through every line:
 - [ ] Does this workflow recur often enough to be a skill? (You typed it manually three times → yes, even if it feels "too simple.")
 - [ ] Is a skill the right home at all — or is this rule deterministic (hook / lint), environment info (CLAUDE.md), a decision record (ADR), or vocabulary (context.md)?
 - [ ] Description is one short, precise sentence — it is all the model sees until invocation.
+- [ ] Ruthlessly edited to its most concise form: no append-only growth, no sediment, no duplication — English is as malleable as code, and the compression is the test of your thinking.
 - [ ] User-invoked by default; model-invoked only if another skill or situation must trigger it, and then marked `user-invocable: false`.
 - [ ] Cross-harness portability: if a skill's invocation semantics matter (user-invoked hiding), ship an explicit sidecar (e.g. OpenAI.yaml with `allow_implicit_invocation: false`) for harnesses that do not infer them from SKILL.md.
 - [ ] When you keep using a skill outside its named scope, rename it to match actual usage (writing-great-skills → /writing-for-agents) rather than duplicating it.
@@ -349,6 +354,7 @@ The skill authoring checklist — run a new or changed skill through every line:
 - New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets
 - 9 Things People Get Wrong With My /grill-* skills
 - Claude Code tried to improve /init... Is it any better?
+- Your skills are WAY TOO LONG
 - I stopped using /grill-me for coding. Here's what I use instead:
 - /handoff is my new favourite skill
 

@@ -85,9 +85,9 @@ These run once per machine or once per repo. The full rationale for a minimal, h
 - **What it does:** Deterministic code that runs at fixed points in the harness's execution cycle. The key event is **PreToolUse**, which fires before a tool call and can block it: a script matches the command, echoes a corrective message, and exits with code 2 — the command is prevented AND the agent is steered to the right alternative (e.g. blocked `npm install foo` retried automatically as `pnpm install foo`).
 - **When to use:** Any rule that can be enforced deterministically: CLI substitutions (pnpm over npm), forbidding destructive commands (`git push`), forcing wrapper scripts. Not for non-deterministic guidance — that belongs in skills.
 - **Invocation:** Register under the `hooks` property in `settings.json` (project or global), pointing a `Bash` matcher at an executable script. Hooks then fire automatically; all matching hooks for an event run in parallel.
-- **Construction notes:** Script pattern: check the command starts with the target CLI → `echo "Use pnpm, not npm"` → `exit 2`. A conversion prompt exists to have Claude turn your CLAUDE.md's deterministic rules into hooks itself (confirm → implement → provide test instructions). Other observed hooks: format-on-edit (prettier after every edit), `npx tsc` interception (redirect to `npm run type check`), git-push blockers kept globally.
+- **Construction notes:** Script pattern: check the command starts with the target CLI → `echo "Use pnpm, not npm"` → `exit 2`. A conversion prompt exists to have Claude turn your CLAUDE.md's deterministic rules into hooks itself (confirm → implement → provide test instructions). Other observed hooks: format-on-edit (prettier after every edit), `npx tsc` interception (redirect to `npm run type check`), git-push blockers kept globally. One placement warning: do NOT use harness hooks as the home for automated checks (lint, validation) on every file edit — that is slow on big refactor sessions (up to ~100 edits), token-noisy, and usually tells the agent broken intermediate states it already knows about. Checks belong in **pre-commit hooks** (fast ones, ideally <3s, output fed back to the agent at commit time) and **CI** (the big, slow suites, before the PR merges).
 - **Status & evolution:** Current, and the recommended replacement for CLI rules in CLAUDE.md — hooks enforce deterministically what instructions only make probable, and free the ~500-instruction budget for real work.
-- **Source:** How to actually force Claude Code to use the right CLI (don't use CLAUDE.md); Claude Code tried to improve /init... Is it any better?
+- **Source:** How to actually force Claude Code to use the right CLI (don't use CLAUDE.md); Claude Code tried to improve /init... Is it any better?; STOP running your checks in harness hooks
 
 ### `/init`
 
@@ -386,9 +386,9 @@ The quality gate. Full treatment in [Chapter 8](08-review-and-qa.md).
 - **What it does:** A retrospective on real coding-agent sessions — the current one or recent past ones: reads what actually happened and suggests improvements across categories (codebase navigation, automated checks to add, coding standards for the automated reviewer, global AGENTS.md health, tool economy, no-ops in steering files, information access).
 - **When to use:** On a sampling of sessions whenever you realize you haven't run it in a while — especially sessions that went wrong or where the agent did something weird. "Retro will usually find a fix." "Retro is merciless... it will pretty much always find ways to improve."
 - **Invocation:** `/retro` on the current or recent sessions.
-- **Construction notes:** Human-in-the-loop by design — apply its fixes with human judgment, never auto-applied: automation "gets itself into a loop where it continually finds false positives." It works because "the agent doesn't complain, I think, as much as it should, and doesn't try to fix its own mistakes" — a second agent must look back at the sessions. Real findings from Pocock's runs: a `pnpm check` script nothing ran (→ add CI), an agent cutting a missing 1.3.0 release without asking, repeated instructions lost between compactions (→ move into a skill), token-wasting custom CLIs, tools not on PATH.
+- **Construction notes:** Human-in-the-loop by design — apply its fixes with human judgment, never auto-applied: automation "gets itself into a loop where it continually finds false positives." It works because "the agent doesn't complain, I think, as much as it should, and doesn't try to fix its own mistakes" — a second agent must look back at the sessions. Real findings from Pocock's runs: a `pnpm check` script nothing ran (→ add CI), an agent cutting a missing 1.3.0 release without asking, repeated instructions lost between compactions (→ move into a skill), token-wasting custom CLIs, tools not on PATH. Its dedicated short adds the output model: every finding is converted into one of two guardrail classes — a deterministic **automated check**, or a **steering-file entry** (e.g. `coding-standards.md`) that code review agents consume before production. The standing response rule it encodes: when an agent makes a mistake, don't get angry — ask "how do I make that mistake harder for the agent to make next time?" ("Retro has been absolutely invaluable for me.")
 - **Status & evolution:** New in skills v1.3 — "the one that I've just seen absolutely go nuts on socials."
-- **Source:** New Skills! v1.3 brings /pr, /implement-spec, and /retro
+- **Source:** New Skills! v1.3 brings /pr, /implement-spec, and /retro; /retro is a banger of a skill
 
 ### Improve-codebase-architecture (the de-slop skill)
 
@@ -397,8 +397,8 @@ The quality gate. Full treatment in [Chapter 8](08-review-and-qa.md).
 - **When to use:** Every couple of days in fast-moving codebases, weekly otherwise, or after a surge of development; the recommended FIRST step in a legacy codebase before any changes. Never as fire-and-forget: "this requires a judgment call from you, the programmer, sitting above the LLM." Turn auto mode off first. Do ONE candidate at a time — "these decisions do require taste."
 - **Invocation:** Run the skill in a fresh session; pick a candidate explicitly (be precise — "pick one" got interpreted as candidate #1); answer its grilling questions; exit via "to PRD" / "to issues" to file the agreed design as a tracker issue for an AFK agent.
 - **Construction notes:** Instructions: explore the codebase naturally, as an agent would, surfacing what the AI itself finds confusing — guiding questions include "Where does understanding one concept require bouncing around between many small files?" and "Where do tightly coupled modules create integration risk in the seams between them?" Then: ground with concrete code, grill, propose a module shape, "spawn three sub-agents in parallel, each of which must produce a radically different interface for the deepened module," recommend the strongest or a hybrid, and file a refactor RFC via `gh issue create`. Contains an embedded glossary (module, interface, seam, adapter, locality, depth) — "having a shared vocabulary with the AI... means you can be a lot more precise."
-- **Status & evolution:** Current; the glossary was recently added. Output feeds `/to-tickets` — a refactor RFC is a destination needing a journey.
-- **Source:** How To De-Slop A Codebase Ruined By AI (with one skill); 5 Claude Code skills I use every single day
+- **Status & evolution:** Current; the glossary was recently added. Output feeds `/to-tickets` — a refactor RFC is a destination needing a journey. The scouting half is explicitly agent-friendly: driven by agents, the skill can "plow through and find candidates for module deepening and for improving test coverage" — provided you tell the agent you care about the codebase improving over time (the strategic intent has to come from you).
+- **Source:** How To De-Slop A Codebase Ruined By AI (with one skill); 5 Claude Code skills I use every single day; Tell your agents to CARE about the codebase
 
 ### QA plan generation
 
@@ -538,6 +538,10 @@ Skills about using the system itself. Authoring guidance lives in [Chapter 10](1
 - Never Run claude /init
 - Claude Code tried to improve /init... Is it any better?
 - How to actually force Claude Code to use the right CLI (don't use CLAUDE.md)
+- STOP running your checks in harness hooks
+- /retro is a banger of a skill
+- Tell your agents to CARE about the codebase
+- Your skills are WAY TOO LONG
 - I'm using claude --worktree for everything now
 - Most devs don't understand how context windows work
 - Frontend is HARDER for AI than backend (here's how to fix it)

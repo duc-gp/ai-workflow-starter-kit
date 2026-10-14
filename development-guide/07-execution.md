@@ -84,6 +84,8 @@ The /implement skill encodes a cadence tuned for cost and signal:
 
 This is the execution-time payoff of the environment work in [Chapter 3](03-preparing-your-codebase.md): a repo where tests and types run fast and reliably is a repo where every commit is verified without anyone deciding to verify it. In the observed Ralph-loop run, every one of the six commits landed with tests and types green and a detailed commit message — with no human at the keyboard.
 
+The same placement logic governs where the checks fire. The common recommendation to run automated checks in harness hooks on every file edit is a mistake on the execution side too: a big refactor session can involve a hundred file edits, per-edit linting makes things slower, the failure output floods the agent with tokens on every single file, and mid-refactor the agent usually already knows the file is in a broken intermediate state — you're just telling it what it knows. Batch the feedback instead: checks in the **pre-commit hook**, so the moment the agent commits, the consolidated output lands back in its context exactly when the work enters history. Keep that hook fast — ideally under 3 seconds — and delegate the big, slow suites to CI, which runs before the PR merges. Encourage the agent to commit; committing is what triggers the feedback.
+
 This is what makes the **day shift / night shift** split work: the human does the thinking — grilling, specs, tickets — in the day shift, while agents execute AFK in the night shift. The gated cadence above is precisely what lets that night-shift work run unattended without degrading: every commit is self-verified, so there is no need for a human to babysit it.
 
 ## Context Hygiene: Clear Between Tickets, Budget the Smart Zone
@@ -104,6 +106,17 @@ Two mechanisms keep quick detours from contaminating the session:
 - **Explore subagents.** When the agent needs to understand a chunk of the codebase, an explore subagent reads "tons and tons of files" in its own context window and hands back only a summary. This is why a whole /implement run can land at just 42.7k tokens despite heavy codebase reading. Pocock's one complaint: "I do wish that explore was faster. You need it in every single session, sometimes multiple times a session."
 
 One more mid-session correction worth knowing: when the agent confidently claims something false about the codebase ("there's no existing test harness for course write service"), don't argue — say **"look harder."** In Pocock's session it then found the entire existing suite.
+
+## Effort Level: A Per-Task Dial, Not a Status Symbol
+
+The most common configuration mistake on the model itself: running your agent's effort/reasoning level at high or max because "my project is the most important to me, so the model must put in the most effort possible." That reasoning conflates the project's importance with the appropriate effort for a *subtask*. Effort is a detail dial — think drawing a piece of art or building a Minecraft sculpture: "the more effort you put in, the more detail you're going to get out from that asset." High effort pays off only on work that genuinely needs detail and depth; on small code changes or repo exploration it just burns tokens, makes the model overthink, and "push[es] it towards outputs that are not actually what you want" — it distracts the model rather than helping it.
+
+Pocock's position is blunt: "Even if you've got high, I still think that's way too much effort for most coding tasks." His own setting is Opus 5.5 on **medium** — and he is debating going lower. The two rules that follow:
+
+- **Medium as the default.** Treat effort as a baseline configuration decision, not a per-session tweak driven by project-importance anxiety.
+- **Starve exploration.** For read-only or lightweight tasks, drop the effort: "with exploration, all you got to do is just open some files and then you're good to go" — exploration at high effort "is going to burn a ton of tokens that it doesn't have to burn."
+
+The budget logic is the same smart-zone economics as the rest of this chapter: "The fewer tokens you use, the smarter the model remains, and the more juice you have in your context window for actually doing useful tasks." Every token spent over-deliberating a simple change is a token removed from the work that matters — and pushes the session toward the dumb zone faster.
 
 ## /handoff: Compressing Session State for a Fresh Start
 
@@ -189,6 +202,8 @@ The same split governs migrations: use scripts and **code mods that crawl the AS
 - [ ] Keep refactoring OUT of the implementation loop; it happens at code review, in subagents with fresh context.
 - [ ] Skim test titles rather than reading every implementation — the red-to-green sequence is your trust signal; QA catches the rest.
 - [ ] Gate every commit on tests and types passing.
+- [ ] Keep automated checks out of per-edit harness hooks: fast checks (<3s) in the pre-commit hook, heavy checks in CI before the PR merges; encourage the agent to commit to trigger the batched feedback.
+- [ ] Run your agent at medium effort by default; drop effort for exploration and small changes; reserve high effort for genuinely detail-heavy work.
 - [ ] Treat ~120–140k tokens as the smart-zone limit; check the budget after each ticket and default to clearing between tickets.
 - [ ] Use "by the way" side questions and explore subagents to keep detours and codebase reading out of the main context.
 - [ ] Say "look harder" when the agent confidently denies something exists in the codebase.
@@ -208,6 +223,8 @@ The same split governs migrations: use scripts and **code mods that crawl the AS
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
 - 5 Claude Code skills I use every single day
 - Building a REAL feature with Claude Code: every step explained
+- STOP running your checks in harness hooks
+- Your effort level is STILL TOO HIGH
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 
 See also: [Chapter 1](01-how-llms-actually-work.md) (smart zone and context windows), [Chapter 3](03-preparing-your-codebase.md) (feedback loops and hooks), [Chapter 4](04-the-workflow.md) (where execution sits in the flow), [Chapter 6](06-tickets-and-planning.md) (sizing tickets to one context window), [Chapter 8](08-review-and-qa.md) (the review that receives the refactoring), [Chapter 9](09-afk-and-parallel-agents.md) (Ralph loops and agent fleets).

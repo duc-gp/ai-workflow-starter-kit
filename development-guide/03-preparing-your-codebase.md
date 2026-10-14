@@ -37,6 +37,14 @@ There is a deeper principle here: **feedback loops beat instructions**. Matt hat
 
 And a check that exists but nothing runs is not a feedback loop. A real retrospective finding (see `/retro` in [Chapter 8](08-review-and-qa.md)): a repo shipping a `pnpm check` script with no CI pipeline to run it — no guard rail, so nothing stopped a broken release. Wire the checks into CI so they fire without anyone deciding to run them.
 
+**Where checks run matters as much as that they run.** The common advice to wire automated checks into agent-harness hooks so they fire on every single file edit is wrong three ways: it's slow (a big refactor session can involve a hundred file edits, and linting every file as it comes through drags the session), it's noisy ("the agent is receiving a ton of tokens on every single file" — pure context bloat), and it's redundant ("it will often know that it's putting the file into a broken state. So what you're doing there is you're just telling the agent something it already knows"). The better layout has three tiers:
+
+- **Pre-commit hooks — fast checks only.** Encourage the agent to commit; the moment it commits, the check output lands back in its context ("Oh, actually this is wrong"). You're "batching all that information to the right moment to when the agent is actually committing it to the history" — one consolidated signal at the decision point instead of noise per edit.
+- **A speed budget: under ~3 seconds.** Don't run every check in pre-commit — a 2-minute pre-commit run breaks the very feedback loop the batching exists for. Trim to what completes near-instantly.
+- **CI — the heavy checks.** Anything "really big" that needs a lot more time (full test/build suites) delegates to CI, which runs before the PR merges and acts as the final gate.
+
+The principle underneath: feedback *placement* beats feedback *volume*. Deliver check results at commit time, batched, not per-edit, dripped — and never spend tokens telling the agent what it already knows.
+
 ### Verification as the #1 skill: give the agent hands and eyes
 
 Poteto (creator of the pstack skill library, whose agents ship thousands of PRs a month) calls this the top of the whole hierarchy: "the single most important skill that should be in your toolkit is verification" — even if you don't use his skill library. Verification means giving the agent the ability to run the code and interact with it like a human user — debug it, take traces and snapshots ("hands and eyes"). Without it you remain the proxy between the agent and its output, and the agent can't iterate — there is no loop:
@@ -86,7 +94,11 @@ The failure mode this replaces is "a web of interconnected kind of shallow modul
 
 **Turning agent mistakes into environment constraints** is the same idea run continuously, from Poteto's setup. Every observed agent failure prompts two questions: "how do I turn this into a lint rule? How do I make it so that the codebase makes this impossible?" The goal is an environment where "it's actually very hard to write bad code" — where there's "really only one way to do something." His before-and-after: early versions of his product were ~eight god files of 10,000+ lines each; breaking features into their own directories plus restrictive lint rules fixed it. His internal framework ("our internal Next.js for our Electron apps") bakes this in: very restrictive lint rules, registry-based feature directories, conventional patterns. The same move at the language level is **type narrowing** — narrow the space of possible types until "there's only one type," exactly analogous to constraining the codebase so there's only one way to do something. Constraints live in the environment, not in the agent's memory: the agent isn't overloaded with rules, it just "bounces off them." And for migrations, encode the transformation itself: use scripts and code mods that crawl the AST and transform code literally, instead of asking the agent to invent the transformation each time. His working definition of the goal: "a good codebase is a codebase that's easy to make changes in."
 
+The `/retro` skill ([Chapter 8](08-review-and-qa.md)) is this same loop packaged as a named step: run a retrospective over recent agent sessions, and each mistake or process inefficiency it finds becomes either a deterministic automated check or an entry in a steering file like `coding-standards.md`, so the next agent or review subagent catches it before production. Its hidden payoff is diagnostic: agents are silent sufferers — "it's surprising what your agents will put up with without moaning" — so a retro that finds friction you never heard about is also telling you your codebase is worse than you assumed. Treat every agent mistake as a codebase signal, not just an agent failure.
+
 Finally, module thinking starts before code: "right from the early planning stage when you're writing your PRDs or when you're turning your PRDs into implementation issues," identify which modules you're affecting, design the interfaces, and decide how you'll test them. During review, this is what you scrutinize — Matt describes reviewing a proposed `materializeCourseAndLesson` method versus adding a parameter to `materializeGhost` (the extra param would be "dodgy API-wise", so a new method won): "Notice how I'm thinking about the interface more than the implementation... I want to make sure this is testable and that the rest of the repo and any future AI agents can understand what it's doing."
+
+**Preparation includes stating that the codebase should improve.** The last preparation move is not a file or a hook — it's a sentence. Agents won't advocate refactoring on their own ("they'll keep piling mud onto our ball of mud" unless you say otherwise), so state the goal explicitly at the start of work: you care about the strategic layer, the codebase should improve over time, not get worse. Told this, agents turn out to be "actually really good at it" — and skills like improve-codebase-architecture are at their best when agent-driven, because an agent can "plow through and find candidates for module deepening and for improving test coverage" ([Chapter 2](02-principles.md) develops the principle; [Chapter 8](08-review-and-qa.md) the skill).
 
 ## Domain Documentation: Glossary, context.md, ADRs, Coding Standards
 
@@ -250,6 +262,7 @@ Run this repo readiness checklist against any repository before pointing agents 
 - [ ] Type checking, tests, lint, and build all runnable via standard commands discoverable from the repo (e.g. package.json scripts)
 - [ ] Tests lock down each module's behavior well enough that an agent can change internals safely
 - [ ] Tests and type checks run on every commit (pre-commit hooks or loop configuration)
+- [ ] Automated checks live in pre-commit hooks (fast, <3s), NOT in per-edit harness hooks; heavy checks delegated to CI before the PR merges
 - [ ] Style preferences encoded as lint rules, not written instructions
 
 **Architecture**
@@ -260,6 +273,8 @@ Run this repo readiness checklist against any repository before pointing agents 
 - [ ] PRDs and tickets already name the modules, interfaces, and tests they affect
 - [ ] No god files: features broken into their own directories, with restrictive lint rules making bad code hard to write
 - [ ] Observed agent failures converted into constraints (lint rules, directory structure, type narrowing) instead of instructions
+- [ ] Agent mistakes run through a retro-style loop: each finding becomes an automated check or a steering-file entry — and treats silent agent friction as a codebase signal
+- [ ] The codebase-improves-over-time goal is stated explicitly when starting work with agents
 
 **Domain documentation**
 - [ ] Glossary / ubiquitous language file exists: terms, verbs, composite concepts, aliases to avoid — updated after every grilling session
@@ -290,6 +305,9 @@ Run this repo readiness checklist against any repository before pointing agents 
 - Claude Code tried to improve /init... Is it any better?
 - How to actually force Claude Code to use the right CLI (don't use CLAUDE.md)
 - Frontend is HARDER for AI than backend (here's how to fix it)
+- STOP running your checks in harness hooks
+- /retro is a banger of a skill
+- Tell your agents to CARE about the codebase
 - Building a REAL feature with Claude Code: every step explained
 - New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets
 - mattpocock/skills: A complete AI Coding workflow, end-to-end

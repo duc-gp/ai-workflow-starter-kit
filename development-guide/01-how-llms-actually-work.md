@@ -174,6 +174,8 @@ The last piece of the mental model is about capability shape, from Andrej Karpat
 
 This is **jaggedness**: humans are tightly coupled across abilities (someone brilliant at systems programming is rarely a 10-year-old at everything else), but models are not. And the jaggedness has a cause you can reason from: the **RL training boundary**. Models improve through reinforcement learning only in **verifiable domains** — where success can be checked objectively, like "does the program pass the unit tests?" Inside that RL-optimized territory you travel "at the speed of light"; outside it — nuance, intent, knowing when to ask a clarifying question, humor — "everything meanders." Karpathy's evidence for the outside: ChatGPT still tells the same "scientists don't trust atoms" joke it told four years ago, because jokes were never optimized. Code-smartness has not satisfyingly generalized to everything else, and you should not expect it to.
 
+Pocock extends the same incentive logic to one specific blind spot: **tactical vs. strategic programming**. Agents are "really good at solving the problem that's in front of them, but they're really bad at strategic programming" — the long view, "where you are the general winning the war." Not a capability gap: agents are RL-trained on tactical benchmark problems, where "the agents learn that tactical programming is the only thing that matters," and general-usefulness training means it "doesn't really make sense even at the harness level" to push them toward the annoying push-back behavior ("we should refactor before we do this"). The strategic layer is therefore permanently your job to supply — and, as [Chapter 2](02-principles.md) develops, supplyable by simply telling the agent you care about it.
+
 Practical implications:
 
 - **Play to the on-rails region.** Agents are strongest exactly where verification is cheap: code that compiles, tests that pass, metrics that move. This is why making your repo verifiable — tests, typechecks, build feedback — is the highest-return preparation work ([Chapter 3](03-preparing-your-codebase.md)), and why Pocock's Ralph loop runs tests and types on every single commit ([Chapter 9](09-afk-and-parallel-agents.md)).
@@ -196,6 +198,7 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 | Review in subagents ([Ch. 8](08-review-and-qa.md)) | Isolate: fresh context has no author bias; digests keep the coordinator lean |
 | Keep CLAUDE.md short, be stingy with MCP ([Ch. 3](03-preparing-your-codebase.md)) | Tool definitions and rules files are always-loaded context tax |
 | Tests + types on every commit in AFK loops ([Ch. 9](09-afk-and-parallel-agents.md)) | RL boundary: agents excel where verification is cheap and objective |
+| State that you care about long-term codebase health ([Ch. 2](02-principles.md)) | RL on tactical benchmarks: agents are incentivized to optimize the immediate task only |
 | Grill before building ([Ch. 5](05-idea-to-spec.md)) | Q&A colocation creates attention hotspots; new information drives the loop |
 | Split planning across sessions (/wayfinder, [Ch. 5](05-idea-to-spec.md), [Ch. 6](06-tickets-and-planning.md)) | The smart zone caps the *planning* phase too, not only execution — "you can't make your way cleanly to the destination" when fog sits between you and it |
 | Max iterations on every loop ([Ch. 9](09-afk-and-parallel-agents.md)) | A pure agent "will eventually run forever" |
@@ -213,6 +216,7 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 - [ ] You use subagents for exploration and review: heavy reading in a disposable window, digest back to the coordinator, fresh eyes on written code.
 - [ ] You can name the four context failure modes (poisoning, distraction, confusion, clash) and apply Write / Select / Compress / Isolate as the fix kit.
 - [ ] You direct agents at verifiable work (tests, types, metrics) and keep the unverifiable judgment — intent, nuance, priorities — for yourself.
+- [ ] You supply the strategic layer: you know agents are tactically trained and won't advocate refactoring, so you state that long-term codebase health is a goal — and they optimize for it.
 
 ## Sources
 
@@ -224,6 +228,7 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
 - Building a REAL feature with Claude Code: every step explained
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
+- Tell your agents to CARE about the codebase
 - /wayfinder: Nothing is too big to plan anymore
 
 See also: [Chapter 2 — Operating Principles](02-principles.md) · [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md) · [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md) · [Chapter 7 — Execution](07-execution.md) · [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md) · [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md)
