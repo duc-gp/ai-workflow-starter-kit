@@ -1,6 +1,6 @@
 # 8. Review, QA, and De-Slopping
 
-Execution ends with code that compiles, passes tests, and looks plausible. That is not the same as code that is correct, complete, and worth keeping. This chapter covers the machinery that makes quality systematic instead of hopeful: fresh-context subagent review on two axes, code-smell vocabulary that activates knowledge the model already has, deliberately ambitious review skills, human QA plans generated from the commits, the feedback loop that turns discoveries back into tickets, and the de-slopping process for codebases where all of this arrived too late.
+Execution ends with code that compiles, passes tests, and looks plausible. That is not the same as code that is correct, complete, and worth keeping. This chapter covers the machinery that makes quality systematic instead of hopeful: fresh-context subagent review on two axes, code-smell vocabulary that activates knowledge the model already has, deliberately ambitious review skills, human QA plans generated from the commits, the feedback loop that turns discoveries back into tickets, mutation testing that grades the test suite itself, and the de-slopping process for codebases where all of this arrived too late.
 
 ## Never Let the Author Review Its Own Code
 
@@ -42,6 +42,26 @@ Per-ticket review catches per-ticket problems. But when a spec was sliced into m
 Tickets are lossy — they are the journey, and the spec is the destination. The final spec pass is what makes a multi-session sprint actually *complete* rather than merely *finished*.
 
 > **Rule:** No multi-session piece of work is done until a fresh context has compared the final implementation against the spec, criterion by criterion.
+
+## Mutation Testing: Grading the Tests Themselves
+
+Two-axis review grades the code against the spec and the standards. But the whole workflow leans on a load-bearing assumption it never checks: that the test suite itself is good. Gray-box delegation is "as long as the tests are good" ([Chapter 3](03-preparing-your-codebase.md)); the TDD red-green signal is only as strong as the tests that go green ([Chapter 7](07-execution.md)). A green suite can still miss entire classes of bugs — passing tests are not good tests.
+
+Mutation testing is how you measure the difference. A mutation testing tool mutates your source code — the example from the video: changing a JavaScript string to be an empty string — reruns your test suite against each mutant, and reports every mutation the tests do **not** fail on:
+
+> "Every one of these mutations that survive your tests, that is a surviving mutant. And it's a mutant that needs to be killed."
+
+A surviving mutant is a concrete, proven gap: a bug (that exact mutation) your suite would not catch. The tooling is mature — Pocock uses **StrykerJS** for TypeScript/JavaScript, and "there are plenty of options out there depending on what language you're working" in, so the lack of a tool is not an excuse to leave test quality unmeasured.
+
+The agent payoff is the feedback loop. Feed the surviving-mutant report back to your agent as rich, actionable feedback on where its suite is weak, and have it write or adjust tests until every mutant is killed:
+
+> "This gives your agent really rich feedback about how good its tests are and you'll find that it produces much more rigorous tests after this. You know that every one of those tests is actually catching a potential bug in your system."
+
+This is the same anti-fake discipline as red-green in execution: post-mutation, every test is justified by the bug it demonstrably catches (a killed mutant), not by the fact that it passes. It is also the mechanized version of the tautological-test smell — a test that asserts the implementation against itself cannot kill any mutant, and mutation testing exposes that automatically instead of by luck. Frame test-writing tasks for the agent accordingly: every test must be justified by the bug it catches, never by passing alone.
+
+When to reach for it: whenever you are — in Pocock's words — "a little bit scared about the quality of the test their agent is writing," which after any large agent-written test suite is the correct default state. His verdict: "I freaking love mutation testing."
+
+> **Rule:** Do not trust an agent-written test suite because it is green. Run mutation testing on it, feed the surviving mutants back to the agent, and kill them all — that is when you know the suite is as good as it could be.
 
 ## /wait-what: Curing Verbose Gibberish With Your Language
 
@@ -283,6 +303,7 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - [ ] Stale QA plans get closed as soon as behavior drifts.
 - [ ] QA discoveries flow back as tickets through a near-zero-friction channel (feedback button: cheap-model title, route, verbatim feedback), and the fix loop runs in parallel with continued QA.
 - [ ] Multi-session work ends with a final implementation-vs-spec comparison in a fresh context.
+- [ ] Agent-written test suites are verified with mutation testing (StrykerJS or the equivalent for your language): surviving mutants fed back to the agent as concrete feedback items until every one is killed — a green suite is not a good suite.
 - [ ] The improve-codebase-architecture skill runs every couple of days (auto mode off, human judgment on), and first of all in any legacy codebase.
 - [ ] At scale you sample instead of reading everything — sampled agent code scrutinized rigorously; repeated shortcuts across agents trigger an environment fix (skills, lints, types), not per-agent correction.
 - [ ] Gardening findings buffered into a document for pattern discovery — not fixed one by one as they appear; tautological tests flagged and eliminated.
@@ -302,6 +323,7 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - Building a REAL feature with Claude Code: every step explained
 - Never Trust An LLM
 - /retro is a banger of a skill
+- Mutation testing is AWESOME
 - Tell your agents to CARE about the codebase
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 

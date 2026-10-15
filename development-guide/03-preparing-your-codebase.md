@@ -82,6 +82,8 @@ One gotcha: some languages make boundary enforcement easier than others. "In Typ
 
 Deep modules become **gray-box modules** when you split ownership at the interface. The interface is a **seam**: the place where the human applies taste and careful design — "I can carefully control and I can apply my taste to and design" it — while the implementation inside is delegated to the agent. Behavior is locked down with tests, so you look inside only to influence outcomes, apply taste, or improve performance. "As long as the tests are good, then I don't really need to care about what happens inside."
 
+That "as long as" is doing all the work, and it is checkable: mutation testing ([Chapter 8](08-review-and-qa.md)) mutates the source and reruns the suite — every surviving mutant is a bug your "good" tests would miss. With agent-written tests especially, run it before trusting the lock-down.
+
 Three benefits are claimed:
 
 1. **Navigability** — the agent trusts interfaces instead of reading every implementation.
@@ -261,6 +263,7 @@ Run this repo readiness checklist against any repository before pointing agents 
 **Feedback loops**
 - [ ] Type checking, tests, lint, and build all runnable via standard commands discoverable from the repo (e.g. package.json scripts)
 - [ ] Tests lock down each module's behavior well enough that an agent can change internals safely
+- [ ] "Good enough" test suites proven, not assumed: mutation testing kills the surviving mutants before gray-box delegation rests on them ([Chapter 8](08-review-and-qa.md))
 - [ ] Tests and type checks run on every commit (pre-commit hooks or loop configuration)
 - [ ] Automated checks live in pre-commit hooks (fast, <3s), NOT in per-edit harness hooks; heavy checks delegated to CI before the PR merges
 - [ ] Style preferences encoded as lint rules, not written instructions
@@ -308,6 +311,7 @@ Run this repo readiness checklist against any repository before pointing agents 
 - STOP running your checks in harness hooks
 - /retro is a banger of a skill
 - Tell your agents to CARE about the codebase
+- Mutation testing is AWESOME
 - Building a REAL feature with Claude Code: every step explained
 - New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets
 - mattpocock/skills: A complete AI Coding workflow, end-to-end

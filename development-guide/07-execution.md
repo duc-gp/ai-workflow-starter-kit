@@ -52,7 +52,7 @@ The mechanics with an agent:
 
 > **Why it works:** Two reasons. First, feedback loops impose **back pressure**: "AI is so eager to create code and find the fastest solution to your problem, you need to impose some back pressure on it to essentially keep it in a stable state." Tests and strong types are that back pressure. Second, red-then-green is an **anti-fake trust signal**: if the agent writes a test, watches it fail, adds the implementation, and the untouched test passes — "if it's a reasonable agent, it's pretty hard for it to fake that." The sequence itself guards against the classic failure mode of the agent quietly modifying a test to make it pass.
 
-That trust signal changes how much you have to read. Because Pocock saw the suite go red and then green, "I don't necessarily read all of the implementations" — he skims test titles to understand what is being tested, then relies on the QA pass ([Chapter 8](08-review-and-qa.md)) to catch what the tests missed and flush out any bad tests.
+That trust signal changes how much you have to read. Because Pocock saw the suite go red and then green, "I don't necessarily read all of the implementations" — he skims test titles to understand what is being tested, then relies on the QA pass ([Chapter 8](08-review-and-qa.md)) to catch what the tests missed and flush out any bad tests. But the signal is only as strong as the tests themselves — a suite can go red and green and still be weak. The next check on it is mutation testing ([Chapter 8](08-review-and-qa.md)): mutate the source, rerun the suite, kill every surviving mutant. It hardens exactly this trust signal — after it, "you know that every one of those tests is actually catching a potential bug in your system."
 
 ### One test at a time
 
@@ -220,6 +220,7 @@ The same split governs migrations: use scripts and **code mods that crawl the AS
 - I'm using claude --worktree for everything now
 - /handoff is my new favourite skill
 - New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets
+- Mutation testing is AWESOME
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
 - 5 Claude Code skills I use every single day
 - Building a REAL feature with Claude Code: every step explained
