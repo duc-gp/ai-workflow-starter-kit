@@ -70,7 +70,7 @@ The session ends when the agent lays out the full scope — as in the ghost-cour
 
 Seed the session with your reasoning, not just your request. From a real grilling opener: "The reason I want this is so that I can plan courses freely without needing to commit to an exact shape on the file system." The principle: "If the LLM has the what, then it understands what you want to build. But if it doesn't know the why, then it can't suggest alternatives." You can also explicitly invite uncertainty ("I'm not sure about that flow. Maybe we can work on that together") and flip the driver's seat mid-session ("Can you give me the trade-offs of both of these approaches?") — the skill is deliberately "nice and flexible so that you can drive sometimes and the AI can drive."
 
-The initial idea itself can — and should — stay rough. "It really can be as vague as this." The skill does the heavy lifting; over-polishing the opening prompt is wasted effort. (Pocock dictates his prompts rather than typing them.)
+The initial idea itself can — and should — stay rough. "It really can be as vague as this." The skill does the heavy lifting; over-polishing the opening prompt is wasted effort. Pocock dictates his prompts rather than typing them, and the argument is throughput, not preference: "You just get your brain into words faster than you can type," and a dictated prompt is a brain dump, not a crafted prompt — dump the raw thoughts and let the agent process them, whether that means restating them back to you, grilling you on them, or figuring something out from them. Send the transcript raw, too. Agents are "unbelievably good at just taking information and taking your crappy transcripts that you send them, totally up, and managing to find meaning in them" — polishing your dictated output before sending removes your speed advantage and adds nothing the agent needs. If you are still typing into agents: "There are loads of great options out there, but just pick one and start talking instead of typing."
 
 Why the interview format in the first place: it is the mechanism for crossing the **communication barrier**. People "massively underestimate the communication gap between them and the agent" — but the gap is not a model limitation that better models will close ("the model is never going to know exactly what you're thinking"). It is a human one: "we often don't know what we want," and we hold "complicated internal value systems for the things that we want to prioritize in the output" — "we care about complicated things in complicated orders," and "communicating that to an agent is really hard because we often don't know it ourselves." Meanwhile "the agent doesn't know what we care about" until you say it. Grilling operationalizes the barrier-crossing: before and while you delegate, keep asking what the agent does not know about you or about what you want right now — then answer those questions, one round at a time, until the shared understanding on the far side of the gap is real. Treat every grilling session as practice at this permanently necessary skill, not a chore to minimize.
 
@@ -293,7 +293,7 @@ The one resource with no place in this table is an unbanked grilling context —
 
 ## Checklist
 
-- [ ] Seed the grilling session with a rough, dictated idea — include the WHY, not just the WHAT
+- [ ] Seed the grilling session with a rough, dictated idea — include the WHY, not just the WHAT; send the transcript raw and unpolished — messy input is what the agent is good at
 - [ ] Remember the communication barrier is permanent and mostly yours: ask "what does the agent not know about me, or about what I want right now?" — the grilling rounds are how you answer it
 - [ ] Pick the right skill: no codebase → `/grill-me`; codebase, one-session scope → `/grill-with-docs`; too big/foggy or front-end-heavy → `/wayfinder`
 - [ ] Pre-break oversized scope: have the agent decompose it before grilling each piece
@@ -318,6 +318,7 @@ The one resource with no place in this table is an unbanked grilling context —
 
 - 9 Things People Get Wrong With My /grill-* skills
 - Don't underestimate the communication barrier
+- WHY ARE YOU TYPING
 - I stopped using /grill-me for coding. Here's what I use instead
 - I was an AI skeptic. Then I tried plan mode
 - New Skills! /handoff, /prototype, /review and /writing-* | Skills Changelog

@@ -65,6 +65,8 @@ A useful mental model from his plan-mode video: an AI agent is like "a colleague
 
 And the barrier never fully closes, because most of it is on your side. Pocock's complaint about how people work with agents: they "massively underestimate the communication gap between them and the agent." Delegating is "like a colleague or someone that you're employing to do something for you, to build some code for you" — and the communication barrier that exists with every human employee exists here too, permanently, because "the model is never going to know exactly what you're thinking." Two facts keep it open. It is "not a model problem. It is a human problem": "we often don't know what we want." And you hold "complicated internal value systems for the things that we want to prioritize in the output" — "we care about complicated things in complicated orders," and "communicating that to an agent is really hard because we often don't know it ourselves." Crucially, "the agent doesn't know what we care about" until you say it. So keep the standing question alive before and while you delegate: what does the agent not know about me, or about what I want right now? Better models will not close this gap — improving what you communicate across it is the durable lever, and it is exactly what the grilling phases of [Chapter 5](05-idea-to-spec.md) exist to do.
 
+**Dictate, don't type — your input rate is throughput too.** Delegation caps the human's job at reviewing inputs and outputs; the remaining bottleneck on your side is getting thought into the agent. Pocock's challenge to anyone still keyboarding prompts into agents: "Why are you like manually typing into agents? Are you literally just sitting there with your meat fingers just sticking in letters?" Dictation turns a brain dump into words faster than typing, and the agent is the structuring layer: get it to "restate it back to you or grill you on it or figure something out." Tool choice is deliberately low-stakes — "there are loads of great options out there, but just pick one and start talking instead of typing" (his pick is WhisperFlow, with an explicitly unsponsored, lukewarm endorsement). And don't polish the transcript before sending: agents are "unbelievably good at just taking information and taking your crappy transcripts that you send them, totally up, and managing to find meaning in them" — input hygiene matters far less than input speed, so the polishing step leaves the human loop entirely. The payoff: "your speed just massively picks up with what you're able to accomplish with the agent." (This is why the grilling seeds of [Chapter 5](05-idea-to-spec.md) are dictated brain dumps, rough on purpose.)
+
 What delegation looks like in practice:
 
 - **Review at boundaries, not as edits stream.** Pocock explicitly does not review edits as they appear during execution; he reviews the diff at the end of each phase, using git staging and commits as the boundary markers that make per-phase diffs legible.
@@ -180,6 +182,9 @@ The autonomy ladder that follows:
 
 Two supporting observations close the loop. First, from Pocock: front-loaded rigor is what *moves* work up this ladder — research assets, a committed prototype, a PRD, and a ticket board are what make it true that "you can totally run this execution loop AFK and the results will be really good." Autonomy isn't a setting you toggle; it's an outcome you engineer. Second, from Karpathy: even perfect metrics corrupt under autonomous pressure — a loop optimizing a metric will Goodhart it, so expand metric coverage over time rather than trusting a single number forever.
 
+**Goals as metrics, iterated on a schedule — the underused rung.** A closely related pattern, which Pocock calls "a massively underused way of using agents": instead of prescribing a solution, encode the goal as measurable metrics and let the agent iterate against them. To drop OBS as a dependency, he had the agent build a scorecard that benchmarks the incumbent (OBS) on a bunch of metrics and scores his custom replacement against it — then scheduled the agent to rerun the scorecard once a day, looking for "more and more creative ways to try to make those metrics better." "You just give it a goal and over time it will get closer to that goal" — and the scope of applicability is wide: "This is a really amazing for performance-sensitive software of which honestly most software is performance-sensitive." (The full scorecard loop — including the lesson that a replacement needs only your feature subset of the incumbent, with the saved effort spent on performance parity — is developed in [Chapter 9](09-afk-and-parallel-agents.md) alongside the auto-research machinery it runs on.)
+
+
 And when verification is expensive but still objective, the economics favor automation anyway: problems that are expensive to solve but cheap to verify (a candidate improvement takes one training run to check, regardless of how many thousands of ideas were searched to find it) are, in Karpathy's words, the sweet spot. That asymmetry — costly search, cheap verification — is the deep reason the entire delegation model of this guide works: you don't have to watch the agent search; you only have to verify what it submits.
 
 ## Checklist
@@ -189,6 +194,7 @@ And when verification is expensive but still objective, the economics favor auto
 - [ ] Verify even intrinsic answers: check citations; for health/legal/critical domains, read the source documents yourself.
 - [ ] When the agent confidently denies something exists in your codebase, say "look harder" before believing it.
 - [ ] Treat the agent as a capable amnesiac delegate: brief it with context, give it the *why* as well as the *what*, and let it propose alternatives.
+- [ ] Dictate your prompts and send the transcripts raw — your input rate into the agent is part of your throughput, and messy transcripts cost the agent nothing.
 - [ ] Keep the communication barrier in mind before and while delegating — ask "what does the agent not know about me, or about what I want right now?" — and don't expect better models to close it for you.
 - [ ] Review inputs and outputs at boundaries (interfaces, module contracts, phase diffs) — not every streamed edit; spot-check the code occasionally.
 - [ ] Skip re-reading artifacts that summarize a conversation you were part of (PRDs, generated issues) — you reviewed them by having the conversation.
@@ -200,6 +206,7 @@ And when verification is expensive but still objective, the economics favor auto
 - [ ] Design for the next order of magnitude only; write it in the dumbest, simplest way possible; let agents lower the cost of *building*, not the bar for *deciding what to build*.
 - [ ] Accept the post-December reality — expressing will to agents is the job — while keeping verification, operations, taste, and responsibility firmly human.
 - [ ] Gate every increase in agent autonomy on verifiability: objective metric → autonomous loop; tests on every commit → AFK backlog; reviewable artifact → boundary approval; pure taste → human in the loop.
+- [ ] For goals expressible as a score, prefer the scorecard pattern over prescribed solutions: agent-built scorecard against the incumbent baseline, scheduled rerun-and-improve passes, the agent finding creative routes to better metrics.
 - [ ] When sampled agent output repeats a bad pattern, amend the environment (skills, lints, types) — one-off incidents are fine, repeated shortcuts are a signal about the kitchen, not the agent.
 - [ ] Ask "where am I the bottleneck?" and teach the agent to answer with real data — prefer context over control when delegating.
 - [ ] Watch for Goodharting in any metric-driven loop; expand metric coverage instead of trusting one number.
@@ -207,6 +214,7 @@ And when verification is expensive but still objective, the economics favor auto
 ## Sources
 
 - Never Trust An LLM
+- WHY ARE YOU TYPING
 - Don't underestimate the communication barrier
 - How I use Claude Code for real engineering
 - I was an AI skeptic. Then I tried plan mode
@@ -214,6 +222,7 @@ And when verification is expensive but still objective, the economics favor auto
 - Building a REAL feature with Claude Code: every step explained
 - The 7 phases of AI-driven development
 - Tell your agents to CARE about the codebase
+- Give your agent a goal, and let it be creative
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
 
