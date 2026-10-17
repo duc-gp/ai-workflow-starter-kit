@@ -273,7 +273,7 @@ The critical constraint: **this is not an AFK skill.**
 
 > "This is not an AFK skill that you can just sort of run and rely on to continually improve your codebase. This requires a judgment call from you, the programmer, sitting above the LLM."
 
-Pocock's model is tactical versus strategic: agents are "really, really good tactical programmers," but they need a strategic programmer above them. The skill lets the agent *scout* deepening opportunities; the human decides which serve the codebase's long-term health. A design detail worth stealing for your own skills: the skill embeds a **glossary** of its architecture terminology (module, interface, deep/shallow, seam, adapter, locality, leverage), because "having a shared vocabulary with the AI is super important... you can be a lot more precise with what you're asking for."
+Pocock's model is tactical versus strategic: agents are "really, really good tactical programmers," but they need a strategic programmer above them — Ousterhout's **tactical tornado**, the prolific fast shipper that will "plow through your codebase and leave behind a wake of destruction" unless a strategist above it says what to care about ([Chapter 2](02-principles.md)). The skill lets the agent *scout* deepening opportunities; the human decides which serve the codebase's long-term health. A design detail worth stealing for your own skills: the skill embeds a **glossary** of its architecture terminology (module, interface, deep/shallow, seam, adapter, locality, leverage), because "having a shared vocabulary with the AI is super important... you can be a lot more precise with what you're asking for."
 
 And the scout half works better agent-driven than most people expect — provided you supply the strategic intent. "Skills like my improved codebase architecture skill are really great when they're driven by agents because they can just plow through and find candidates for module deepening and for improving test coverage and all the cool stuff that you need when you've got a good codebase." Tell the agent you care about the codebase improving over time ([Chapter 2](02-principles.md)); the scouting, candidate-listing, and even the refactor design run fine delegated. What stays yours is the judgment call at the top of this section — which candidate, and whether it serves the long view.
 
@@ -325,6 +325,7 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - /retro is a banger of a skill
 - Mutation testing is AWESOME
 - Tell your agents to CARE about the codebase
+- Your agent is a tactical tornado
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 
 See also: [Chapter 2](02-principles.md) for the never-trust principle behind fresh-context review, [Chapter 3](03-preparing-your-codebase.md) for the codebase properties review enforces, [Chapter 6](06-tickets-and-planning.md) for how specs become tickets, [Chapter 7](07-execution.md) for the implementation sessions review gates, [Chapter 9](09-afk-and-parallel-agents.md) for the AFK loops QA feeds, and [Chapter 10](10-building-skills.md) for authoring review skills of your own.

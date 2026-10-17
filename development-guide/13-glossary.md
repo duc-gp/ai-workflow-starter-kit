@@ -108,6 +108,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **Ralph loop** — A fresh-context agent loop over a backlog (from Geoffrey Huntley's Ralph Wiggum technique): a bash for-loop that repeatedly invokes a CLI coding agent — pick the highest-priority item, implement it, mark it done, append learnings to a progress log, commit — until the backlog is empty or max iterations is hit. Each iteration is a fresh context window, which is the whole point. See [Chapter 9](09-afk-and-parallel-agents.md).
 
+**reducer** — Frontend state pattern that makes agent-edited UIs robust: persistent state plus a set of **actions** covering user events *and* failures, where the reducer takes the current state plus one action and returns a new state. Separates the UI ("very dumb" dispatch-only components) from the logic that controls it, concentrating that logic in a single module that is easy to test outside the browser, easy to modify, and easy to see in full — "the whole thing just feels so much more robust and it feels like most of the edge cases are handled." See [Chapter 3](03-preparing-your-codebase.md).
+
 **research rot** — The decay of cached research: a `research.md` asset "can go out of date or it can just rot away… and actually cause our agent to take a wrong turn." Research assets live only for the sprint that produced them — delete them after. See [Chapter 5](05-idea-to-spec.md).
 
 **sandbox** — An isolated execution environment (typically a Docker container) where an agent runs without permission prompts and without endangering the host. The prerequisite for AFK execution and the safe alternative to **YOLO mode**. See [Chapter 9](09-afk-and-parallel-agents.md).
@@ -132,7 +134,7 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 ## T–Z
 
-**tactical vs strategic programming** — Tactical = solving the problem in front of you; strategic = the long view, "where you are the general winning the war." Agents are tactically excellent and strategically indifferent — not from a capability gap but from RL training on tactical benchmarks ("the agents learn that tactical programming is the only thing that matters"). The strategic intent must come from you: tell agents you care about the codebase improving over time and they optimize for it, and are good at it. See [Chapter 1](01-how-llms-actually-work.md) and [Chapter 2](02-principles.md).
+**tactical vs strategic programming** — Tactical = solving the problem in front of you; strategic = the long view, "where you are the general winning the war." Agents are tactically excellent and strategically indifferent — not from a capability gap but from RL training on tactical benchmarks ("the agents learn that tactical programming is the only thing that matters"). The archetype is Ousterhout's **tactical tornado**: the prolific programmer who ships fastest and leaves "a wake of destruction" behind — agents are tactical tornados by training, so the strategist role above them is permanently yours. The strategic intent must come from you: tell agents you care about the codebase improving over time and they optimize for it, and are good at it. See [Chapter 1](01-how-llms-actually-work.md) and [Chapter 2](02-principles.md).
 
 **ticket** — One unit of the journey from spec to shipped: a thin vertical slice sized to a single context window / smart zone, with acceptance criteria and a reference to its parent spec. Implement one per session, clearing between tickets. (Renamed from "issues" because tickets is tracker-neutral.) See [Chapter 6](06-tickets-and-planning.md).
 
@@ -204,6 +206,9 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - /retro is a banger of a skill
 - Learn anything with the /teach skill
 - /wayfinder: Nothing is too big to plan anymore
+- When should you NOT use /grill-me?
+- Your agent is a tactical tornado
+- The secret to building robust frontend apps with agents
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
 
 See also: [Chapter 1](01-how-llms-actually-work.md) · [Chapter 2](02-principles.md) · [Chapter 3](03-preparing-your-codebase.md) · [Chapter 4](04-the-workflow.md) · [Chapter 5](05-idea-to-spec.md) · [Chapter 6](06-tickets-and-planning.md) · [Chapter 7](07-execution.md) · [Chapter 8](08-review-and-qa.md) · [Chapter 9](09-afk-and-parallel-agents.md) · [Chapter 10](10-building-skills.md) · [Chapter 11](11-team-blueprint.md) · [Chapter 12](12-skill-catalog.md)

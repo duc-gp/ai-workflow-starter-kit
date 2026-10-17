@@ -122,7 +122,7 @@ The thinking phases. Details and human-side technique in [Chapter 5](05-idea-to-
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one by one. If a question can be answered by exploring the codebase, explore the codebase instead.
 ```
 
-- **When to use:** Non-codebase use cases — spec-ing ideas, even non-engineering work (one user wrote a eulogy with it). Rule of thumb: "When you have a codebase, use grill-with-docs. When you don't have a codebase, use grill-me."
+- **When to use:** Non-codebase use cases — spec-ing ideas, even non-engineering work (one user wrote a eulogy with it). Rule of thumb: "When you have a codebase, use grill-with-docs. When you don't have a codebase, use grill-me." And not for really small diffs either, codebase or not — the decision-tree video's first question is "is the resulting diff... really small?" If so, oneshot it and correct conversationally; alignment investment scales with diff size.
 - **Invocation:** `/grill-me` seeded with a rough (dictated) idea, including the WHY: "Grill me. I'd like to think about adding this to the [X] page." Sessions run ~6 to ~50 questions; complex features take 30–45 minutes.
 - **Construction notes:** Deliberately does NOT use the built-in ask-user-question tool — he dislikes that tool's UI, and not calling a tool is always more token-efficient. (Matt Pocock's UI complaint elsewhere is sharper: reviewing the new `/init`'s use of that same tool, he called it "pants" because you can't see the full proposal while answering.) Flexible driver role — you can flip and ask IT for trade-offs. Effectiveness depends on the human: classify questions by fidelity (grillable Q&A vs ungrillable feel-questions needing a prototype), pre-break oversized scope, lead the conversation, use a frontier model (grilling relies on parametric knowledge).
 - **Status & evolution:** "The most influential four sentences I've ever written" — still alive, recategorized into the productivity section for non-codebase work. Superseded inside codebases by `/grill-with-docs`. Replaces plan mode as the planning method. Updated in v1.2 from one-question-per-turn to **multi-question rounds over a dependency graph**: questions are asked in rounds (labeled "Round 1", "Round 2"), each question labeled Q1/Q2 with a recommended answer, and only currently-answerable (frontier) questions are asked — dependent questions wait for their prerequisite. Fixes the end-of-session "dead slow" failure mode where only easy questions remain. Emojis add visual navigation; intended for dictation batch answers ("Q1, I agree. Q2, I agree. Q3, we need a change").
@@ -522,6 +522,7 @@ Skills about using the system itself. Authoring guidance lives in [Chapter 10](1
 - 5 Claude Code skills I use every single day
 - I stopped using /grill-me for coding. Here's what I use instead:
 - 9 Things People Get Wrong With My /grill-* skills
+- When should you NOT use /grill-me?
 - Building a REAL feature with Claude Code: every step explained
 - The 7 phases of AI-driven development
 - How To De-Slop A Codebase Ruined By AI (with one skill)

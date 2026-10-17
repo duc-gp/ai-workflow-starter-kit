@@ -256,6 +256,18 @@ Two caveats and one amplifier:
 - **Prototype before speccing.** Frontend questions like "how should it look" or "how should it behave" often can't be settled by talking — Matt recommends the prototype route (and Wayfinder) for almost anything touching the frontend: "raise the fidelity of the discussion by making a cheap rough concrete artifact to react to." See [Chapter 5](05-idea-to-spec.md).
 - **AFK multiplier.** Plugging a browser into a frontend or full-stack Ralph loop produced "an enormous improvement" — without it, a looped agent literally cannot see its own output. See [Chapter 9](09-afk-and-parallel-agents.md).
 
+### Reducers and state machines: concentrate the logic, dumb the UI
+
+The browser fixes the agent's *eyes*; the reducer fixes what it is looking *at*. For stateful frontend features, the structure that makes agent edits robust is a **reducer** (with state machines named alongside as feeling "absolutely incredible to use from a front-end point of view when you're working with agents"): persistent state plus a set of **actions** covering everything that can happen — user actions (`openCamera`, `closeCamera`) *and* failures (`photoCaptured`) — where the reducer takes the current state plus one action and returns the new state. This "separates the user interface from the logic that controls that user interface": the React components become "very stupid" dispatchers (a button's `onClick` dispatches `open camera`, nothing else), and all the frontend logic concentrates in a single module that is easy to test, easy to modify, and easy to see in full.
+
+Three payoffs for agent work:
+
+1. **The actions list doubles as a spec** of everything that can happen — happy paths and failure paths — which the agent can implement and test against.
+2. **The reducer tests outside the browser, and they are very fast.** Pure state-in/state-out logic needs no UI harness, so the whole behavioral surface is testable at unit speed.
+3. **The result feels robust.** Pages structured this way come out of agent edits with "most of the edge cases handled" — the structure, not the prompting, is what makes agent-edited frontend code robust. The inverse is the anti-pattern: smart components with scattered logic — hard to test, hard to modify, and invisible as a whole.
+
+Pocock is retrofitting this into existing codebases — "going back over old projects and cranking up the number of reducers" — and the model-side resistance is documented: LLMs are reluctant to reach for reducers in frontend logic on their own, which is exactly why the pattern belongs in your steering guidance ([Chapter 10](10-building-skills.md) covers where steering lives).
+
 ## Checklist
 
 Run this repo readiness checklist against any repository before pointing agents at it:
@@ -308,6 +320,7 @@ Run this repo readiness checklist against any repository before pointing agents 
 - Claude Code tried to improve /init... Is it any better?
 - How to actually force Claude Code to use the right CLI (don't use CLAUDE.md)
 - Frontend is HARDER for AI than backend (here's how to fix it)
+- The secret to building robust frontend apps with agents
 - STOP running your checks in harness hooks
 - /retro is a banger of a skill
 - Tell your agents to CARE about the codebase
