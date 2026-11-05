@@ -118,6 +118,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **seam** — The gap between modules where an interface lives: the place unit and integration tests attach, and where human taste is applied in a gray-box architecture. An **adapter** is a concrete module satisfying the interface at a seam — a real clock in production, a fake clock in tests. See [Chapter 3](03-preparing-your-codebase.md).
 
+**seniority as responsibility** — The model of junior/mid/senior as "the amount of responsibility you're given... the amount of responsibility that you can emotionally handle" — a social grant of trust ("It's just sort of a social thing. It's how much stuff you get trusted with"), not a skill or mistake-rate certification ("everyone is going to make mistakes"). The practical consequence: adopting an ambitious AI workflow is gated by nothing but your decision to try it — "don't wait on that social acceptance to try things out for sure." See [Chapter 2](02-principles.md), [Chapter 9](09-afk-and-parallel-agents.md), and [Chapter 11](11-team-blueprint.md).
+
 **side quest** — Work that surfaces mid-session but doesn't belong to the session's task. Handle it without polluting the session: spin it out via handoff (fire-and-forget, or round trip), or use an out-of-history "by the way" question for quick orientation. See [Chapter 7](07-execution.md).
 
 **skill** — A reusable, versioned instruction set invoked in an agent harness (e.g. `/grill-me`) — not a "command," not a "plugin." Two design axes: **stateless** (each run self-contained, nothing persisted) vs **stateful** (persists state — glossaries, ADRs, learning records — to the file system so later sessions resume and compound); and **user-invoked** (a human types the slash command) vs **model-invoked** (the agent pulls it in when its description matches the situation). See [Chapter 10](10-building-skills.md).
@@ -210,5 +212,6 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - Your agent is a tactical tornado
 - The secret to building robust frontend apps with agents
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
+- Junior engineers: don't wait for permission
 
 See also: [Chapter 1](01-how-llms-actually-work.md) · [Chapter 2](02-principles.md) · [Chapter 3](03-preparing-your-codebase.md) · [Chapter 4](04-the-workflow.md) · [Chapter 5](05-idea-to-spec.md) · [Chapter 6](06-tickets-and-planning.md) · [Chapter 7](07-execution.md) · [Chapter 8](08-review-and-qa.md) · [Chapter 9](09-afk-and-parallel-agents.md) · [Chapter 10](10-building-skills.md) · [Chapter 11](11-team-blueprint.md) · [Chapter 12](12-skill-catalog.md)

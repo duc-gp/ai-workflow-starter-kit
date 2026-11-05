@@ -219,6 +219,8 @@ Pulling the sources together, AFK execution is safe under specific preconditions
 
 **AFK works when tasks are verifiable.** Types, tests, and browser automation give the loop its own judge; Karpathy's verifiability gate is the same principle at the limit. No objective feedback loop → no unattended run.
 
+**One precondition that does not exist: your level.** A junior AI engineer asked exactly this — adopt the software factory now, or wait for mid/senior? Pocock's answer: level is "the amount of responsibility you're given... It's just the amount of responsibility that you can emotionally handle" — a social grant of trust, not a tool-skill certification — and "everyone is going to make mistakes and your rate of mistakes is not necessarily the thing that makes you different from a junior to mid to senior." So "don't wait on that social acceptance to try things out for sure." What makes a factory safe is everything else in this chapter — sandboxing, green CI, label-gated backlogs, bounded loops — none of which reads your job title. The on-ramp is the same for every level: learn the loop interactively with `ralph-once.sh`, then trust it overnight once the guardrails have proven themselves.
+
 **Humans must stay in the loop for:**
 
 - **QA.** "Then a human, yes, a human… actually walks through and QAs the completed work." QA is where reality bites: his run surfaced a showstopper (a non-git-repo directory leaving database and filesystem out of sync) that never came up in grilling. This is why he says "the specs-to-code approach is just never going to work" — you must iterate execution → QA → new tickets, not fire-and-forget.
@@ -268,7 +270,7 @@ Every successful AFK setup in the sources rests on the same short list. Skip any
 - [ ] If parallelizing implementers, add the two safety pieces: a planner that dispatches only unblocked tickets, and a powerful merger agent for conflicts. Otherwise run sequentially.
 - [ ] Gate the backlog: `ready for agent` only after a written brief; human-in-the-loop labels the loop must skip.
 - [ ] Use a worktree per agent session (`claude --worktree`); push to an explicitly named branch, protect main, push before removing the worktree.
-- [ ] Learn the loop with `ralph-once.sh` before trusting it overnight; keep steering-heavy features interactive.
+- [ ] Learn the loop with `ralph-once.sh` before trusting it overnight; keep steering-heavy features interactive — at any level, since the guardrails (not your tenure) are what make the factory safe.
 - [ ] Run the day shift / night shift split: grill and QA while the loop implements your previous session; file QA findings as issues and re-run the loop in parallel.
 - [ ] When waiting on one agent, delegate more non-interfering macro tasks to others (high effort setting, ~20-minute granularity); treat idle token capacity as the bottleneck being you.
 - [ ] Only fully automate what you can evaluate: objective + metric + boundaries (+ a program.md for research-style loops); watch for Goodharting; keep humans on QA, review, and taste.
@@ -291,5 +293,6 @@ Every successful AFK setup in the sources rests on the same short list. Skip any
 - Burn through the backlog from hell with /triage
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - Give your agent a goal, and let it be creative
+- Junior engineers: don't wait for permission
 
 See also: [Chapter 3](03-preparing-your-codebase.md) for building the feedback loops AFK depends on, [Chapter 4](04-the-workflow.md) for where AFK execution sits in the 7 phases, [Chapter 6](06-tickets-and-planning.md) for ticket slicing and the triage state machine that feeds these loops, [Chapter 7](07-execution.md) for interactive execution sessions, and [Chapter 8](08-review-and-qa.md) for the review and QA gates that close the loop.

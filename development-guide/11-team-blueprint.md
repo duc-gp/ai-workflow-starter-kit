@@ -160,6 +160,8 @@ A new hire meets the workflow in three layers.
 
 Note the source's own framing: complaints like "it just asked me 200 questions" were diagnosed as "probably… just a skill issue" in the human's context management. That is exactly the variance this chapter exists to remove — so put these six items in the onboarding material, not in tribal memory.
 
+**And don't gate the flow by level.** Asked whether a junior should adopt the software-factory workflow or wait for mid/senior, Pocock answered that junior/mid/senior is "the amount of responsibility you're given... the amount of responsibility that you can emotionally handle" — "just sort of a social thing. It's how much stuff you get trusted with" — not a skill certification, and "everyone is going to make mistakes and your rate of mistakes is not necessarily the thing that makes you different from a junior to mid to senior." Applied to a rollout: don't reserve the heavyweight flow for mid/senior developers. This chapter's entire thesis is that the gates — not individual talent or tenure — carry quality, which makes the full workflow safe for a junior by construction. When a junior's agent work goes wrong anyway, treat it as the mistake every level makes: route it through the retro loop ([Chapter 8](08-review-and-qa.md)) as a process signal, not as proof they weren't ready.
+
 ## Escalation Paths When the Flow Fails
 
 The flow will fail. The blueprint's job is to make each failure mode route to a named procedure rather than to improvisation.
@@ -249,7 +251,7 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - [ ] `/implement` runs typecheck, build, verification, and two-axis subagent review on every piece of work — automatically
 - [ ] QA plans generated for every user-facing change; a human walks them; findings become tickets
 - [ ] Every deterministic rule enforced by hooks/lint (PreToolUse blockers, git-push safety hook, pre-commit tests/lint/typecheck), with `settings.json` in the repo
-- [ ] New developers onboarded via `/ask-matt`, a teach workspace pointed at the codebase, and the six human-side grilling skills
+- [ ] New developers onboarded via `/ask-matt`, a teach workspace pointed at the codebase, and the six human-side grilling skills — at every level; the gates, not tenure, carry quality, so juniors run the full flow too
 - [ ] Escalation paths named and known: de-slop cadence scheduled, `/triage` for the backlog, `/handoff` for session splits
 - [ ] For stakeholders outside the agent session (non-AI-native, no Slack/Teams), use to-questionnaire to export decisions to a shareable doc, collect answers, and pull them back in; pursue in-channel agent collaboration as the destination.
 - [ ] Workloads split by economics: subscription for human-in-the-loop, API/alternate provider for AFK; effort levels and model tiers set per phase
@@ -285,5 +287,6 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - I Open-Sourced My Own AFK Software Factory
 - How I use Claude Code for real engineering
 - Never Trust An LLM
+- Junior engineers: don't wait for permission
 
 See also: [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md), [Chapter 4 — The End-to-End Workflow](04-the-workflow.md), [Chapter 5 — From Idea to Spec](05-idea-to-spec.md), [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md), [Chapter 7 — Execution](07-execution.md), [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md), [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md), [Chapter 10 — Building Skills](10-building-skills.md), [Chapter 12 — Skill Catalog](12-skill-catalog.md).
