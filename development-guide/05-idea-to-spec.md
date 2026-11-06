@@ -245,6 +245,8 @@ What makes the handoff work for this loop specifically: the handoff document mus
 
 **When to skip it.** Prototyping is a judgment call, not a ritual. In one real feature build, Pocock hit a UI decision he "couldn't get a sense for which way to go until I saw it in reality" — and consciously chose to build it one way and give feedback afterwards rather than pause for 3–5 prototype variants: "I don't mind jumping to code and fixing it there." For cheap-to-reverse decisions in an interactive workflow, iteration beats an extra phase; reserve prototypes for decisions that would be expensive to unwind or that gate the rest of the design.
 
+There is a named mode at the far end of this spectrum: **vibe coding as scoped rapid prototyping**. Karpathy's definition — "you fully give into the vibes, embrace exponentials, and forget that the code even exists" — describes exactly this posture: aim the agent at the outputs, defer code-level concerns, "worry about the code later." Pocock's position (from "Is vibe coding an insult?"): judged on that definition it "doesn't really work as an approach" generally, but inside a throwaway prototyping phase it is legitimate — "then vibe coding can be good" — provided you treat the mode as temporary and pay the code-quality debt back outside it. The test is what surrounds the phase: a prototype that gets committed, picked with your eyes, and then implemented properly ([Chapter 4](04-the-workflow.md)) is vibe coding used well; the same posture sustained on a long-term project just degrades the codebase — "the environment your code is in is going to get worse and worse" ([Chapter 2](02-principles.md)). Or as he puts it elsewhere: gray-box, boundary-focused delegation is "a million miles away from vibe coding" — taste at the seams is what separates the scoped version from the entropy version.
+
 ## Writing the Spec
 
 When the grilling (or the Wayfinder map) is done, the accumulated understanding gets compressed into a **spec** — the destination document.
@@ -331,5 +333,6 @@ The one resource with no place in this table is an unbanked grilling context —
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
 - /wayfinder: Nothing is too big to plan anymore
 - When should you NOT use /grill-me?
+- Is vibe coding an insult?
 
 See also: [Chapter 1](01-how-llms-actually-work.md) for the smart zone and parametric vs contextual knowledge; [Chapter 3](03-preparing-your-codebase.md) for context.md, ADRs, and CLAUDE.md wiring; [Chapter 4](04-the-workflow.md) for where these phases sit in the end-to-end flow; [Chapter 6](06-tickets-and-planning.md) for turning the spec into tickets; [Chapter 7](07-execution.md) for handoff mechanics and implementation sessions; [Chapter 8](08-review-and-qa.md) for the QA loop that catches what no spec can; [Chapter 10](10-building-skills.md) for the skill-authoring lessons behind the grilling fixes.

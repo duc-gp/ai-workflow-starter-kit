@@ -89,6 +89,8 @@ Bassam Daidi describes the same division of labor from inside GitHub: let the ag
 
 > **Warning:** Delegation is earned, not assumed. Pocock is only "pretty aggressive with accept edits on" *after* thorough planning — "now that we've done the planning… we understand the implementation a bit." Upfront thinking is what buys the right to stop watching keystrokes. Delegating without the upfront investment is just vibe coding with extra steps.
 
+**What "vibe coding" actually means — use the term precisely.** That warning names vibe coding as the failure mode, and a short opinion clip ("Is vibe coding an insult?") pins the term down. Karpathy's original definition: "you fully give into the vibes, embrace exponentials, and forget that the code even exists." Judged on that definition, "vibe coding as it's defined here doesn't really work as an approach" — it is not a general development methodology. Pocock's answer to the "is it a slur?" debate: the term is "very useful and very handy" *when used accurately*; what "drives me crazy" is definition drift — the phrase has "gotten so far diffused from what it actually used to mean" and now gets loosely applied to any AI-assisted coding. The one legitimate niche is very rapid prototyping: deliberately aim the agent at the outputs and "worry about the code later," accepting that the mode is temporary and its code-quality debt is paid back outside the prototyping phase. Long-term on a real project, pure vibe coding is an entropy machine — "the environment your code is in is going to get worse and worse." Same practice, opposite verdict by context: the phase decides whether the label describes a technique or an anti-pattern, not the other way around.
+
 ### Course-correct the environment, not the agent
 
 Poteto (ex-Meta React team, creator of the pstack skill library, whose agents ship thousands of PRs a month) adds the review-side rule that makes delegation scale. When sampled agent output shows a bad pattern, the question is not "which agent went wrong" but "what made this possible":
@@ -233,5 +235,6 @@ And when verification is expensive but still objective, the economics favor auto
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
 - Junior engineers: don't wait for permission
+- Is vibe coding an insult?
 
 See also: [Chapter 1 — How LLMs Actually Work](01-how-llms-actually-work.md) · [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md) · [Chapter 4 — The End-to-End Workflow](04-the-workflow.md) · [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md) · [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md)

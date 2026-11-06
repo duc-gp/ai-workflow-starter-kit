@@ -150,6 +150,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **vertical slice** — The ticket-slicing rule: "each issue is a thin vertical slice that cuts through all integration layers, not a horizontal slice of one layer." Slices are ordered to flush out unknown unknowns first — the tracer-bullet idea. See [Chapter 6](06-tickets-and-planning.md).
 
+**vibe coding** — Karpathy's coinage, defined as "you fully give into the vibes, embrace exponentials, and forget that the code even exists." Not a slur and not a general development approach — "it doesn't really work as an approach." One legitimate niche: very rapid prototyping, outputs-first with code-level concerns deliberately deferred ("worry about the code later") and the debt repaid outside the phase. As the only mode on a long-term project it is an entropy machine — "the environment your code is in is going to get worse and worse." The term is only useful when anchored to that original definition; definition drift (applying it to any AI-assisted coding) destroys it. See [Chapter 2](02-principles.md), [Chapter 5](05-idea-to-spec.md), and **gray-box architecture** for the deliberate contrast.
+
 **wayfinder map** — A parent issue on the repo's tracker charting the route from a foggy, too-big idea to a spec: every open decision becomes a sub-issue typed research, grilling, prototype, or task, each scoped to one agent session, wired together with blocking relationships. Work the tickets one at a time "until the route is clear," then feed the completed map to `/to-spec`. See [Chapter 5](05-idea-to-spec.md) and [Chapter 6](06-tickets-and-planning.md).
 
 **workflow** — The counterpart of **agent**: predetermined code paths, known ahead of time and written in code, with LLM calls embedded. Workflows can be optimized (parallelized, tuned) precisely because the path is known; agents improvise. Real systems sit on a spectrum between the two. See [Chapter 1](01-how-llms-actually-work.md).
@@ -213,5 +215,6 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - The secret to building robust frontend apps with agents
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
 - Junior engineers: don't wait for permission
+- Is vibe coding an insult?
 
 See also: [Chapter 1](01-how-llms-actually-work.md) · [Chapter 2](02-principles.md) · [Chapter 3](03-preparing-your-codebase.md) · [Chapter 4](04-the-workflow.md) · [Chapter 5](05-idea-to-spec.md) · [Chapter 6](06-tickets-and-planning.md) · [Chapter 7](07-execution.md) · [Chapter 8](08-review-and-qa.md) · [Chapter 9](09-afk-and-parallel-agents.md) · [Chapter 10](10-building-skills.md) · [Chapter 11](11-team-blueprint.md) · [Chapter 12](12-skill-catalog.md)
