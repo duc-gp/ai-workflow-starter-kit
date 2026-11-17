@@ -184,6 +184,8 @@ Two more placement rules complete the picture:
 - **Steering guidance goes into skills**, not CLAUDE.md. Genuinely useful but situational guidance — e.g. "LLMs are reluctant to use reducers in frontend logic, but reducers are amazing with LLMs because you can pull them out as a testable unit" — should be a skill the agent discovers on demand, carrying its full rationale at zero standing cost (see [Chapter 10](10-building-skills.md)). Matt even retired his own long-advocated global concision instruction to skill territory.
 - **Links, not content.** When his setup skill writes to CLAUDE.md, it writes only short links to the issue-tracker, triage-label, and domain docs under `docs/agents/` — pointers, not inlined prose.
 
+One more placement boundary, discovered at multi-repo scale: the *user* directory is not a home for shared config either — global config is where the user adapts the setup to suit how they work, and shared/team config living there is invisible, never updated, and behind everyone else's. When your work spans many repos and per-repo duplication of skills, steering files, and settings becomes a sync burden, the escalation is the **home repo** — one repo holding all of it, that the agent is always run inside, reaching every other repo from there ([Chapter 14](14-the-home-repo.md)).
+
 One honest counterweight: "one line in CLAUDE.md is cheap insurance against a mistake that's annoying to catch in review." The always-in-context argument is sometimes legitimately right. Weigh it against the budget — but the default answer is no.
 
 ## The /init Story: From "Never Run It" to "Grill Its Output"
@@ -332,5 +334,6 @@ Run this repo readiness checklist against any repository before pointing agents 
 - mattpocock/skills: A complete AI Coding workflow, end-to-end
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - Is vibe coding an insult?
+- The Home Repo Pattern: Run agents across ALL your repos
 
 See also: [Chapter 1](01-how-llms-actually-work.md) for context windows and the smart zone; [Chapter 2](02-principles.md) for the trust and taste principles gray-box delegation depends on; [Chapter 5](05-idea-to-spec.md) for grilling and prototyping; [Chapter 8](08-review-and-qa.md) for how coding-standards.md is consumed at review; [Chapter 9](09-afk-and-parallel-agents.md) for the loops these feedback mechanisms make safe; [Chapter 10](10-building-skills.md) for authoring the skills that absorb steering guidance.

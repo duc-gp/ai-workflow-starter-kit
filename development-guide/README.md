@@ -1,6 +1,6 @@
 # The AI-Driven Development Guide
 
-A comprehensive guide to building software with AI coding agents — distilled from 34 sources: Matt Pocock's skills-repo tutorials and workflow videos, an Andrej Karpathy interview on the post-2025 agentic-coding shift, a GitHub senior engineer's take on system design and AI delegation, and a context-engineering explainer. Thirteen chapters, one glossary, one skill catalog, cross-linked into a single coherent system.
+A comprehensive guide to building software with AI coding agents — distilled from 37 sources: Matt Pocock's skills-repo tutorials and workflow videos, an Andrej Karpathy interview on the post-2025 agentic-coding shift, a GitHub senior engineer's take on system design and AI delegation, and a context-engineering explainer. Fourteen chapters, one glossary, one skill catalog, cross-linked into a single coherent system.
 
 ## Why this guide exists
 
@@ -10,9 +10,10 @@ This guide's thesis, developed across every chapter and made explicit in [Chapte
 
 ## How to use this guide
 
-- **New to AI-assisted development?** Read in order, 1 → 13. Chapter 1 gives you the mental model everything else depends on; each later chapter builds on it.
+- **New to AI-assisted development?** Read in order, 1 → 14. Chapter 1 gives you the mental model everything else depends on; each later chapter builds on it.
 - **Already running agents day to day?** Start at [Chapter 4](04-the-workflow.md) (the workflow backbone), then branch into whichever phase chapter matches what you're struggling with.
 - **Rolling this out to a team?** Read [Chapter 11](11-team-blueprint.md) first for the destination, then backfill the chapters it points you to.
+- **Working across many repos?** [Chapter 14](14-the-home-repo.md) shows how to centralize agent config — skills, steering files, settings, wiki, tooling — in one home repo the agent always runs from.
 - **Building your own skills?** [Chapter 10](10-building-skills.md) teaches the craft; [Chapter 12](12-skill-catalog.md) is the reference catalog of every skill and harness feature named in the source material, with construction notes for building your own version of each.
 - **Forgot what a term means?** [Chapter 13](13-glossary.md) is the guide's own ubiquitous language — one precise definition per term, linked back to where it's developed.
 - **Just want the workflow running, without reading any of this?** [`../starter-kit/`](../starter-kit/README.md) is a standalone, cloneable script that installs the skills and wires up `CLAUDE.md` in any repo for you — this guide becomes background reading you never have to open.
@@ -78,6 +79,7 @@ Two lines carry the whole diagram:
 | 11 | [The Team Blueprint](11-team-blueprint.md) | The capstone: assembling everything into a team workflow where quality is enforced by process, not talent |
 | 12 | [Skill Catalog](12-skill-catalog.md) | Reference: every named skill and harness feature, grouped by phase, in one consistent format |
 | 13 | [Glossary](13-glossary.md) | The guide's own ubiquitous language — every term of art, defined once, linked to its chapter |
+| 14 | [The Home Repo](14-the-home-repo.md) | Running agents across all your repos: one home repo for skills, steering files, settings, wiki, tooling, and navigation pointers |
 
 ## A note on grounding and evolution
 

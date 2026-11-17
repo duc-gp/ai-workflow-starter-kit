@@ -76,7 +76,9 @@ Three decisions matter for a team:
 
 Two properties make a shared skill set cheap to standardize on. First, the context tax is trivial: because the skills are user-invoked with short, precise descriptions, the entire set consumes only ~660 tokens of context (verify with `/context`) — unlike skill repos whose descriptions "leech their way" into every session. Second, there is a built-in tutor: `/ask-matt` is "essentially me as a skill" — a new team member can ask it "how do I get started? What is the main flow I should use?" and get the canonical answer.
 
-**Maintaining the shared set.** Skill renames are not auto-migrated by the installer (`/to-prd` → `/to-spec` and `/to-issues` → `/to-tickets` required deleting and re-adding). Assign an owner for skill upgrades: re-run `npx skills add`, then audit the skills folder so no stale skills linger — "make sure you're intentionally grabbing all the right skills." If your team has modified skills locally, point your agent at the upstream repo and the release notes and have it pull down the changes.
+**Maintaining the shared set.** Skill renames are not auto-migrated by the installer (`/to-prd` → `/to-spec` and `/to-issues` → `/to-tickets` required deleting and re-adding). Assign an owner for skill upgrades: re-run `npx skills add`, then audit the skills folder so no stale skills linger — "make sure you're intentionally grabbing all of the right skills." If your team has modified skills locally, point your agent at the upstream repo and the release notes and have it pull down the changes.
+
+**When the team spans many repos: the home repo.** Project scope standardizes one repo; an organization usually has many (storefront, payments API, admin dashboard, twenty more), and duplicating the skill set and steering files into each is "a massive pain" to keep in sync. The multi-repo answer is the **home repo** — one repo holding all skills, steering files, a versioned `settings.json`, a wiki, and custom tooling, that every developer always launches their agent inside, with plain-path navigation pointers to all target repos in its AGENTS.md. Two team-relevant properties: the versioned settings "spill out over across your entire organization immediately" when everyone runs from the same base, and "private skills" — too good or too sensitive to publish — live there and reach every session. It also fixes the ownership boundary: shared team config in users' home directories is invisible, never updated, and wrong — the user directory is where the *user* adapts the setup, not where the team standardizes it. Monorepo first when consolidation is possible; home repo when it isn't. Full pattern in [Chapter 14](14-the-home-repo.md).
 
 ## The Standard Flow Every Developer Follows
 
@@ -242,6 +244,7 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 
 - [ ] Repo passes the [Chapter 3](03-preparing-your-codebase.md) readiness bar: deep modules, tests at seams, minimal CLAUDE.md with docs pointers
 - [ ] Skills installed at **project scope**, symlinked, from one shared repo; context tax verified with `/context`
+- [ ] Multi-repo org: one home repo (skills, steering files, settings.json, wiki, tooling) that everyone launches agents from — shared team config never lives in user directories; pointers to all target repos in its AGENTS.md
 - [ ] Setup skill run: team's real issue tracker configured, triage labels accepted, domain docs (context.md + ADRs) wired into CLAUDE.md
 - [ ] Skill changes go through PR review; one owner handles upstream skill upgrades and audits for stale/renamed skills
 - [ ] Every developer runs the same flow: grill (Wayfinder for big/foggy work) → spec → tickets → implement → review → QA
@@ -288,5 +291,6 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - How I use Claude Code for real engineering
 - Never Trust An LLM
 - Junior engineers: don't wait for permission
+- The Home Repo Pattern: Run agents across ALL your repos
 
-See also: [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md), [Chapter 4 — The End-to-End Workflow](04-the-workflow.md), [Chapter 5 — From Idea to Spec](05-idea-to-spec.md), [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md), [Chapter 7 — Execution](07-execution.md), [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md), [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md), [Chapter 10 — Building Skills](10-building-skills.md), [Chapter 12 — Skill Catalog](12-skill-catalog.md).
+See also: [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md), [Chapter 4 — The End-to-End Workflow](04-the-workflow.md), [Chapter 5 — From Idea to Spec](05-idea-to-spec.md), [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md), [Chapter 7 — Execution](07-execution.md), [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md), [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md), [Chapter 10 — Building Skills](10-building-skills.md), [Chapter 12 — Skill Catalog](12-skill-catalog.md), [Chapter 14 — The Home Repo](14-the-home-repo.md).

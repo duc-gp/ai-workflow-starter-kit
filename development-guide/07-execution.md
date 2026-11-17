@@ -168,7 +168,7 @@ Mechanics:
 
 The appeal is lifecycle alignment: one worktree per agent per unit of work, created and destroyed with the session — "I just love it when a tool kind of absorbs the complexity of another tool into itself and helps you manage its lifecycle." The manual baseline still works when you want it: `git worktree add <name>` creates the folder on a new branch of the same name; VS Code's Source Control panel shows each worktree as a separate repository you can stage, commit, and PR from; clean up with `git worktree remove <name>` (roughly equivalent to `rm -rf <folder>`), and `git pull` in the main checkout after merging.
 
-Subagents support worktrees too: a parent agent can spin up a subagent in its own worktree and have it PR back to main, orchestrated "from above" — but it appears to be **opt-in**; you must ask Claude to use worktrees for its subagents. That pattern scales up into the fleet setups of [Chapter 9](09-afk-and-parallel-agents.md).
+Subagents support worktrees too: a parent agent can spin up a subagent in its own worktree and have it PR back to main, orchestrated "from above" — but it appears to be **opt-in**; you must ask Claude to use worktrees for its subagents. That pattern scales up into the fleet setups of [Chapter 9](09-afk-and-parallel-agents.md). In multi-repo home-repo setups, the worktree move happens on its own: when several agents run at once against the same target repo, "it will just use a work tree within that same repo" — zero setup, with occasional normal worktree cleanup as you go ([Chapter 14](14-the-home-repo.md)).
 
 ## Commit Discipline
 
@@ -227,5 +227,6 @@ The same split governs migrations: use scripts and **code mods that crawl the AS
 - STOP running your checks in harness hooks
 - Your effort level is STILL TOO HIGH
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
+- The Home Repo Pattern: Run agents across ALL your repos
 
 See also: [Chapter 1](01-how-llms-actually-work.md) (smart zone and context windows), [Chapter 3](03-preparing-your-codebase.md) (feedback loops and hooks), [Chapter 4](04-the-workflow.md) (where execution sits in the flow), [Chapter 6](06-tickets-and-planning.md) (sizing tickets to one context window), [Chapter 8](08-review-and-qa.md) (the review that receives the refactoring), [Chapter 9](09-afk-and-parallel-agents.md) (Ralph loops and agent fleets).

@@ -1,6 +1,6 @@
 # 13. Glossary: The Ubiquitous Language of AI-Driven Development
 
-This guide teaches you to maintain a **ubiquitous language** — one precisely defined vocabulary shared by the code, the developers, the domain experts, and the agent — because "the same techniques that work with humans also, it turns out, work with AI." This chapter is the guide practicing what it preaches: every term of art used in the previous twelve chapters, defined in one to three sentences, with a link to the chapter where it is developed. Use these terms exactly — in tickets, in prompts, in skills, in conversation — and both your teammates and your agents will know precisely what you mean.
+This guide teaches you to maintain a **ubiquitous language** — one precisely defined vocabulary shared by the code, the developers, the domain experts, and the agent — because "the same techniques that work with humans also, it turns out, work with AI." This chapter is the guide practicing what it preaches: every term of art used in the other chapters, defined in one to three sentences, with a link to the chapter where it is developed. Use these terms exactly — in tickets, in prompts, in skills, in conversation — and both your teammates and your agents will know precisely what you mean.
 
 ## A–C
 
@@ -70,6 +70,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **harness** — The agent product wrapping the model: Claude Code, Cursor, Codex CLI, VS Code agent mode. The harness supplies the tool loop, the system prompt, permissions, and features like plan mode, subagents, hooks, and worktrees. See [Chapter 1](01-how-llms-actually-work.md).
 
+**home repo** — The single repo holding all skills, steering files, a versioned settings.json, a wiki, and custom tooling, that you *always* run your agent inside: "whenever I run my agent, I am running my agent always inside the home repo." Its AGENTS.md/CLAUDE.md carries **navigation pointers** — "literally just a path" — to every important target repo; the agent clones what's missing on fresh machines and reaches all repos from the one base, so agent configuration exists once instead of being duplicated (and endlessly synced) across 20–40 repos. Working directory ≠ operating scope. Monorepo first; home repo when consolidation is blocked (public/private mix, political will). See [Chapter 14](14-the-home-repo.md).
+
 **hooks** — Deterministic code the harness runs at fixed points in its execution cycle — e.g. a PreToolUse hook that blocks a bash command and echoes a corrective message ("Use pnpm, not npm", exit code 2). Hooks enforce rules that instructions can only make probable, and free up instruction budget while doing it. See [Chapter 3](03-preparing-your-codebase.md).
 
 **instruction budget** — The rough limit of ~300–500 instructions an LLM can follow before it gets "less and less powerful and more and more confused." Every always-loaded rule — CLAUDE.md lines, MCP tool descriptions — spends budget the actual task needs; hooks, skills, and lean context files protect it. See [Chapter 1](01-how-llms-actually-work.md) and [Chapter 3](03-preparing-your-codebase.md).
@@ -111,6 +113,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 **reducer** — Frontend state pattern that makes agent-edited UIs robust: persistent state plus a set of **actions** covering user events *and* failures, where the reducer takes the current state plus one action and returns a new state. Separates the UI ("very dumb" dispatch-only components) from the logic that controls it, concentrating that logic in a single module that is easy to test outside the browser, easy to modify, and easy to see in full — "the whole thing just feels so much more robust and it feels like most of the edge cases are handled." See [Chapter 3](03-preparing-your-codebase.md).
 
 **research rot** — The decay of cached research: a `research.md` asset "can go out of date or it can just rot away… and actually cause our agent to take a wrong turn." Research assets live only for the sprint that produced them — delete them after. See [Chapter 5](05-idea-to-spec.md).
+
+**retro the retro** — The meta-loop governing harness self-evolution: every retro-proposed change is a hypothesis that a human (or a process) must evaluate on later tasks — "it needs a way to establish whether a change helps on later tasks or not and to revise or remove changes that do not" — because "if the coding agent is just making kind of endless changes on itself, it's not going to suggest good things." The judgment comes from volume: "running a lot of retros." See [Chapter 8](08-review-and-qa.md) and [Chapter 2](02-principles.md).
 
 **sandbox** — An isolated execution environment (typically a Docker container) where an agent runs without permission prompts and without endangering the host. The prerequisite for AFK execution and the safe alternative to **YOLO mode**. See [Chapter 9](09-afk-and-parallel-agents.md).
 
@@ -216,5 +220,7 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - Andrej Karpathy on No Priors: Agentic Coding, Claws, Auto-Research & the Post-December Workflow Shift
 - Junior engineers: don't wait for permission
 - Is vibe coding an insult?
+- Someone wrote a PAPER about my skill
+- The Home Repo Pattern: Run agents across ALL your repos
 
-See also: [Chapter 1](01-how-llms-actually-work.md) · [Chapter 2](02-principles.md) · [Chapter 3](03-preparing-your-codebase.md) · [Chapter 4](04-the-workflow.md) · [Chapter 5](05-idea-to-spec.md) · [Chapter 6](06-tickets-and-planning.md) · [Chapter 7](07-execution.md) · [Chapter 8](08-review-and-qa.md) · [Chapter 9](09-afk-and-parallel-agents.md) · [Chapter 10](10-building-skills.md) · [Chapter 11](11-team-blueprint.md) · [Chapter 12](12-skill-catalog.md)
+See also: [Chapter 1](01-how-llms-actually-work.md) · [Chapter 2](02-principles.md) · [Chapter 3](03-preparing-your-codebase.md) · [Chapter 4](04-the-workflow.md) · [Chapter 5](05-idea-to-spec.md) · [Chapter 6](06-tickets-and-planning.md) · [Chapter 7](07-execution.md) · [Chapter 8](08-review-and-qa.md) · [Chapter 9](09-afk-and-parallel-agents.md) · [Chapter 10](10-building-skills.md) · [Chapter 11](11-team-blueprint.md) · [Chapter 12](12-skill-catalog.md) · [Chapter 14](14-the-home-repo.md)

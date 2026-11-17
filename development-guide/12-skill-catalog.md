@@ -81,6 +81,18 @@ These run once per machine or once per repo. The full rationale for a minimal, h
 - **Status & evolution:** Current; documented in the dedicated Wayfinder explainer.
 - **Source:** /wayfinder: Nothing is too big to plan anymore
 
+### Home repo (The Home Repo Pattern)
+
+- **Type:** infrastructure (one repo + a launch habit)
+- **What it does:** Centralizes everything the agent needs in every session — all skills, all steering files, a personal/business wiki, custom tooling, and versioned settings — into a single "home" repo, with navigation pointers (literally just paths) in its AGENTS.md/CLAUDE.md to every important repo. You always run the agent inside the home repo; it reaches the storefront, the payments API, and the rest from there, "operating across lots of different repos at once and pulling in all of the context that it needs."
+- **When to use:** Any multi-repo setup where duplicating skills, tooling, and AGENTS.md across 20–40 repos (a "massive pain" to sync) or dumping shared config into the user directory (invisible, never updated, wrong ownership boundary) has become a burden. Monorepo first — consolidate into one repo if you can; "if you can't, and most likely you can't just because of political will, then a home repo is the way to go."
+- **Invocation:** Clone the home repo on a fresh machine and launch every agent session inside it. Adding a target repo = adding a path to its AGENTS.md.
+- **Construction notes:** The pointers self-provision: if a pointed-to repo (e.g. sandcastle) doesn't exist at its path, the agent "clones it down"; several agents running at once "will just use a work tree within that same repo" — "zero setup basically." Beyond ~20–40 repos, use progressive disclosure: group the pointers into category files (front-end / backend / internal tooling) that link the raw repos. Houses versioned `settings.json` that "spill out over across your entire organization immediately," private skills ("extremely good and extremely sensitive to my business"), and a Karpathy-style markdown wiki queried for rich data. Centralization is what makes the custom tooling ambitious: `wiki help` in his setup lists integrations with Gmail, Slack, Discord, YouTube, GitHub, GCal — and the home repo "becomes the tooling that links all different parts of your business up together." An article, "The Home Repo Pattern," ships a setup prompt that "essentially just grills you about your own setup, looks at all of the repos that you need to care about, and then it will start to move things into a home repo." Full treatment in [Chapter 14](14-the-home-repo.md).
+- **Status & evolution:** Current — a pattern he held back as "too boring and obvious to post about" until articulating it showed it "actually solves a bunch of problems that people are actually having." A ~1.5-minute short of the same talk exists ("The Home Repo Pattern").
+- **Source:** The Home Repo Pattern: Run agents across ALL your repos; The Home Repo Pattern
+
+### Hooks (PreToolUse and friends)
+
 - **Type:** harness feature (Claude Code)
 - **What it does:** Deterministic code that runs at fixed points in the harness's execution cycle. The key event is **PreToolUse**, which fires before a tool call and can block it: a script matches the command, echoes a corrective message, and exits with code 2 — the command is prevented AND the agent is steered to the right alternative (e.g. blocked `npm install foo` retried automatically as `pnpm install foo`).
 - **When to use:** Any rule that can be enforced deterministically: CLI substitutions (pnpm over npm), forbidding destructive commands (`git push`), forcing wrapper scripts. Not for non-deterministic guidance — that belongs in skills.
@@ -387,8 +399,8 @@ The quality gate. Full treatment in [Chapter 8](08-review-and-qa.md).
 - **When to use:** On a sampling of sessions whenever you realize you haven't run it in a while — especially sessions that went wrong or where the agent did something weird. "Retro will usually find a fix." "Retro is merciless... it will pretty much always find ways to improve."
 - **Invocation:** `/retro` on the current or recent sessions.
 - **Construction notes:** Human-in-the-loop by design — apply its fixes with human judgment, never auto-applied: automation "gets itself into a loop where it continually finds false positives." It works because "the agent doesn't complain, I think, as much as it should, and doesn't try to fix its own mistakes" — a second agent must look back at the sessions. Real findings from Pocock's runs: a `pnpm check` script nothing ran (→ add CI), an agent cutting a missing 1.3.0 release without asking, repeated instructions lost between compactions (→ move into a skill), token-wasting custom CLIs, tools not on PATH. Its dedicated short adds the output model: every finding is converted into one of two guardrail classes — a deterministic **automated check**, or a **steering-file entry** (e.g. `coding-standards.md`) that code review agents consume before production. The standing response rule it encodes: when an agent makes a mistake, don't get angry — ask "how do I make that mistake harder for the agent to make next time?" ("Retro has been absolutely invaluable for me.")
-- **Status & evolution:** New in skills v1.3 — "the one that I've just seen absolutely go nuts on socials."
-- **Source:** New Skills! v1.3 brings /pr, /implement-spec, and /retro; /retro is a banger of a skill
+- **Status & evolution:** New in skills v1.3 — "the one that I've just seen absolutely go nuts on socials." The skill has since drawn academic attention: a paper on harness self-evolution ("How do coding agent harnesses self-evolve? An empirical study of retrospective adaptation") studied it and concluded that self-evolution needs evaluation on later tasks plus revision/removal of unhelpful changes — a conclusion Pocock endorses as matching what the skill already requires (human-in-the-loop application of fixes; "retro the retro").
+- **Source:** New Skills! v1.3 brings /pr, /implement-spec, and /retro; /retro is a banger of a skill; Someone wrote a PAPER about my skill
 
 ### Improve-codebase-architecture (the de-slop skill)
 
@@ -512,6 +524,7 @@ Skills about using the system itself. Authoring guidance lives in [Chapter 10](1
 - [ ] After every AFK run: generate a QA plan issue (human-labeled), walk it, file findings via a feedback-button-style path, re-run the loop.
 - [ ] Sandbox all AFK execution (Sandcastle/Docker) — never YOLO mode; use worktrees per agent and push to explicitly named branches behind a push-blocking hook.
 - [ ] For foggy big work or front-end-heavy work, default to `/wayfinder`: chart the map once, then walk each takable ticket in its own Wayfinder session; let prototype tickets keep it from becoming waterfall.
+- [ ] Working across many repos? Centralize in a home repo — skills, steering files, settings, wiki, tooling — and always launch the agent from it; keep navigation pointers to every target repo in its AGENTS.md.
 - [ ] After adopting new or renamed skills, use delete-and-re-add rather than trusting the installer, then audit the skills folder for stale entries.
 
 ## Sources
@@ -547,5 +560,7 @@ Skills about using the system itself. Authoring guidance lives in [Chapter 10](1
 - Most devs don't understand how context windows work
 - Frontend is HARDER for AI than backend (here's how to fix it)
 - /wayfinder: Nothing is too big to plan anymore
+- Someone wrote a PAPER about my skill
+- The Home Repo Pattern: Run agents across ALL your repos
 
-See also: [Chapter 4 — The End-to-End Workflow](04-the-workflow.md), [Chapter 5 — From Idea to Spec](05-idea-to-spec.md), [Chapter 7 — Execution](07-execution.md), [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md), [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md), [Chapter 10 — Building Skills](10-building-skills.md), [Chapter 13 — Glossary](13-glossary.md).
+See also: [Chapter 4 — The End-to-End Workflow](04-the-workflow.md), [Chapter 5 — From Idea to Spec](05-idea-to-spec.md), [Chapter 7 — Execution](07-execution.md), [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md), [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md), [Chapter 10 — Building Skills](10-building-skills.md), [Chapter 13 — Glossary](13-glossary.md), [Chapter 14 — The Home Repo](14-the-home-repo.md).

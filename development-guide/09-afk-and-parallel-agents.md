@@ -228,6 +228,7 @@ Pulling the sources together, AFK execution is safe under specific preconditions
 - **Hard, steering-heavy features.** Use `ralph-once.sh` interactively rather than the AFK loop.
 - **Under-specified tickets.** If nobody has written the brief that earns a `ready for agent` label, the ticket is human work (triage) first.
 - **Taste and unverifiable judgment.** Prototyping, UI decisions you "couldn't get a sense for which way to go ... until I saw it in reality", and anything outside an objective metric.
+- **Modifying the harness itself.** Retro-proposed changes to skills, checks, and steering files have no objective metric that says "this helped" — an empirical study of the retro skill concluded harness self-evolution "needs a way to establish whether a change helps on later tasks or not and to revise or remove changes that do not," and "if the coding agent is just making kind of endless changes on itself, it's not going to suggest good things." The human (or a process) stays in the loop to "retro the retro" ([Chapter 8](08-review-and-qa.md); the principle is [Chapter 2](02-principles.md)'s verifiability gate).
 
 ## Provisioning and Secrets: The Wizard Skill
 
@@ -294,5 +295,6 @@ Every successful AFK setup in the sources rests on the same short list. Skip any
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - Give your agent a goal, and let it be creative
 - Junior engineers: don't wait for permission
+- Someone wrote a PAPER about my skill
 
 See also: [Chapter 3](03-preparing-your-codebase.md) for building the feedback loops AFK depends on, [Chapter 4](04-the-workflow.md) for where AFK execution sits in the 7 phases, [Chapter 6](06-tickets-and-planning.md) for ticket slicing and the triage state machine that feeds these loops, [Chapter 7](07-execution.md) for interactive execution sessions, and [Chapter 8](08-review-and-qa.md) for the review and QA gates that close the loop.
