@@ -35,6 +35,8 @@ There is a deeper principle here: **feedback loops beat instructions**. Matt hat
 
 > **Rule:** Any quality rule that CAN be expressed as a deterministic check (lint rule, type constraint, test, hook) should be — never as prose instructions to the agent.
 
+**Ratchet existing violations rather than banning overnight.** A taste rule usually arrives after the codebase already violates it thousands of times — the 21,000-line feature's retro surfaced TypeScript `as` outside shared utilities (~2,000 instances), `useEffect` in the hooks directory (~230 uses across 140 files), raw `fetch` calls, and magic-string `useSearchParams` reads. The migration path: find or write the deterministic rule (a small custom parser/lint rule where your linter ships none — Oxlint has no intersections→interface-extends rule, so the recommendation is to write one), enable it, then "create a strategy to ratchet it up" folder by folder until the count hits zero. What no lint rule fits still ratchets — for comments, phase the ban per folder rather than overnight. ([Chapter 8](08-review-and-qa.md) covers where these rules come from: review comments and retro.)
+
 And a check that exists but nothing runs is not a feedback loop. A real retrospective finding (see `/retro` in [Chapter 8](08-review-and-qa.md)): a repo shipping a `pnpm check` script with no CI pipeline to run it — no guard rail, so nothing stopped a broken release. Wire the checks into CI so they fire without anyone deciding to run them.
 
 **Where checks run matters as much as that they run.** The common advice to wire automated checks into agent-harness hooks so they fire on every single file edit is wrong three ways: it's slow (a big refactor session can involve a hundred file edits, and linting every file as it comes through drags the session), it's noisy ("the agent is receiving a ton of tokens on every single file" — pure context bloat), and it's redundant ("it will often know that it's putting the file into a broken state. So what you're doing there is you're just telling the agent something it already knows"). The better layout has three tiers:
@@ -54,6 +56,8 @@ Poteto (creator of the pstack skill library, whose agents ship thousands of PRs 
 It was the first skill he built at Cursor, the thing that first let him climb the trust ladder, and every app his team runs carries an auto-maintained verification skill — "critical infrastructure." The verification CLI itself is "just a bunch of glue" over Playwright and the Chrome DevTools Protocol plus APIs. Once the agent can verify against a rubric or score, it can also **hill-climb**: continually try to improve the result in a loop (cf. Karpathy's auto-research, [Chapter 9](09-afk-and-parallel-agents.md)).
 
 In this guide's terms, that is exactly what the frontend browser loop below does — and the reason "the environment determines quality" is not just about lint rules but about giving the agent **eyes on its own output**.
+
+What the newest agents do with that ability was the 21,000-line walkthrough's most pleasant surprise. Chasing a reported white bar in exported composites, the agent reproduced the bug in its own browser, read the pixel colors along the export's right edge, and concluded correctly that the last pixel column was only partly painted because the browser was shrinking a 120-wide image under Windows 125% scaling — a non-issue, closed as such. Pocock's verdict: "This generation of agents appear to be really, really good at this. In other words, verifying their own work really solidly." The retro's follow-up: make that the standard — his verify-CVM skill (verifying implementations by running them in a browser) should become standing practice rather than a one-off.
 
 ## Modular Architecture: Deep, Gray-box Modules
 
@@ -335,5 +339,6 @@ Run this repo readiness checklist against any repository before pointing agents 
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - Is vibe coding an insult?
 - The Home Repo Pattern: Run agents across ALL your repos
+- Watch me ship a 21,000-line feature with mattpocock/skills
 
 See also: [Chapter 1](01-how-llms-actually-work.md) for context windows and the smart zone; [Chapter 2](02-principles.md) for the trust and taste principles gray-box delegation depends on; [Chapter 5](05-idea-to-spec.md) for grilling and prototyping; [Chapter 8](08-review-and-qa.md) for how coding-standards.md is consumed at review; [Chapter 9](09-afk-and-parallel-agents.md) for the loops these feedback mechanisms make safe; [Chapter 10](10-building-skills.md) for authoring the skills that absorb steering guidance.

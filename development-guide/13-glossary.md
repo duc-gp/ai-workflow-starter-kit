@@ -130,7 +130,7 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **slop** — Plausible-looking, low-quality AI output: code that works but degrades the codebase — scattered conditionals, optional-prop creep, duplicated parallel implementations, shallow modules. The reviewer's verdict that names it best: "the behavior is correct in all three substantive PRs, but the codebase is meaningfully messier than it was a week ago." See [Chapter 8](08-review-and-qa.md).
 
-**smart zone** — The usable portion of the context window before attention degradation: roughly the first 140k tokens on current Claude models (estimates in the sources range 120–140k), regardless of the advertised window size. Past it lies the **dumb zone** — strained attention, stupider decisions. Every ticket and session is sized to fit one smart zone. See [Chapter 1](01-how-llms-actually-work.md).
+**smart zone** — The usable portion of the context window before attention degradation: roughly the first 140k tokens on current Claude models (estimates in the sources range 120–140k), regardless of the advertised window size. Past it lies the **dumb zone** — strained attention, stupider decisions. Every ticket and session is sized to fit one smart zone. The zone model Pocock credits to Dex Horthy ("not original to me"); on current Opus-class models it is a cost/optimization boundary rather than a hallucination cliff — work gets worse rather than fabricated, and a 750k-token context re-bills every previous token once the cache expires. See [Chapter 1](01-how-llms-actually-work.md).
 
 **spec** — The destination document: "the description of everything of how it's going to look at the end," compressed out of a grilling session (problem statement, solution, user stories, implementation and testing decisions) and published to the issue tracker. The spec is the destination; the **tickets** are the journey. See [Chapter 5](05-idea-to-spec.md).
 
@@ -222,5 +222,6 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - Is vibe coding an insult?
 - Someone wrote a PAPER about my skill
 - The Home Repo Pattern: Run agents across ALL your repos
+- Watch me ship a 21,000-line feature with mattpocock/skills
 
 See also: [Chapter 1](01-how-llms-actually-work.md) · [Chapter 2](02-principles.md) · [Chapter 3](03-preparing-your-codebase.md) · [Chapter 4](04-the-workflow.md) · [Chapter 5](05-idea-to-spec.md) · [Chapter 6](06-tickets-and-planning.md) · [Chapter 7](07-execution.md) · [Chapter 8](08-review-and-qa.md) · [Chapter 9](09-afk-and-parallel-agents.md) · [Chapter 10](10-building-skills.md) · [Chapter 11](11-team-blueprint.md) · [Chapter 12](12-skill-catalog.md) · [Chapter 14](14-the-home-repo.md)

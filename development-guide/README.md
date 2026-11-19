@@ -1,6 +1,6 @@
 # The AI-Driven Development Guide
 
-A comprehensive guide to building software with AI coding agents — distilled from 37 sources: Matt Pocock's skills-repo tutorials and workflow videos, an Andrej Karpathy interview on the post-2025 agentic-coding shift, a GitHub senior engineer's take on system design and AI delegation, and a context-engineering explainer. Fourteen chapters, one glossary, one skill catalog, cross-linked into a single coherent system.
+A comprehensive guide to building software with AI coding agents — distilled from 38 sources: Matt Pocock's skills-repo tutorials and workflow videos, an Andrej Karpathy interview on the post-2025 agentic-coding shift, a GitHub senior engineer's take on system design and AI delegation, and a context-engineering explainer. Fourteen chapters, one glossary, one skill catalog, cross-linked into a single coherent system.
 
 ## Why this guide exists
 

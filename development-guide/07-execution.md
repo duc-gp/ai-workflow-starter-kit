@@ -148,6 +148,8 @@ Each line encodes a lesson:
 
 **When to hand off vs. compact:** if you must barrel on at the *same* problem — long debugging especially — `/compact` is still right: compact away the options already tried, keep going, compact again ("save your state essentially"). Handoff is for *splitting scope*: the new task gets a fresh full smart zone, and the original session's context stays pure. Repeated compaction also leaves a "sediment of different layers" from previous conversations — workable, but inefficient.
 
+The 21,000-line walkthrough adds the moment when compact becomes nearly free: **after the conversation has been externalized into documents.** With the spec written, the tickets cut, and the glossary updated, "when we've taken the conversation and just turned it into a document [compact] is so so safe. It's almost free" — a minute spent, context back near its starting point, and the compacted session still knows the codebase, the spec, and the prototype, so you can hand it `/implement-spec` on the spec it just created ([Chapter 9](09-afk-and-parallel-agents.md)). The standing risk is auto-compact's timing, not compact itself: "the timing sometimes just absolutely wumps you. Something important will be taken out of context." Compact at a moment you chose, never at one the harness chose for you.
+
 Because the handoff artifact is plain markdown, it is harness-agnostic: session one can be Claude Code and the recipient Codex or Copilot CLI — "a very very simple way" to hand work between different agents, including for adversarial review. And the pattern round-trips: a session can hand off to a prototype session (which grew to 169k tokens in Pocock's example — far more than would have fit in the parent), then hand the compressed learnings *back* — "almost like you've done a kind of DIY sub agent." The full prototype round-trip lives in [Chapter 5](05-idea-to-spec.md).
 
 Pocock's meta-lesson: he resisted making /handoff a skill because it seemed too simple — then noticed "I was doing this so freaking often that I just decided, okay, I need a skill for this." Frequency of use, not complexity, justifies packaging ([Chapter 10](10-building-skills.md)).
@@ -228,5 +230,6 @@ The same split governs migrations: use scripts and **code mods that crawl the AS
 - Your effort level is STILL TOO HIGH
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - The Home Repo Pattern: Run agents across ALL your repos
+- Watch me ship a 21,000-line feature with mattpocock/skills
 
 See also: [Chapter 1](01-how-llms-actually-work.md) (smart zone and context windows), [Chapter 3](03-preparing-your-codebase.md) (feedback loops and hooks), [Chapter 4](04-the-workflow.md) (where execution sits in the flow), [Chapter 6](06-tickets-and-planning.md) (sizing tickets to one context window), [Chapter 8](08-review-and-qa.md) (the review that receives the refactoring), [Chapter 9](09-afk-and-parallel-agents.md) (Ralph loops and agent fleets).

@@ -176,7 +176,7 @@ The flow will fail. The blueprint's job is to make each failure mode route to a 
 
 **The agent is confidently wrong → push back.** Never argue from your own memory; make it verify. When an agent falsely claimed no test harness existed, the two-word correction "look harder" found the whole suite. The general rule from [Chapter 2](02-principles.md) applies with force in a team, where a wrong claim can propagate into tickets: never trust, always verify against the code.
 
-**The process itself is drifting → retro.** Skills, steering files, and tooling decay silently: check scripts nothing runs, instructions that are no-ops, token-wasting CLIs, repeated instructions lost to compaction. Run the `/retro` skill ([Chapter 8](08-review-and-qa.md)) on a sampling of the team's recent agent sessions — especially ones that went wrong — and apply its suggested fixes with human judgment. It is deliberately not automated: an auto-applied retro loop "continually finds false positives" and takes the repo somewhere it shouldn't go.
+**The process itself is drifting → retro.** Skills, steering files, and tooling decay silently: check scripts nothing runs, instructions that are no-ops, token-wasting CLIs, repeated instructions lost to compaction. Run the `/retro` skill ([Chapter 8](08-review-and-qa.md)) on a sampling of the team's recent agent sessions — especially ones that went wrong — and apply its suggested fixes with human judgment. It is deliberately not automated: an auto-applied retro loop "continually finds false positives" and takes the repo somewhere it shouldn't go. Make sure the input exists: agent session transcripts saved to disk survive compaction — the 21,000-line retro read ~30 of them alongside human review comments pulled via the GitHub CLI — so archiving sessions is part of the loop's standard output, and in a hosted factory you persist them to the cloud so retros can see what agents struggled with while nobody was watching.
 
 ## Collaborating With Stakeholders Outside the Agent Session
 
@@ -292,5 +292,6 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - Never Trust An LLM
 - Junior engineers: don't wait for permission
 - The Home Repo Pattern: Run agents across ALL your repos
+- Watch me ship a 21,000-line feature with mattpocock/skills
 
 See also: [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md), [Chapter 4 — The End-to-End Workflow](04-the-workflow.md), [Chapter 5 — From Idea to Spec](05-idea-to-spec.md), [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md), [Chapter 7 — Execution](07-execution.md), [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md), [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md), [Chapter 10 — Building Skills](10-building-skills.md), [Chapter 12 — Skill Catalog](12-skill-catalog.md), [Chapter 14 — The Home Repo](14-the-home-repo.md).

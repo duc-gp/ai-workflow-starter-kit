@@ -53,7 +53,7 @@ The **smart zone** is the usable portion of the context window before attention 
 
 The mechanism underneath is quadratic attention: every added token must be tracked in relation to every other token — 5 tokens is ~10 attention relationships; 10,000 tokens is ~1,000,000. That scaling is why "many models now ship with 1 million tokens of context window, but it's pretty shocking how little of that is usable for actual work" — advertised windows and usable windows are different things.
 
-A working rule of thumb for where the dumb zone begins: **~150,000 tokens** — but treat it as per-model, per-task, and moving. Pocock's own recommendation moved from ~100k six months earlier to ~150k now, "and it will continue to creep up" as models improve. Re-derive the threshold periodically rather than treating it as fixed.
+A working rule of thumb for where the dumb zone begins: **~150,000 tokens** — but treat it as per-model, per-task, and moving. Pocock's own recommendation moved from ~100k six months earlier to ~150k now, "and it will continue to creep up" as models improve. Re-derive the threshold periodically rather than treating it as fixed. Two refinements from the 21,000-line feature walkthrough: the framing is borrowed — "not original to me," he credits Dex Horthy (HumanLayer, then Factory) — and the model's history explains why the number moves. Earlier generations forced clearing at ~120k tokens (even ~80k on Sonnet 3.5); on Opus-class models the zone is no longer a hallucination cliff but a cost/optimization boundary — past it the agent mostly produces worse work rather than hallucinating, and huge windows are expensive at every step, because a 750k-token context re-bills every previous token once the cache runs out. Advertised window size is a marketing number; the smart zone is the budget.
 
 The dumb zone has a detector: **faithfulness hallucinations**. "If you're seeing hallucinations, especially faithfulness hallucinations, then you're probably in the dumb zone." Treat that as the signal to clear, compact, hand off — or redesign the task so it doesn't need that much context at all. Some tasks genuinely don't need much of the smart zone and can be run in the dumb zone; but to get the most out of the tokens you spend, spend them in the smart zone.
 
@@ -231,5 +231,6 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 - Tell your agents to CARE about the codebase
 - Your agent is a tactical tornado
 - /wayfinder: Nothing is too big to plan anymore
+- Watch me ship a 21,000-line feature with mattpocock/skills
 
 See also: [Chapter 2 — Operating Principles](02-principles.md) · [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md) · [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md) · [Chapter 7 — Execution](07-execution.md) · [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md) · [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md)

@@ -78,6 +78,8 @@ The v1.3 skills release names three tiers of ticket orchestration, ranked:
 
 What recently made the middle tier viable: **sub-agents can now spawn sub-agents.** They "used to be nerfed" but are now "as powerful as orchestrator agents" — so "an agent does the babysitting instead of a human."
 
+The 21,000-line feature ran this tier for real: nine tickets implemented by parallel sub-agents, everything reviewed against the repo's coding standards (one hard violation and a couple of scope-creep cases caught and fixed), ending in a single mergeable PR after ~45–60 minutes unattended — "this is the point here where I would step away, where I would trust it to run AFK." The retro on that run sharpened the skill's design: it creates its merger agent too early and should try merging directly first; its single reviewer can't cover a huge diff and should split into sub-agents; and per-ticket review would be "extraordinarily slow," so review stays at spec level. Findings like these go back onto the skills repo as issues — the retro loop in [Chapter 8](08-review-and-qa.md).
+
 ## Feeding the Loop: Backlogs and Labels
 
 The prd.json version is the minimal Ralph. Pocock's setup evolved: his current loops pull **GitHub issues** as the backlog instead of a local JSON file — issues created by the PRD-to-issues flow ([Chapter 6](06-tickets-and-planning.md)), by his in-app feedback button, and by teammates. A shared issue tracker is what lets AFK agents coexist with humans, and that requires explicit signals about which tickets are agent-safe:
@@ -296,5 +298,6 @@ Every successful AFK setup in the sources rests on the same short list. Skip any
 - Give your agent a goal, and let it be creative
 - Junior engineers: don't wait for permission
 - Someone wrote a PAPER about my skill
+- Watch me ship a 21,000-line feature with mattpocock/skills
 
 See also: [Chapter 3](03-preparing-your-codebase.md) for building the feedback loops AFK depends on, [Chapter 4](04-the-workflow.md) for where AFK execution sits in the 7 phases, [Chapter 6](06-tickets-and-planning.md) for ticket slicing and the triage state machine that feeds these loops, [Chapter 7](07-execution.md) for interactive execution sessions, and [Chapter 8](08-review-and-qa.md) for the review and QA gates that close the loop.

@@ -61,6 +61,8 @@ Keep the tickets short. Pocock flagged his own demo tickets as "a bad example" b
 
 The slicing rule the `/to-tickets` skill applies is: "each issue is a thin **vertical slice** that cuts through all integration layers, not a horizontal slice of one layer" — a good slice touches UI + schema + API together rather than splitting a feature into a "frontend ticket" and a "backend ticket" that can't ship independently. Slices are also ordered to flush out unknown unknowns first — tracer bullets — so the riskiest unresolved question gets built and proven early rather than last. See [Chapter 12](12-skill-catalog.md) for the full construction notes.
 
+One ordering pattern from the 21,000-line feature: **make the first ticket a prefactor when several tickets share unbuilt infrastructure.** Its first ticket was not a feature slice at all but an extraction — pull the shared diagram editor out so every later ticket builds against it; the rest declared their blocked-by against it and ran in parallel where the graph allowed. Review of the proposed breakdown stayed light — "Nine seems fine to me... looks good to me" — which is the review-the-slicing-only posture at its calmest.
+
 ## Why You Don't Hand-Review Generated Tickets
 
 This surprises people: after adjusting the slicing, Pocock does not read the generated ticket text. Asked whether he reviews the issues — "Absolutely not... it's just expanding out stuff that's in the PRD." Same for the spec text itself: "LLMs are really, really good at summarizing things," so accept it on faith.
@@ -217,5 +219,6 @@ One caution to close on, because it frames how much to invest in the ticket pile
 - Building a REAL feature with Claude Code: every step explained
 - I Open-Sourced My Own AFK Software Factory
 - /wayfinder: Nothing is too big to plan anymore
+- Watch me ship a 21,000-line feature with mattpocock/skills
 
 See also: [Chapter 4](04-the-workflow.md) for where planning sits in the end-to-end flow, [Chapter 5](05-idea-to-spec.md) for producing the spec that tickets slice, [Chapter 7](07-execution.md) for implementing the tickets session by session, [Chapter 8](08-review-and-qa.md) for the QA loop that feeds new tickets back onto the board, and [Chapter 9](09-afk-and-parallel-agents.md) for the AFK machinery that consumes `ready for agent` work.
