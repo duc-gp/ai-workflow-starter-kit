@@ -38,6 +38,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **day shift / night shift** — The division of labor at the heart of the workflow: the human does the thinking work — ideation, grilling, specs, ticket slicing — in the day shift; agents execute AFK in the night shift. See [Chapter 4](04-the-workflow.md).
 
+**dark factory** — Agents working 24/7 while you sleep — dark only in the sense that *you* go to sleep, not in Karpathy's vibe-coding sense where the code barely exists. The stronger claim (a factory with no humans at all) still fails the economic test: "if somebody can make that work and it has economic value then it would exist. I have not seen it existing yet." Expect domain-specific factories first — pure math is more tractable than a basic CRUD app. See [Chapter 9](09-afk-and-parallel-agents.md).
+
 **decision ticket** — A Wayfinder sub-issue that resolves *what to build* (typed research, grilling, prototype, or task) — not an **implementation ticket**. Decision tickets live on the **wayfinder map**; each is scoped to one agent session and its resolution is written back into the parent map. Implementation tickets are produced later by `/to-tickets`. Confusing the two is a common beginner mistake: "when people first use Wayfinder." See [Chapter 5](05-idea-to-spec.md) and [Chapter 6](06-tickets-and-planning.md).
 
 **deep module** — A module that hides a lot of implementation behind a simple interface; **depth** is "the amount of behavior a caller can exercise per unit of interface they have to learn" (from Ousterhout's *A Philosophy of Software Design*). Deep modules give callers leverage and maintainers locality; their opposite, **shallow modules** (complex interface, little behind it), are the signature of an AI-hostile codebase. See [Chapter 3](03-preparing-your-codebase.md).
@@ -45,6 +47,10 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 **de-slopping** — The systematic cleanup of accumulated slop: architecture-deepening refactors driven by the improve-codebase-architecture skill, run human-in-the-loop every few days. Not an AFK skill — the candidates require a judgment call from the strategic programmer sitting above the agent. See [Chapter 8](08-review-and-qa.md).
 
 **effort level** — The reasoning/effort dial on a coding agent. A per-task setting, not a status symbol: high effort pays off only on detail-heavy work; for small changes and repo exploration it burns tokens and makes the model overthink. Medium is the sensible default ("even high is way too much effort for most coding tasks"); every token not spent over-deliberating is context budget kept for useful work. See [Chapter 7](07-execution.md).
+
+**evidence-based sign-off** — Trusting agent output on the strength of an evidence chain rather than code reading: the bug is reproduced, a test fails on current code, and the proposed fix makes that test pass. Converts review from reading code into reading evidence, and concentrates scarce human attention where trust hasn't been earned yet. See [Chapter 6](06-tickets-and-planning.md) and [Chapter 8](08-review-and-qa.md).
+
+**ensemble review** — Cross-family adversarial review: different model families review the same artifact (system designs above all) with the same inputs, each surfacing different problems; you collect the reports and filter the false positives with your own judgment — 2000s-ML ensemble wisdom applied to LLMs. Prompt reviewers to be ruthless, not zealots, and stop before the loop degenerates into models nit-picking each other. See [Chapter 8](08-review-and-qa.md).
 
 **explore subagent** — A subagent (often on a cheap, fast model such as Haiku) that reads many files in its own context window and hands only a summary back to the parent agent. It is how harnesses build just-in-time context — and the reason pre-baked codebase documentation is mostly redundant. See [Chapter 1](01-how-llms-actually-work.md) and [Chapter 5](05-idea-to-spec.md).
 
@@ -94,6 +100,8 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **model prior** — What the model already knows from training (also called **parametric knowledge**, as opposed to the contextual knowledge you supply in the window). Skills lean on it: name a well-cited concept ("message chains," "red before green") and you unlock knowledge "deep in the agent's prior" instead of re-teaching it. Grilling leans on it too — which is why planning wants a frontier model while implementation tolerates a dumber one. See [Chapter 7](07-execution.md) and [Chapter 5](05-idea-to-spec.md).
 
+**operability** — Designing running software so that inaction is safe: "Ideally the software was written in a way where not doing anything doesn't make it worse." Switches and toggles you can press "in the heat of the moment" create breathing room and remove the "you have to act now" element; the prerequisite is a real understanding of your data flows and volumes, because "different volumes have different trade-offs" — and the on-call human feels the pain the agent never will. See [Chapter 3](03-preparing-your-codebase.md).
+
 **plan mode** — A harness mode (Shift+Tab in Claude Code) that disables file writes and swaps in a plan-focused system prompt, forcing explore-then-plan before any code. It was the gateway to structured AI work; the guide's current recommendation replaces it with grilling, which reaches shared understanding *before* any plan document exists. See [Chapter 5](05-idea-to-spec.md).
 
 **PRD (product requirements document)** — A destination document describing the product: problem statement, solution, user stories, and deliberately non-prescriptive implementation decisions so it stays durable against the code. The skill that produced them was renamed `/to-spec` because "specification is a much broader term" — PRD survives as the product-flavored subtype of **spec**. See [Chapter 5](05-idea-to-spec.md).
@@ -126,9 +134,13 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 
 **side quest** — Work that surfaces mid-session but doesn't belong to the session's task. Handle it without polluting the session: spin it out via handoff (fire-and-forget, or round trip), or use an out-of-history "by the way" question for quick orientation. See [Chapter 7](07-execution.md).
 
+**Simpsons car (the)** — Homer's everything-car: software with every possible feature, the recurring metaphor for where agent power goes if undirected. Software "defaults to entropy, towards having everything" — build the best possible software, not the software with the most things it can do. See [Chapter 11](11-team-blueprint.md).
+
 **skill** — A reusable, versioned instruction set invoked in an agent harness (e.g. `/grill-me`) — not a "command," not a "plugin." Two design axes: **stateless** (each run self-contained, nothing persisted) vs **stateful** (persists state — glossaries, ADRs, learning records — to the file system so later sessions resume and compound); and **user-invoked** (a human types the slash command) vs **model-invoked** (the agent pulls it in when its description matches the situation). See [Chapter 10](10-building-skills.md).
 
 **slop** — Plausible-looking, low-quality AI output: code that works but degrades the codebase — scattered conditionals, optional-prop creep, duplicated parallel implementations, shallow modules. The reviewer's verdict that names it best: "the behavior is correct in all three substantive PRs, but the codebase is meaningfully messier than it was a week ago." See [Chapter 8](08-review-and-qa.md).
+
+**solution-space exploration** — Mario's design method: have the agent write "not just one version of the thing within the solution space, but 10," and explore them all at once — "iteration, iteration, iteration until it feels simple enough yet capable enough." System/API design as "more an artisan endeavor than a structured engineering thing"; the final judgment is a feel with no prompt. See [Chapter 5](05-idea-to-spec.md).
 
 **smart zone** — The usable portion of the context window before attention degradation: roughly the first 140k tokens on current Claude models (estimates in the sources range 120–140k), regardless of the advertised window size. Past it lies the **dumb zone** — strained attention, stupider decisions. Every ticket and session is sized to fit one smart zone. The zone model Pocock credits to Dex Horthy ("not original to me"); on current Opus-class models it is a cost/optimization boundary rather than a hallucination cliff — work gets worse rather than fabricated, and a 750k-token context re-bills every previous token once the cache expires. See [Chapter 1](01-how-llms-actually-work.md).
 
@@ -174,6 +186,7 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - [ ] Record "aliases to avoid" alongside each term so fuzzy synonyms get challenged, not absorbed.
 - [ ] Embed a terminology glossary inside skills that need one, so agent and human argue from the same words.
 - [ ] Invoke well-cited named concepts (Fowler smells, red-green, deep modules) by name instead of re-explaining them — they are in the model prior.
+- [ ] Use domain terms deliberately: the right vocabulary gives the model access to the knowledge in its weights — with the wrong terms it takes a different path through the problem entirely.
 - [ ] Write an ADR only for decisions that are hard to reverse, surprising without context, and real trade-offs.
 - [ ] Cut vocabulary bike-shedding when it stalls: "That's good enough. Let's ship with this. We can always change and refactor to new language later."
 - [ ] When a teammate — or an agent — uses a term loosely, challenge it against the glossary.
@@ -223,5 +236,6 @@ This guide teaches you to maintain a **ubiquitous language** — one precisely d
 - Someone wrote a PAPER about my skill
 - The Home Repo Pattern: Run agents across ALL your repos
 - Watch me ship a 21,000-line feature with mattpocock/skills
+- LIVE: Writing code that doesn't suck with the creators of Pi
 
 See also: [Chapter 1](01-how-llms-actually-work.md) · [Chapter 2](02-principles.md) · [Chapter 3](03-preparing-your-codebase.md) · [Chapter 4](04-the-workflow.md) · [Chapter 5](05-idea-to-spec.md) · [Chapter 6](06-tickets-and-planning.md) · [Chapter 7](07-execution.md) · [Chapter 8](08-review-and-qa.md) · [Chapter 9](09-afk-and-parallel-agents.md) · [Chapter 10](10-building-skills.md) · [Chapter 11](11-team-blueprint.md) · [Chapter 12](12-skill-catalog.md) · [Chapter 14](14-the-home-repo.md)

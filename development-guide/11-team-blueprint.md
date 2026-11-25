@@ -12,6 +12,8 @@ The evidence that this scales beyond content creators: Bassam Daidi, a senior en
 
 > **Why it works:** Skills are versioned files in the repo. When one developer discovers a fix — a confirmation gate that stops premature implementation, a one-sentence Fowler-smell list that sharpens review — it lands in the skill via a pull request and every developer's agent behaves better the next morning. Individual talent still matters (judgment, taste, domain knowledge), but it compounds into the shared process instead of evaporating when that person is on holiday.
 
+Keep one honest caveat next to that thesis, from outside the skills world: "We still haven't figured out what the engineering process with agents should look like to create quality software and until we're there, we're just going to throw [ __ ] on the wall until something sticks." (Mario — who nonetheless points at human-in-the-loop approaches, naming the host's material and HumanLayer, as where the industry needs to go.) Read this guide as the current best answer to a still-open problem, and keep the retro loop running so your process keeps earning its place rather than ossifying into ritual.
+
 Two distinct failure sources must both be closed:
 
 1. **Agent-side variance** — closed by skills: the agent follows the same grilling, spec, ticketing, implementation, and review procedure regardless of who invoked it.
@@ -162,6 +164,12 @@ A new hire meets the workflow in three layers.
 
 Note the source's own framing: complaints like "it just asked me 200 questions" were diagnosed as "probably… just a skill issue" in the human's context management. That is exactly the variance this chapter exists to remove — so put these six items in the onboarding material, not in tribal memory.
 
+The Pi panel's veterans put a discipline on top of that coaching: "There's a magic button now and if I was a junior I would press it all the time." The button is not the problem — pressing it without fundamentals, peers, and discipline is, because those are what make you "effective at directing your agents." A team staffed entirely around the button gets the incident meeting where "nobody knows what the [ __ ] going on"; a team that keeps coaching the human-side skills keeps people who can still "watch over the software factory." And the market-value argument for that coaching is stated without sentimentality by someone with ~20 years in open source: "because I'm old" — accumulated experience, including hard-won knowledge of what the agents still get wrong. ([Chapter 2](02-principles.md) develops the same argument for individuals.)
+
+One human-factor rule completes the picture, and it has no machine analog: if a developer has to daily justify their existence to the agents, "vibes are off" (Armen) — motivation drains into justification work. His advice is to reach the conclusion early and move to where you do deliver value, possibly every three months. For a team lead the implication is structural: don't run the team as a standing justification exercise. Point people where they deliver value, and let the measured gates decide what needs humans — Mario makes no argument that every engineer keeps their job ("for a lot of tasks in software you don't need humans anymore. It's just matter of fact"), but liking humans and sympathizing with users remains durable value ("Difficulty level impossible" for machines).
+
+And name the ambient condition so it stops feeling personal: the panel's veterans got their "AI psychosis" out in a single summer, and even they don't sleep enough — "simultaneously the coolest time and the most confusing time and the most weirdest time" (Armen), while the host describes himself as "receiving treatment." A forced-strategic-thinking-all-day job with a thousand parallel agent runs is genuinely disorienting; treating that as individual weakness rather than a shared condition is how teams lose people who were otherwise delivering.
+
 **And don't gate the flow by level.** Asked whether a junior should adopt the software-factory workflow or wait for mid/senior, Pocock answered that junior/mid/senior is "the amount of responsibility you're given... the amount of responsibility that you can emotionally handle" — "just sort of a social thing. It's how much stuff you get trusted with" — not a skill certification, and "everyone is going to make mistakes and your rate of mistakes is not necessarily the thing that makes you different from a junior to mid to senior." Applied to a rollout: don't reserve the heavyweight flow for mid/senior developers. This chapter's entire thesis is that the gates — not individual talent or tenure — carry quality, which makes the full workflow safe for a junior by construction. When a junior's agent work goes wrong anyway, treat it as the mistake every level makes: route it through the retro loop ([Chapter 8](08-review-and-qa.md)) as a process signal, not as proof they weren't ready.
 
 ## Escalation Paths When the Flow Fails
@@ -238,6 +246,8 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - **Stale research and stale QA plans.** Research assets live only for the sprint — stale research "cause[s] the agent to take a wrong turn." Close QA-plan issues once behavior changes, or the agent treats them as source of truth.
 - **Scheduling days of AI tasks into the future.** Teams that queue speculative work "end up with crap because they aren't building on a foundation that they are aligned with." Build on something that works; plan the next slice from there.
 - **Skipping the human taste loop on UI.** "The AI just simply can't see what it's building" — front-end work without a prototype-and-feedback phase produces slop no review skill recovers.
+- **Building the Simpsons car.** Agents never say you can't — at worst "this will take six weeks," done in two hours — and features arrive unrequested as byproducts. Resist spending that power on adding everything: "I think the default behavior of software is towards entropy, towards having everything" (Armen). Build the best possible software, not the software with the most things it can do — Mario's recurring metaphor is Homer's everything-car. Economically the same argument lands in uptime-critical domains first: service quality pays off before feature-bloat does.
+- **Letting understanding evaporate.** The industry pitch of removing humans removes the only people who can diagnose anything: "We already have peers of ours that say during an incident meeting, nobody knows what the [ __ ] going on. They're all just prompting their Claude. That is [ __ ] scary." Keep humans who understand the system, and keep disaster contingency plans — not "another backup of another coding agent... run on generators." The anecdote the panel recalls is the shape of the failure: a cascading switch failure once locked Facebook out of their own headquarters, and for the first time everyone had to work out from first principles what was going on, because so much stood on top of the failed piece.
 - **Trusting confident output.** The foundational discipline from [Chapter 2](02-principles.md): reproduce bugs, verify claims ("look harder"), read the sources on anything critical. A team that stops verifying has re-personalized quality — it now depends on whoever happens to be credulous.
 
 ## Checklist
@@ -260,6 +270,7 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - [ ] Workloads split by economics: subscription for human-in-the-loop, API/alternate provider for AFK; effort levels and model tiers set per phase
 - [ ] AFK execution sandboxed, label-gated, never YOLO; internal tooling (if any) gates powerful tools behind approval
 - [ ] Success measured in landed impact and gate health, with Goodhart's law in mind
+- [ ] No standing justification exercise: people pointed where they deliver value, fundamentals and peer-coaching kept alive, and the ambient disorientation ("AI psychosis") treated as a shared condition, not individual weakness
 - [ ] Anti-pattern list reviewed with the team — quarterly re-read recommended
 
 ## Sources
@@ -293,5 +304,6 @@ Each of these looks like a harmless shortcut; each one silently makes output qua
 - Junior engineers: don't wait for permission
 - The Home Repo Pattern: Run agents across ALL your repos
 - Watch me ship a 21,000-line feature with mattpocock/skills
+- LIVE: Writing code that doesn't suck with the creators of Pi
 
 See also: [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md), [Chapter 4 — The End-to-End Workflow](04-the-workflow.md), [Chapter 5 — From Idea to Spec](05-idea-to-spec.md), [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md), [Chapter 7 — Execution](07-execution.md), [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md), [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md), [Chapter 10 — Building Skills](10-building-skills.md), [Chapter 12 — Skill Catalog](12-skill-catalog.md), [Chapter 14 — The Home Repo](14-the-home-repo.md).

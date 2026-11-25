@@ -176,12 +176,16 @@ This is **jaggedness**: humans are tightly coupled across abilities (someone bri
 
 Pocock extends the same incentive logic to one specific blind spot: **tactical vs. strategic programming**. Agents are "really good at solving the problem that's in front of them, but they're really bad at strategic programming" — the long view, "where you are the general winning the war." Not a capability gap: agents are RL-trained on tactical benchmark problems, where "the agents learn that tactical programming is the only thing that matters," and general-usefulness training means it "doesn't really make sense even at the harness level" to push them toward the annoying push-back behavior ("we should refactor before we do this"). The dedicated video names the archetype with John Ousterhout's term (from *A Philosophy of Software Design*): the agent is a **tactical tornado** — a prolific programmer who pumps out code far faster than everyone else, but works in a purely tactical fashion and leaves "a wake of destruction" behind. Agents are tornados by training, not by accident — "when they're working on a benchmark, they're not trying to think about the next benchmark. They're only focused on the current task," and "actually trying to add strategic stuff in there would probably make them worse." The strategic layer is therefore permanently your job to supply — and, as [Chapter 2](02-principles.md) develops, supplyable by simply telling the agent you care about it.
 
+A practitioner calibration of the same boundary comes from the creators of the Pi coding agent, on a live panel: the newest models improved only on a narrow slice — orchestrating sub-agents, and grinding on anything verifiable through tests or another oracle — plus they lie and reward-hack less than the generation before. System design, architecture, and API design have not moved: "They still suck at system design and architecture and API design." The panel's test for which side a task falls on: anything ambiguous with no right solution — the kind needing experience, domain knowledge, or gut feeling — agents "really suck at"; anything with "pretty much just a straight line towards the goal" can run far more unattended. And one heuristic for working the verifiable side: the first solution an agent reaches is technically valid but rarely optimal, so supply the trade-offs up front.
+
 Practical implications:
 
 - **Play to the on-rails region.** Agents are strongest exactly where verification is cheap: code that compiles, tests that pass, metrics that move. This is why making your repo verifiable — tests, typechecks, build feedback — is the highest-return preparation work ([Chapter 3](03-preparing-your-codebase.md)), and why Pocock's Ralph loop runs tests and types on every single commit ([Chapter 9](09-afk-and-parallel-agents.md)).
 - **The verifiability gate governs autonomy.** Karpathy's rule for autonomous improvement loops: "If you can't evaluate it, you can't auto-research it." The sweet spot is expensive-to-find, cheap-to-verify work (kernel optimization, training-loss reduction). Give an autonomous loop an objective, a metric, and boundaries — and beware Goodharting: a loop over metrics will overfit them, so expand metric coverage over time.
 - **You cover the off-rails region.** The model's weak spots — intent, nuance, judging what actually matters — are precisely the human's job in this workflow: the grilling answers, the why behind a feature, the QA judgment call. "The things that agents can't do is your job now. The things that agents can do, they can probably do better than you, or very soon. Be strategic about what you're actually spending time on."
 - **Failures are usually instructions, not capability.** Karpathy's post-December claim: capability now exceeds most people's ability to harness it, so "everything is skill issue" — his archetype being "I just didn't give good enough instructions in the agents.md file." When an agent fails, audit your context and instructions before blaming the model. That attitude is developed into a full operating principle in [Chapter 2](02-principles.md).
+
+- **Models improve in slices, not layers.** The Pi panel's release-over-release read: the newest generation gained sub-agent orchestration and test-verifiable grinding, lost some of its lying and reward hacking — and did not move at all on system design, architecture, or API design. Re-derive your task mapping after every model release rather than assuming gains transfer.
 
 - **Don't run ahead of capability.** The stack is "still bursting at the seams"; fully autonomous everything is "net not useful" today. Calibrate autonomy to what verifiably works.
 
@@ -217,6 +221,7 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 - [ ] You can name the four context failure modes (poisoning, distraction, confusion, clash) and apply Write / Select / Compress / Isolate as the fix kit.
 - [ ] You direct agents at verifiable work (tests, types, metrics) and keep the unverifiable judgment — intent, nuance, priorities — for yourself.
 - [ ] You supply the strategic layer: you know agents are tactically trained and won't advocate refactoring, so you state that long-term codebase health is a goal — and they optimize for it.
+- [ ] You re-derive your trust mapping after every model release — capability gains arrive in slices (orchestration, test-verifiable grinding), not layers (system design has not moved) — and the lying/reward-hacking floor stays assumed even as the ceiling rises.
 
 ## Sources
 
@@ -232,5 +237,6 @@ Every later rule in this guide traces back to a mechanism in this chapter. Keep 
 - Your agent is a tactical tornado
 - /wayfinder: Nothing is too big to plan anymore
 - Watch me ship a 21,000-line feature with mattpocock/skills
+- LIVE: Writing code that doesn't suck with the creators of Pi
 
 See also: [Chapter 2 — Operating Principles](02-principles.md) · [Chapter 3 — Preparing Your Codebase](03-preparing-your-codebase.md) · [Chapter 6 — Tickets and Planning](06-tickets-and-planning.md) · [Chapter 7 — Execution](07-execution.md) · [Chapter 8 — Review, QA, and De-Slopping](08-review-and-qa.md) · [Chapter 9 — AFK and Parallel Agents](09-afk-and-parallel-agents.md)

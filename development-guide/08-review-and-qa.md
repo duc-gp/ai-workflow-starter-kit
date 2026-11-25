@@ -65,6 +65,12 @@ When to reach for it: whenever you are — in Pocock's words — "a little bit s
 
 > **Rule:** Do not trust an agent-written test suite because it is green. Run mutation testing on it, feed the surviving mutants back to the agent, and kill them all — that is when you know the suite is as good as it could be.
 
+## The Limits of Verification: Green CI Is Not Security
+
+Mutation testing grades the tests; the Pi panel grades the whole verification *stack* — and their verdict is a necessary counterweight to this chapter's enthusiasm. Mario's position: a metric ton of linting rules, unit tests, and e2e tests does not mean the system is good — agents remain "goal seeking, reward hacking" optimizers that lie, measure the wrong thing, or measure not enough. "Unless you have a very good insight into what's actually happening underneath the hood, you have no idea if your verifications are actually worth anything." Clean code on disc "doesn't even prove what you think it proves" — a green CI is evidence, not security.
+
+The sharpest version of the limit is the **unit-of-verification problem**: pure functions verify easily; a full system end-to-end does not; and modules verifying individually does not mean their combination verifies. Deterministic tools get you "farish, but not far enough... probably never going to be far enough" — the halting problem bounds what Lean, Coq, or any formal method can promise, and none of the code we write is "in any way, shape or form in line with what the aerospace industry does" (aerospace writes code knowing it must be verified). Armen tried anyway — a Lean proof over parts of Pi, plus a mini-TypeScript meta-language for a hypothetical component — and shelved both: verified code ends up as "another thing the agent looks at," not an intrinsic constraint; "it doesn't really solve anything at the end of the day." The conclusion is neither cynicism nor complacency: "anything is better than nothing" — build the loops, grade them, and keep a human with insight into what happens underneath the hood, because the loops guard the goals you wrote, not the goals you meant.
+
 ## /wait-what: Curing Verbose Gibberish With Your Language
 
 Two-axis review catches code that is wrong or non-conforming. A different problem is agent *prose* you cannot even parse — incredibly verbose output full of weird LLM phrases that "goes right over your head." Pocock singles out Opus (especially Opus 5) as "talking garbage at the moment": verbose, hard to read, "and a lot of people feel the same." He tried fixing it with output styles and by adding instructions to agents.md before concluding a dedicated skill was the right tool.
@@ -125,7 +131,7 @@ The endgame, credited to Lauren Tan's approach: ban comments outright — "No co
 Two-axis review checks the code. But after review passes, work still has to cross the last gate: a human reading the PR. "PRs are still the main bottleneck for work getting to main" — so the v1.3 **/pr** skill (inspired by Dex Hies's Show Me skill) makes the PR body itself a review instrument, generated from a fixed template with four sections:
 
 1. **Summary** — Show Me-style: concise diagrams and pseudo-code that make the PR easier to read and review; the reviewer sees the shape of the change before the diff.
-2. **Evidence** — before-and-after proof on a real entity. Asking the agent for evidence often makes it run an extra test or take an extra screenshot — runtime information that the change does what it thinks it's doing, not just that the code reads plausibly.
+2. **Evidence** — before-and-after proof on a real entity. Asking the agent for evidence often makes it run an extra test or take an extra screenshot — runtime information that the change does what it thinks it's doing, not just that the code reads plausibly. The panel's production version of the same bar: sign off when the bug is reproduced, a test fails on current code, and the fix makes that test pass — "If that issue was also reproduced, has a test that fails with the current code and a fix that runs that makes the test pass, I have high trust that this is good."
 3. **Merge danger** — is this a one-way door (hard to roll back — deletes data, expensive to revert) or a two-way door ("a door that you can walk back through. In other words, we can easily revert this PR")? Placed near the top: "the first or second thing the person is going to see."
 4. **Blast radius** — the potential ramifications of the changes.
 
@@ -176,6 +182,8 @@ The false positives are the price of the ambition, and Pocock argues you should 
 > "Those false positives are pretty easy just to say no to... It's the ones that you miss that you never know about. The opportunities for improvement that you never see. Those are the dangerous ones."
 
 A false positive costs you one "this is fine, don't worry about it." A miss is invisible forever. Tune review skills toward recall, not precision.
+
+A second ensemble technique comes from outside the skills world: **cross-family adversarial review**. Take different model families, have each review the same thing with the same inputs (system designs above all), collect the different problems each family identifies, and filter their reports with your own judgment — the "age-old wisdom of ensemble methods" from 2000s ML, applied to reviewers instead of models. Two calibration notes travel with it: prompt reviewers to be ruthless, not overzealous — zealot mode flags things you don't need to think about or fix, so the false positives stay yours to filter — and stop before iterating "until nothing comes up," the point where models just slam each other with nits. "When prompted correctly, an agent can be ruthless and tell you this is real garbage." (Mario)
 
 ### The file-size rule
 
@@ -317,6 +325,8 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - [ ] File-size rule enforced at review: no PR pushes a file past ~1k lines (or ~5k tokens) without a split first.
 - [ ] Review criteria are concrete — you have said exactly what good and bad look like, with no "improve or worsen" vagueness.
 - [ ] Your review skill also covers tests, seams, and feedback loops — not just source aesthetics.
+- [ ] You know what verification cannot buy: a green CI is evidence, not security — modules verifying individually does not mean their combination verifies, so a human with insight under the hood stays in the loop.
+- [ ] For high-stakes design review, run cross-family adversarial review: different model families, same inputs, collect their distinct findings, filter the false positives yourself — and prompt them ruthless, not zealot.
 - [ ] After AFK runs, a QA plan is generated from the last N commits, saved as an issue, and labeled human-only.
 - [ ] Stale QA plans get closed as soon as behavior drifts.
 - [ ] QA discoveries flow back as tickets through a near-zero-friction channel (feedback button: cheap-model title, route, verbatim feedback), and the fix loop runs in parallel with continued QA.
@@ -351,5 +361,6 @@ De-slopping and the review gate are the same idea at two timescales: the two-axi
 - LIVE: Poteto (creator of pstack) on shipping 1,000's of PR's a month at SpaceX
 - Someone wrote a PAPER about my skill
 - Watch me ship a 21,000-line feature with mattpocock/skills
+- LIVE: Writing code that doesn't suck with the creators of Pi
 
 See also: [Chapter 2](02-principles.md) for the never-trust principle behind fresh-context review, [Chapter 3](03-preparing-your-codebase.md) for the codebase properties review enforces, [Chapter 6](06-tickets-and-planning.md) for how specs become tickets, [Chapter 7](07-execution.md) for the implementation sessions review gates, [Chapter 9](09-afk-and-parallel-agents.md) for the AFK loops QA feeds, and [Chapter 10](10-building-skills.md) for authoring review skills of your own.

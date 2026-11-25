@@ -146,6 +146,8 @@ The skill supports three invocation modes: triage a specific issue, scan the who
 
 > **Warning:** Don't accept reporter-supplied evidence at face value. In the demo the agent recommended `ready for agent` purely on the strength of the reporter's stack trace — Pocock flagged it as "being a little bit too credulous" and forced independent verification by chaining his `diagnose` skill in the same session: "diagnose this yourself." The diagnose skill reproduces the bug and builds the regression test *first*, then fixes inside that feedback loop (the TDD pattern — [Chapter 7](07-execution.md)).
 
+The same evidence bar runs as production automation on Pi: the project gets 40–50 new issues a day, and a triage bot (built by a colleague, tuned for a week or two on old data) has an agent — "based on a very simple prompt" — investigate whether the bug is real and the report makes sense, try to reproduce it reliably, propose a fix, and assign a priority. The trust rule is the evidence chain: when an issue is reproduced, has a test failing on current code, and the proposed fix makes that test pass, Mario "can most often just sign off on the thing and merge the fix the agent suggested" — a P0 label can be trusted as a P0. The boundary is feature work: "anything that involves me as the user of the product... results are hilarious." What the bot buys is attention economics — review becomes reading evidence instead of reading code, and scarce human attention concentrates where trust hasn't been earned yet. That is the same conversion `/triage` plus `diagnose` performs interactively.
+
 Once diagnosed, you can fix right there in the same session if context budget allows — Pocock keeps a running mental budget ("I sort of have a budget of 100K for this session") and at 46.5k tokens used judged there was room to diagnose and fix a small bug. Ship via a PR that references the issue so merging auto-closes it (his usual preference over pushing to main). While triaging, he often runs two sessions in parallel: one triaging the next issue, another on main fixing the last one.
 
 ### Encoding rejections: the `.out-of-scope/` directory
@@ -204,7 +206,7 @@ One caution to close on, because it frames how much to invest in the ticket pile
 - [ ] Implement one ticket per session; clear between tickets; never say "do every single ticket".
 - [ ] For inbound backlogs, run `/triage`: exactly one category label + one state label per issue; write an agent brief before anything moves to `ready for agent`.
 - [ ] Make AFK agents pick up only `ready for agent` work — never let them stumble onto unready tasks.
-- [ ] When the triage agent trusts a reporter too readily, force reproduction: "diagnose this yourself."
+- [ ] When the triage agent trusts a reporter too readily, force reproduction: "diagnose this yourself." The same evidence chain scales as automation (repro + failing test + passing fix = sign-off); it never extends to feature decisions involving you as the product's user.
 - [ ] Record rejected features in `.out-of-scope/` files so future triage auto-closes them.
 - [ ] For ideas too big and foggy to spec, run `/wayfinder` first: a map issue with typed, session-sized, blocking-linked sub-issues (research / grilling / prototype / task); let prototype tickets keep the map from becoming waterfall; when done, run `/to-spec` off the finished map → `/to-tickets`.
 - [ ] Treat the map's sub-issues as *decision* tickets — the implementation tickets come later from `/to-tickets`; don't implement decision tickets directly.
@@ -220,5 +222,6 @@ One caution to close on, because it frames how much to invest in the ticket pile
 - I Open-Sourced My Own AFK Software Factory
 - /wayfinder: Nothing is too big to plan anymore
 - Watch me ship a 21,000-line feature with mattpocock/skills
+- LIVE: Writing code that doesn't suck with the creators of Pi
 
 See also: [Chapter 4](04-the-workflow.md) for where planning sits in the end-to-end flow, [Chapter 5](05-idea-to-spec.md) for producing the spec that tickets slice, [Chapter 7](07-execution.md) for implementing the tickets session by session, [Chapter 8](08-review-and-qa.md) for the QA loop that feeds new tickets back onto the board, and [Chapter 9](09-afk-and-parallel-agents.md) for the AFK machinery that consumes `ready for agent` work.
